@@ -1,13 +1,12 @@
-import Image from "next/image";
-import styles from "./page.module.css";
-
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <span className={styles.title}>
+    <div>
+      <main>
+        <span>
           Привет мой любимый Эндкул как дела как жизнь?
+          <br />
         </span>
+        <span>живееем</span>
       </main>
     </div>
   );
