@@ -19,6 +19,12 @@ const eslintConfig = [
       "build/**",
       "next-env.d.ts",
     ],
+
+    // Disable some annoying checks
+    rules: {
+      "react-hooks/exhaustive-deps": "off",
+      "@next/next/no-img-element": "off",
+    },
   },
 ];
 
