@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@svgr/webpack": "^8.1.0",
     "@tabler/icons-react": "^3.35.0",
     "axios": "^1.12.2",
     "next": "15.5.6",
