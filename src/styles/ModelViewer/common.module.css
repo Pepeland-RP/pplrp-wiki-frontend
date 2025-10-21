@@ -26,6 +26,13 @@
     padding: 1rem;
 
     position: relative;
+
+    transform: none;
+    transition: transform, 300ms;
+}
+
+.background_exit_active .viewer {
+    transform: scale(0.95) translateY(50px);
 }
 
 .render_container {
