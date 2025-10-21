@@ -26,6 +26,7 @@ export const useModelViewerContext = () => {
 export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
   const [modelUrl, setModelUrl] = useState<string>('');
   const [expanded, setExpanded] = useState<boolean>(false);
+  const [loaded, setLoaded] = useState<boolean>(false);
   const viewerRef = useRef<ModelViewer>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -42,10 +43,12 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
         canvas: canvasRef.current!,
         width: 400,
         height: 400,
-        gltf_path: modelUrl,
       });
 
-      viewerRef.current.animation = new InitialAnimation();
+      viewerRef.current.loadGLTF(modelUrl).then(() => {
+        viewerRef.current!.animation = new InitialAnimation();
+        setLoaded(true);
+      });
 
       observer = new ResizeObserver(entries => {
         const { width, height } = entries[0].contentRect;
@@ -81,11 +84,16 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
         <div className={style.background}>
           <div className={style.viewer}>
             <div className={style.render_container} id="viewer">
-              <canvas ref={canvasRef} />
+              <canvas
+                ref={canvasRef}
+                style={{ opacity: loaded ? 1 : 0 }}
+                className={style.canvas}
+              />
             </div>
             <button
               onClick={() => {
                 setExpanded(false);
+                setLoaded(false);
               }}
             >
               Жесточайше закрыть

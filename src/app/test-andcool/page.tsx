@@ -7,7 +7,7 @@ const Page = () => {
   return (
     <button
       onClick={() => {
-        invoke('/api/assets/643d7263-88cb-4e04-ab30-f9abdf510173');
+        invoke('/api/assets/pump');
       }}
     >
       Жесточайше открыть

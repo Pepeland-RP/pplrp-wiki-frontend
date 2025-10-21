@@ -9,8 +9,8 @@ export abstract class ModelAnimation {
 export class InitialAnimation extends ModelAnimation {
   // К сожалению, мой личный таролог покинул меня,
   // поэтому менять в принципе можно
-  initial_pos = [-0.5, 1.1, 1];
-  target_pos = [-0.9, 0.74, 0.9];
+  initial_pos = [-1, 1.1, -0.5];
+  target_pos = [-1, 0.74, -1];
   length = 1;
 
   easeOutCubic(x: number): number {

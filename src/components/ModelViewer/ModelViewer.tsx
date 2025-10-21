@@ -75,13 +75,12 @@ export class ModelViewer {
       2000,
     );
 
-    this.camera.position.set(0, 1, 2);
-
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
       antialias: true,
       alpha: true,
     });
+    this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(props.width, props.height);
 
     this.cameraLight = new PointLight('#ffffff', 0.6);
@@ -121,9 +120,6 @@ export class ModelViewer {
 
     this.grid = new GridHelper(1, 10, '#ffffff', '#aaaaaa');
     this.scene.add(this.grid);
-
-    // Load gltf
-    void this.loadGLTF(props.gltf_path);
 
     this.render = this.render.bind(this);
   }
