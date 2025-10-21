@@ -162,7 +162,12 @@ export class ModelViewer {
     this.cameraLight.dispose();
     this.ambientLight.dispose();
     this.controls.dispose();
+    this.grid.dispose();
+    this.composer.dispose();
+    this.renderPass.dispose?.();
+    this.fxaaPass.dispose?.();
     if (this.frameId) cancelAnimationFrame(this.frameId);
+    console.log('Viewer disposed');
   }
 
   /** Sets render size */

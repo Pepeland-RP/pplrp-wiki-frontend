@@ -36,6 +36,7 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
     }
 
     // Подождем 50мс, чтобы канваз успел смонтироваться
+    let observer: ResizeObserver;
     setTimeout(() => {
       viewerRef.current = new ModelViewer({
         canvas: canvasRef.current!,
@@ -46,19 +47,20 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
 
       viewerRef.current.animation = new InitialAnimation();
 
-      const resizeObserver = new ResizeObserver(entries => {
+      observer = new ResizeObserver(entries => {
         const { width, height } = entries[0].contentRect;
         if (!viewerRef.current) return;
         viewerRef.current.setSize(width, height);
       });
 
-      resizeObserver.observe(
-        document.getElementById('viewer') as HTMLDivElement,
-      );
+      observer.observe(document.getElementById('viewer') as HTMLDivElement);
     }, 50);
 
     return () => {
       if (viewerRef.current) viewerRef.current.dispose();
+
+      const el = document.getElementById('viewer');
+      if (observer && el) observer.unobserve(el);
     };
   }, [expanded, modelUrl]);
 
