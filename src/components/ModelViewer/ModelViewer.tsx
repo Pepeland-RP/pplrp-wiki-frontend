@@ -11,6 +11,7 @@ import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import {
   AmbientLight,
   Box3,
+  Clock,
   DepthTexture,
   FloatType,
   GridHelper,
@@ -23,6 +24,7 @@ import {
   WebGLRenderer,
   WebGLRenderTarget,
 } from 'three';
+import { ModelAnimation } from './animation';
 
 export class ModelViewer {
   /** Scene object */
@@ -53,8 +55,14 @@ export class ModelViewer {
   grid!: GridHelper;
 
   private frameId: number | undefined;
+  private progress: number = 0;
+  private clock: Clock;
+
+  animation?: ModelAnimation;
 
   constructor(props: ModelViewerProps) {
+    this.clock = new Clock();
+
     this.canvas = props.canvas;
     this.canvas.width = props.width;
     this.canvas.height = props.height;
@@ -140,6 +148,9 @@ export class ModelViewer {
 
   render() {
     //console.log(this.camera.position);
+    this.progress += this.clock.getDelta();
+    if (this.animation) this.animation.animate(this, this.progress);
+
     this.controls.update();
     this.composer.render();
     this.frameId = requestAnimationFrame(this.render);

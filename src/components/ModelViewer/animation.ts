@@ -1,0 +1,31 @@
+import { ModelViewer } from './ModelViewer';
+
+type Vector3Array = [number, number, number];
+
+export abstract class ModelAnimation {
+  abstract animate(viewer: ModelViewer, progress: number): void;
+}
+
+export class InitialAnimation extends ModelAnimation {
+  // К сожалению, мой личный таролог покинул меня,
+  // поэтому менять в принципе можно
+  initial_pos = [-0.5, 1.1, 1];
+  target_pos = [-0.9, 0.74, 0.9];
+  length = 1;
+
+  easeOutCubic(x: number): number {
+    return 1 - Math.pow(1 - x, 3);
+  }
+
+  animate(viewer: ModelViewer, progress: number) {
+    if (progress > this.length) return;
+    const pr = progress / this.length;
+    const easedProgress = this.easeOutCubic(pr);
+
+    viewer.camera.position.set(
+      ...(this.initial_pos.map(
+        (x, i) => x + (this.target_pos[i] - x) * easedProgress,
+      ) as Vector3Array),
+    );
+  }
+}

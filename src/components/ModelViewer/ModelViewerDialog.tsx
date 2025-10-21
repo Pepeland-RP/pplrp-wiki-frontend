@@ -11,6 +11,7 @@ import {
 import ReactCSSTransition from '@/components/shared/CSSTransition';
 import style from '@/styles/ModelViewer/common.module.css';
 import { ModelViewer } from './ModelViewer';
+import { InitialAnimation } from './animation';
 
 const ModelViewerContext = createContext<ModelViewerDialogProps | undefined>(
   undefined,
@@ -43,9 +44,7 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
         gltf_path: modelUrl,
       });
 
-      // К сожалению, мой личный таролог покинул меня,
-      // поэтому менять в принципе можно
-      viewerRef.current.camera.position.set(-0.9, 0.74, 0.9);
+      viewerRef.current.animation = new InitialAnimation();
 
       const resizeObserver = new ResizeObserver(entries => {
         const { width, height } = entries[0].contentRect;
