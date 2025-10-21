@@ -1,0 +1,36 @@
+.background {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    transition: opacity 300ms;
+    backdrop-filter: blur(2px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.background_exit_active {
+    opacity: 0;
+}
+
+.viewer {
+    background-color: var(--color-level-1);
+    border: 1px var(--color-border) solid;
+    border-radius: .75rem;
+
+    width: min(80%, 80vh);
+    aspect-ratio: 1 / 1;
+
+    padding: 1rem;
+
+    position: relative;
+}
+
+.render_container {
+    position: absolute;
+    inset: 0;
+    top: 5rem;
+    overflow: hidden;
+}

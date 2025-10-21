@@ -23,7 +23,6 @@ import {
   WebGLRenderer,
   WebGLRenderTarget,
 } from 'three';
-import { useEffect, useRef } from 'react';
 
 export class ModelViewer {
   /** Scene object */
@@ -153,23 +152,19 @@ export class ModelViewer {
     this.controls.dispose();
     if (this.frameId) cancelAnimationFrame(this.frameId);
   }
+
+  /** Sets render size */
+  setSize(w: number, h: number) {
+    this.camera.aspect = w / h;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(w, h);
+
+    this.composer.setSize(w, h);
+    const pixelRatio = this.renderer.getPixelRatio();
+    this.composer.setPixelRatio(pixelRatio);
+    this.fxaaPass.material.uniforms['resolution'].value.x =
+      1 / (w * pixelRatio);
+    this.fxaaPass.material.uniforms['resolution'].value.y =
+      1 / (h * pixelRatio);
+  }
 }
-
-export const ModelViewerTest = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const viewer = new ModelViewer({
-      canvas: canvasRef.current!,
-      width: 800,
-      height: 800,
-      gltf_path: '/static/gltf/santa_hat.gltf',
-    });
-
-    return () => {
-      viewer.dispose();
-    };
-  }, []);
-
-  return <canvas ref={canvasRef} />;
-};

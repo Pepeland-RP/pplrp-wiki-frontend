@@ -1,4 +1,7 @@
- body {
-     background-color: black;
-     /* Для теста, можешь потом удалить*/
- }
+body {
+    background-color: black;
+    /* Для теста, можешь потом удалить*/
+
+    --color-level-1: #0a0a0a;
+    --color-border: #ffffff0d;
+}
