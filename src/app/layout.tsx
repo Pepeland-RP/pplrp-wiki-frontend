@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import { Inter } from 'next/font/google';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -11,6 +12,8 @@ export const viewport: Viewport = {
   initialScale: 0.9,
 };
 
+const inter = Inter({ subsets: ['latin'] });
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -18,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body>{children}</body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

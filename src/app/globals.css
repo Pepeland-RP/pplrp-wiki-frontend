@@ -1,7 +1,12 @@
 body {
+    overflow-y: scroll;
+    margin: 0;
     background-color: black;
     /* Для теста, можешь потом удалить*/
 
     --color-level-1: #0a0a0a;
     --color-border: #ffffff0d;
+    --color-text: #eeeeee;
+
+    color: var(--color-text)
 }

@@ -20,28 +20,70 @@
     border: 1px var(--color-border) solid;
     border-radius: .75rem;
 
-    width: min(80%, 80vh);
-    aspect-ratio: 1 / 1;
+    width: min(70%, 70vh);
+    aspect-ratio: 0.9 / 1;
+    max-height: 70%;
 
     padding: 1rem;
 
-    position: relative;
-
     transform: none;
-    transition: transform, 300ms;
+    transition: transform 300ms;
+
+    display: flex;
+    flex-direction: column;
+    gap: .7rem;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header button {
+    padding: 0;
+    background: none;
+    border: none;
+    color: inherit;
+
+    cursor: pointer;
+    transition: opacity 150ms;
+}
+
+.header button:hover {
+    opacity: .9;
+}
+
+.viewer h3 {
+    margin: 0;
+    display: flex;
+
+    align-items: center;
+    flex-direction: row;
+
+    gap: .4rem;
 }
 
 .background_exit_active .viewer {
     transform: scale(0.95) translateY(50px);
 }
 
+.render_container_container {
+
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
 .render_container {
     position: absolute;
     inset: 0;
-    top: 5rem;
     overflow: hidden;
 }
 
 .canvas {
+    box-sizing: border-box;
     transition: opacity 300ms;
+    border: 1px var(--color-border) solid;
+    border-radius: .75rem;
 }

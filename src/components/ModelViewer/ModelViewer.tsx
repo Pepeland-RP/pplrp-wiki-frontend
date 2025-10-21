@@ -138,6 +138,8 @@ export class ModelViewer {
     this.object.position.y -= box.min.y;
     this.object.position.z -= center.z;
 
+    this.controls.target.y = center.y;
+
     this.scene.add(this.object);
     this.render();
   }
