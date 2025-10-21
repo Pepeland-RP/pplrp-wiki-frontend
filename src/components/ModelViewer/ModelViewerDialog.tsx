@@ -43,6 +43,10 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
         gltf_path: modelUrl,
       });
 
+      // К сожалению, мой личный таролог покинул меня,
+      // поэтому менять в принципе можно
+      viewerRef.current.camera.position.set(-0.9, 0.74, 0.9);
+
       const resizeObserver = new ResizeObserver(entries => {
         const { width, height } = entries[0].contentRect;
         if (!viewerRef.current) return;

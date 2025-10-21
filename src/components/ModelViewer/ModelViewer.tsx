@@ -139,6 +139,7 @@ export class ModelViewer {
   }
 
   render() {
+    //console.log(this.camera.position);
     this.controls.update();
     this.composer.render();
     this.frameId = requestAnimationFrame(this.render);
