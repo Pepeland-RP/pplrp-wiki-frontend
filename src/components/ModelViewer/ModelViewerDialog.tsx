@@ -39,7 +39,7 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
       const el = document.getElementById('viewer');
       if (observerRef.current && el) observerRef.current.unobserve(el);
     };
-  }, [expanded, modelUrl]);
+  }, []);
 
   const invoke = (url: string) => {
     setModelUrl(url);
@@ -84,7 +84,7 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
   );
 
   return (
-    <ModelViewerContext.Provider value={{ invoke }}>
+    <ModelViewerContext.Provider value={{ invoke, hide: close }}>
       <ReactCSSTransition
         state={expanded}
         timeout={300}

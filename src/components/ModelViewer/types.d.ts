@@ -6,4 +6,5 @@ interface ModelViewerProps {
 
 interface ModelViewerDialogProps {
   invoke: (url: string) => void;
+  hide: () => void;
 }
