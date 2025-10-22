@@ -29,6 +29,10 @@ interface GLTFData {
   meta: GLTFMeta | null;
 }
 
+/**
+ * По задумке, meta должна содержать инфу о том, как и куда рендерить модель
+ * А задаваться она будет из админки через интерактивный редактор
+ */
 interface GLTFMeta {
   render?: {
     camera_position?: [number, number, number];
