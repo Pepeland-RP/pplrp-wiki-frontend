@@ -16,6 +16,12 @@ export default function ModelCard(props: Model) {
       // TODO: Make proper handling of this)
       if (!thumbnailRef.current || !props.gltf) return;
 
+      /**
+       * Поясню, что происходит ниже
+       * Сначала асинхронно подгружаем модельку из GLTF,
+       * затем она добавляется в конец очереди где ждет рендеринга,
+       * а потом уже устанавливается как `src` в thumbnail
+       */
       const gltf = await new GLTFLoader().loadAsync(
         `/api/assets/${props.gltf.resource_id}`,
       );
