@@ -25,6 +25,8 @@ export default function ModelCard(props: Model) {
       const gltf = await new GLTFLoader().loadAsync(
         `/api/assets/${props.gltf.resource_id}`,
       );
+
+      // TODO: Этот промис может выкинуть эксцепшн, надо его схэндлить как-то (показать вместо картинки ошибку)
       thumbnailRef.current.src = await renderQueue.enqueue({
         object: gltf.scene,
         meta: props.gltf.meta,
