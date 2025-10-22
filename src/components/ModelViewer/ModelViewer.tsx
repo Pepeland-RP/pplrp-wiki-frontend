@@ -155,6 +155,7 @@ export class ModelViewer {
   }
 
   render() {
+    //console.log(this.camera.position, this.controls.target);
     this.progress += this.clock.getDelta();
     if (this.animation) this.animation.animate(this, this.progress);
 

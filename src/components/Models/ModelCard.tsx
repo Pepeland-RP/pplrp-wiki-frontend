@@ -6,26 +6,22 @@ import { useEffect, useRef, useState } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { useModelViewerContext } from '../ModelViewer/ModelViewerDialog';
 
-interface ModelCardProps {
-  name?: string;
-  category?: string;
-}
-
-export default function ModelCard({
-  name = 'test',
-  category = 'Новое',
-}: ModelCardProps) {
+export default function ModelCard(props: Model) {
   const { invoke } = useModelViewerContext();
   const [loaded, setLoaded] = useState<boolean>(false);
   const thumbnailRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const renderThumbnail = async () => {
-      if (!thumbnailRef.current) return;
-      const gltf = await new GLTFLoader().loadAsync('/api/assets/pump');
+      // TODO: Make proper handling of this)
+      if (!thumbnailRef.current || !props.gltf) return;
+
+      const gltf = await new GLTFLoader().loadAsync(
+        `/api/assets/${props.gltf.resource_id}`,
+      );
       thumbnailRef.current.src = await renderQueue.enqueue({
         object: gltf.scene,
-        meta: null,
+        meta: props.gltf.meta,
       });
       setLoaded(true);
     };
@@ -38,14 +34,18 @@ export default function ModelCard({
       <div
         className={styles.model_preview}
         onClick={() => {
+          // TODO: Make proper handling of this)
+          if (!props.gltf) return;
           invoke({
-            resource_id: 'pump',
-            meta: null,
+            resource_id: props.gltf.resource_id,
+            meta: props.gltf.meta,
           });
         }}
       >
         <div className={styles.grid_background} />
-        <div className={styles.model_badge}>{category}</div>
+        {props.season && (
+          <div className={styles.model_badge}>{props.season.name}</div>
+        )}
         <div className={styles.image_container}>
           <img
             ref={thumbnailRef}
@@ -60,7 +60,7 @@ export default function ModelCard({
 
       <div className={styles.model_info}>
         <div className={styles.model_details}>
-          <h3 className={styles.model_name}>{name}</h3>
+          <h3 className={styles.model_name}>{props.name}</h3>
           <div className={styles.model_icons}>
             <div className={styles.model_icon_placeholder}></div>
             <div className={styles.model_icon_placeholder}></div>

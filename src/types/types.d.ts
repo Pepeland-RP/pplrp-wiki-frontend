@@ -13,10 +13,13 @@ interface ModelViewerDialogProps {
 interface Model {
   id: number;
   name: string;
+  /** Сезон это то, что отображается сверху карточки (постоянные, хэллоуин) */
   season: {
     name: string;
     icon: string | null;
   } | null;
+  /** Категория это костюм, тотем и тд */
+  category: { name: string }[];
   acceptable_items: {
     name: string;
     texture_id: string;
