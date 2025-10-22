@@ -8,5 +8,5 @@ body {
     --color-border: #ffffff0d;
     --color-text: #eeeeee;
 
-    color: var(--color-text)
+    color: var(--color-text);
 }
