@@ -65,12 +65,6 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
         viewerRef.current
           .loadGLTF(`/api/assets/${modelData.resource_id}`)
           .then(() => {
-            if (modelData.meta?.render?.camera_position) {
-              viewerRef.current!.camera.position.set(
-                ...modelData.meta.render.camera_position,
-              );
-            }
-
             if (modelData.meta?.render?.controls_target) {
               viewerRef.current!.controls.target.set(
                 ...modelData.meta.render.controls_target,
@@ -78,7 +72,9 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
             }
 
             viewerRef.current!.controls.update();
-            viewerRef.current!.animation = new InitialAnimation();
+            viewerRef.current!.animation = new InitialAnimation(
+              modelData.meta?.render?.camera_position,
+            );
             setLoaded(true);
           });
 
