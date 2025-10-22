@@ -3,7 +3,7 @@
     inset: 0;
     z-index: 500;
     transition: opacity 300ms;
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(4px);
 
     display: flex;
     align-items: center;

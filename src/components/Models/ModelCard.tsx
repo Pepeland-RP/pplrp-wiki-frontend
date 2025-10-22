@@ -1,6 +1,10 @@
 'use client';
 
-import '../../styles/Models/models.css';
+import { renderQueue } from '@/lib/RenderingQueue';
+import styles from '@/styles/Models/models.module.css';
+import { useEffect, useRef, useState } from 'react';
+import { GLTFLoader } from 'three/examples/jsm/Addons.js';
+import { useModelViewerContext } from '../ModelViewer/ModelViewerDialog';
 
 interface ModelCardProps {
   name?: string;
@@ -11,29 +15,58 @@ export default function ModelCard({
   name = 'test',
   category = 'Новое',
 }: ModelCardProps) {
+  const { invoke } = useModelViewerContext();
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const thumbnailRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    const renderThumbnail = async () => {
+      if (!thumbnailRef.current) return;
+      const gltf = await new GLTFLoader().loadAsync('/api/assets/pump');
+      thumbnailRef.current.src = await renderQueue.enqueue({
+        object: gltf.scene,
+      });
+      setLoaded(true);
+    };
+
+    renderThumbnail();
+  }, []);
+
   return (
-    <div className="model-card">
-      <div className="model-preview">
-        <div className="grid-background" />
+    <article className={styles.model_card}>
+      <div
+        className={styles.model_preview}
+        onClick={() => {
+          invoke('/api/assets/pump');
+        }}
+      >
+        <div className={styles.grid_background} />
 
-        <div className="model-badge">{category}</div>
+        <div className={styles.model_badge}>{category}</div>
 
-        <div className="image-container">
-          <p>placeholder</p>
+        <div className={styles.image_container}>
+          <img
+            ref={thumbnailRef}
+            width={300}
+            height={300}
+            className={`${styles.thumbnail} ${
+              !loaded && styles.thumbnail_loading
+            }`}
+          />
         </div>
       </div>
 
-      <div className="model-info">
-        <div className="model-details">
-          <h3 className="model-name">{name}</h3>
-          <div className="model-icons">
-            <div className="model-icon-placeholder"></div>
-            <div className="model-icon-placeholder"></div>
-            <div className="model-icon-placeholder"></div>
+      <div className={styles.model_info}>
+        <div className={styles.model_details}>
+          <h3 className={styles.model_name}>{name}</h3>
+          <div className={styles.model_icons}>
+            <div className={styles.model_icon_placeholder}></div>
+            <div className={styles.model_icon_placeholder}></div>
+            <div className={styles.model_icon_placeholder}></div>
           </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
 /* просто тестовые плейсхолдеры без бека. я пукнул. */

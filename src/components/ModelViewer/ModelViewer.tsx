@@ -48,6 +48,8 @@ export class ModelViewer {
   object!: Group<Object3DEventMap>;
   controls!: OrbitControls;
 
+  renderPaused: boolean = false;
+
   renderPass!: RenderPass;
   fxaaPass!: ShaderPass;
   composer!: EffectComposer;
@@ -66,6 +68,8 @@ export class ModelViewer {
     this.canvas = props.canvas;
     this.canvas.width = props.width;
     this.canvas.height = props.height;
+
+    this.renderPaused = props.renderPaused === true;
 
     this.scene = new Scene();
     this.camera = new PerspectiveCamera(
@@ -124,9 +128,8 @@ export class ModelViewer {
     this.render = this.render.bind(this);
   }
 
-  async loadGLTF(path: string) {
-    const gltf = await new GLTFLoader().loadAsync(path);
-    this.object = gltf.scene;
+  setGltf(object: Group<Object3DEventMap>) {
+    this.object = object;
 
     const box = new Box3().setFromObject(this.object);
     const size = new Vector3();
@@ -144,14 +147,21 @@ export class ModelViewer {
     this.render();
   }
 
+  async loadGLTF(path: string) {
+    const gltf = await new GLTFLoader().loadAsync(path);
+    this.setGltf(gltf.scene);
+  }
+
   render() {
-    //console.log(this.camera.position);
     this.progress += this.clock.getDelta();
     if (this.animation) this.animation.animate(this, this.progress);
 
     this.controls.update();
     this.composer.render();
-    this.frameId = requestAnimationFrame(this.render);
+
+    if (!this.renderPaused) {
+      this.frameId = requestAnimationFrame(this.render);
+    }
   }
 
   /** Proper dispose all components */
