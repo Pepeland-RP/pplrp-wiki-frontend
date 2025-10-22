@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import './globals.css';
+import '@/styles/globals.css';
 import { Inter } from 'next/font/google';
 
 export const metadata: Metadata = {
