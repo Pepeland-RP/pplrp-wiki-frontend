@@ -128,7 +128,7 @@ export class ModelViewer {
     this.render = this.render.bind(this);
   }
 
-  setGltf(object: Group<Object3DEventMap>) {
+  setGltf(object: Group<Object3DEventMap>, update: boolean = true) {
     this.object = object;
 
     const box = new Box3().setFromObject(this.object);
@@ -141,7 +141,9 @@ export class ModelViewer {
     this.object.position.y -= box.min.y;
     this.object.position.z -= center.z;
 
-    this.controls.target.y = center.y;
+    if (update) {
+      this.controls.target.y = center.y;
+    }
 
     this.scene.add(this.object);
     this.render();

@@ -5,6 +5,7 @@ import { Group, Object3DEventMap } from 'three';
 
 type TaskDTO = {
   object: Group<Object3DEventMap>;
+  meta?: GLTFMeta | null;
 };
 
 type Task = {
@@ -56,8 +57,24 @@ export class RenderingQueue {
     this.working = true;
 
     try {
+      let should_center = true;
+      if (task.data.meta?.render?.camera_position) {
+        this.renderer.camera.position.set(
+          ...task.data.meta.render.camera_position,
+        );
+      }
+
+      if (task.data.meta?.render?.controls_target) {
+        should_center = false;
+        this.renderer.controls.target.set(
+          ...task.data.meta.render.controls_target,
+        );
+      }
+
+      this.renderer.controls.update();
+
       // Пробуем рендерить
-      this.renderer.setGltf(task.data.object);
+      this.renderer.setGltf(task.data.object, should_center);
       task.resolve(this.canvas.toDataURL());
     } catch (e) {
       task.reject(e);

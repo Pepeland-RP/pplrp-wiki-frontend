@@ -27,7 +27,7 @@ export const useModelViewerContext = () => {
 };
 
 export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
-  const [modelUrl, setModelUrl] = useState<string>('');
+  const [modelData, setModelData] = useState<GLTFData | null>(null);
   const [expanded, setExpanded] = useState<boolean>(false);
   const [loaded, setLoaded] = useState<boolean>(false);
   const viewerRef = useRef<ModelViewer>(null);
@@ -41,8 +41,8 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
-  const invoke = (url: string) => {
-    setModelUrl(url);
+  const invoke = (props: GLTFData) => {
+    setModelData(props);
     setExpanded(true);
     disableScroll();
   };
@@ -55,17 +55,32 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
 
   const callbackRef = useCallback(
     (element: HTMLCanvasElement | null) => {
-      if (element && modelUrl !== '') {
+      if (element && modelData) {
         viewerRef.current = new ModelViewer({
           canvas: element,
           width: 400,
           height: 400,
         });
 
-        viewerRef.current.loadGLTF(modelUrl).then(() => {
-          viewerRef.current!.animation = new InitialAnimation();
-          setLoaded(true);
-        });
+        viewerRef.current
+          .loadGLTF(`/api/assets/${modelData.resource_id}`)
+          .then(() => {
+            if (modelData.meta?.render?.camera_position) {
+              viewerRef.current!.camera.position.set(
+                ...modelData.meta.render.camera_position,
+              );
+            }
+
+            if (modelData.meta?.render?.controls_target) {
+              viewerRef.current!.controls.target.set(
+                ...modelData.meta.render.controls_target,
+              );
+            }
+
+            viewerRef.current!.controls.update();
+            viewerRef.current!.animation = new InitialAnimation();
+            setLoaded(true);
+          });
 
         observerRef.current = new ResizeObserver(entries => {
           const { width, height } = entries[0].contentRect;
@@ -80,7 +95,7 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
         if (viewerRef.current) viewerRef.current.dispose();
       }
     },
-    [modelUrl],
+    [modelData],
   );
 
   return (

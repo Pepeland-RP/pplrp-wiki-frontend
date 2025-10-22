@@ -25,6 +25,7 @@ export default function ModelCard({
       const gltf = await new GLTFLoader().loadAsync('/api/assets/pump');
       thumbnailRef.current.src = await renderQueue.enqueue({
         object: gltf.scene,
+        meta: null,
       });
       setLoaded(true);
     };
@@ -37,13 +38,14 @@ export default function ModelCard({
       <div
         className={styles.model_preview}
         onClick={() => {
-          invoke('/api/assets/pump');
+          invoke({
+            resource_id: 'pump',
+            meta: null,
+          });
         }}
       >
         <div className={styles.grid_background} />
-
         <div className={styles.model_badge}>{category}</div>
-
         <div className={styles.image_container}>
           <img
             ref={thumbnailRef}
