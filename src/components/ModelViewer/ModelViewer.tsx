@@ -165,7 +165,6 @@ export class ModelViewer {
     this.renderPass.dispose?.();
     this.fxaaPass.dispose?.();
     if (this.frameId) cancelAnimationFrame(this.frameId);
-    console.log('Viewer disposed');
   }
 
   /** Sets render size */

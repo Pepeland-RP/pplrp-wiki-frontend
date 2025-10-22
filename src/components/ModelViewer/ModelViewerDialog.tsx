@@ -3,6 +3,7 @@
 import {
   createContext,
   ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -30,42 +31,13 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
   const [expanded, setExpanded] = useState<boolean>(false);
   const [loaded, setLoaded] = useState<boolean>(false);
   const viewerRef = useRef<ModelViewer>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const observerRef = useRef<ResizeObserver>(null);
 
   useEffect(() => {
-    if (!expanded) {
-      if (viewerRef.current) viewerRef.current.dispose();
-      return;
-    }
-
-    // Подождем 50мс, чтобы канваз успел смонтироваться
-    let observer: ResizeObserver;
-    setTimeout(() => {
-      viewerRef.current = new ModelViewer({
-        canvas: canvasRef.current!,
-        width: 400,
-        height: 400,
-      });
-
-      viewerRef.current.loadGLTF(modelUrl).then(() => {
-        viewerRef.current!.animation = new InitialAnimation();
-        setLoaded(true);
-      });
-
-      observer = new ResizeObserver(entries => {
-        const { width, height } = entries[0].contentRect;
-        if (!viewerRef.current) return;
-        viewerRef.current.setSize(width, height);
-      });
-
-      observer.observe(document.getElementById('viewer') as HTMLDivElement);
-    }, 50);
-
     return () => {
       if (viewerRef.current) viewerRef.current.dispose();
-
       const el = document.getElementById('viewer');
-      if (observer && el) observer.unobserve(el);
+      if (observerRef.current && el) observerRef.current.unobserve(el);
     };
   }, [expanded, modelUrl]);
 
@@ -80,6 +52,36 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
     setLoaded(false);
     enableScroll();
   };
+
+  const callbackRef = useCallback(
+    (element: HTMLCanvasElement | null) => {
+      if (element && modelUrl !== '') {
+        viewerRef.current = new ModelViewer({
+          canvas: element,
+          width: 400,
+          height: 400,
+        });
+
+        viewerRef.current.loadGLTF(modelUrl).then(() => {
+          viewerRef.current!.animation = new InitialAnimation();
+          setLoaded(true);
+        });
+
+        observerRef.current = new ResizeObserver(entries => {
+          const { width, height } = entries[0].contentRect;
+          if (!viewerRef.current) return;
+          viewerRef.current.setSize(width, height);
+        });
+
+        observerRef.current.observe(document.getElementById('viewer')!);
+      } else {
+        const el = document.getElementById('viewer');
+        if (observerRef.current && el) observerRef.current.unobserve(el);
+        if (viewerRef.current) viewerRef.current.dispose();
+      }
+    },
+    [modelUrl],
+  );
 
   return (
     <ModelViewerContext.Provider value={{ invoke }}>
@@ -104,7 +106,7 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
             <div className={style.render_container_container}>
               <div className={style.render_container} id="viewer">
                 <canvas
-                  ref={canvasRef}
+                  ref={callbackRef}
                   style={{ opacity: loaded ? 1 : 0 }}
                   className={style.canvas}
                 />
