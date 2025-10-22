@@ -176,6 +176,7 @@ export class ModelViewer {
     this.composer.dispose();
     this.renderPass.dispose?.();
     this.fxaaPass.dispose?.();
+    this.renderer.forceContextLoss?.();
     if (this.frameId) cancelAnimationFrame(this.frameId);
   }
 
