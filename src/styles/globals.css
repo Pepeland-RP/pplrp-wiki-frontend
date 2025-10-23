@@ -1,3 +1,13 @@
+/* Устранение задержки клика на мобильных устройствах */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+a, button, input, select, textarea, [role="button"], [onclick] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
 body {
     overflow-y: scroll;
     margin: 0;

@@ -9,7 +9,9 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   width: 'device-width',
-  initialScale: 0.9,
+  initialScale: 1.0,
+  maximumScale: 5.0,
+  userScalable: true,
 };
 
 const inter = Inter({ subsets: ['latin'] });
