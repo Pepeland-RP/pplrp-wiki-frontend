@@ -1,8 +1,10 @@
 'use client';
 
 import { renderQueue } from '@/lib/RenderingQueue';
+import { disposeGLTFScene } from '@/lib/three-utils';
 import styles from '@/styles/Models/models.module.css';
 import { useEffect, useRef, useState } from 'react';
+import { Group, Object3DEventMap } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { useModelViewerContext } from '../ModelViewer/ModelViewerDialog';
 
@@ -10,8 +12,11 @@ export default function ModelCard(props: Model) {
   const { invoke } = useModelViewerContext();
   const [loaded, setLoaded] = useState<boolean>(false);
   const thumbnailRef = useRef<HTMLImageElement>(null);
+  const gltfSceneRef = useRef<Group<Object3DEventMap> | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const renderThumbnail = async () => {
       // TODO: Make proper handling of this)
       if (!thumbnailRef.current || !props.gltf) return;
@@ -26,15 +31,37 @@ export default function ModelCard(props: Model) {
         `/api/assets/${props.gltf.resource_id}`,
       );
 
+      if (!isMounted) {
+        // Component unmounted before loading completed, cleanup immediately
+        disposeGLTFScene(gltf.scene);
+        return;
+      }
+
+      // Store reference for cleanup
+      gltfSceneRef.current = gltf.scene;
+
       // TODO: Этот промис может выкинуть эксцепшн, надо его схэндлить как-то (показать вместо картинки ошибку)
-      thumbnailRef.current.src = await renderQueue.enqueue({
+      const dataURL = await renderQueue.enqueue({
         object: gltf.scene,
         meta: props.gltf.meta,
       });
-      setLoaded(true);
+
+      if (isMounted && thumbnailRef.current) {
+        thumbnailRef.current.src = dataURL;
+        setLoaded(true);
+      }
     };
 
     renderThumbnail();
+
+    return () => {
+      isMounted = false;
+      // Cleanup GLTF scene on unmount
+      if (gltfSceneRef.current) {
+        disposeGLTFScene(gltfSceneRef.current);
+        gltfSceneRef.current = null;
+      }
+    };
   }, []);
 
   return (
@@ -57,6 +84,7 @@ export default function ModelCard(props: Model) {
         <div className={styles.image_container}>
           <img
             ref={thumbnailRef}
+            alt={props.name}
             width={300}
             height={300}
             className={`${styles.thumbnail} ${

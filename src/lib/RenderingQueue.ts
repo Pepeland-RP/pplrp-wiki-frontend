@@ -104,7 +104,10 @@ export class RenderingQueue {
 
       // Пробуем рендерить
       this.renderer!.setGltf(task.data.object, should_center);
-      task.resolve(this.canvas.toDataURL());
+      const dataURL = this.canvas.toDataURL();
+      this.renderer!.scene.remove(task.data.object);
+
+      task.resolve(dataURL);
     } catch (e) {
       task.reject(e);
     } finally {

@@ -35,9 +35,16 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     return () => {
-      if (viewerRef.current) viewerRef.current.dispose();
-      const el = document.getElementById('viewer');
-      if (observerRef.current && el) observerRef.current.unobserve(el);
+      // Cleanup viewer
+      if (viewerRef.current) {
+        viewerRef.current.dispose();
+        viewerRef.current = null;
+      }
+      // Cleanup observer
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
     };
   }, []);
 
@@ -56,6 +63,18 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
   const callbackRef = useCallback(
     (element: HTMLCanvasElement | null) => {
       if (element && modelData) {
+        // Cleanup previous viewer if exists
+        if (viewerRef.current) {
+          viewerRef.current.dispose();
+          viewerRef.current = null;
+        }
+
+        // Cleanup previous observer if exists
+        if (observerRef.current) {
+          observerRef.current.disconnect();
+          observerRef.current = null;
+        }
+
         viewerRef.current = new ModelViewer({
           canvas: element,
           width: 400,
@@ -78,17 +97,26 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
             setLoaded(true);
           });
 
-        observerRef.current = new ResizeObserver(entries => {
-          const { width, height } = entries[0].contentRect;
-          if (!viewerRef.current) return;
-          viewerRef.current.setSize(width, height);
-        });
+        const viewerElement = document.getElementById('viewer');
+        if (viewerElement) {
+          observerRef.current = new ResizeObserver(entries => {
+            const { width, height } = entries[0].contentRect;
+            if (!viewerRef.current) return;
+            viewerRef.current.setSize(width, height);
+          });
 
-        observerRef.current.observe(document.getElementById('viewer')!);
+          observerRef.current.observe(viewerElement);
+        }
       } else {
-        const el = document.getElementById('viewer');
-        if (observerRef.current && el) observerRef.current.unobserve(el);
-        if (viewerRef.current) viewerRef.current.dispose();
+        // Cleanup when element or modelData is null
+        if (observerRef.current) {
+          observerRef.current.disconnect();
+          observerRef.current = null;
+        }
+        if (viewerRef.current) {
+          viewerRef.current.dispose();
+          viewerRef.current = null;
+        }
       }
     },
     [modelData],

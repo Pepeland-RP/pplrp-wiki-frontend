@@ -25,6 +25,7 @@ import {
   WebGLRenderTarget,
 } from 'three';
 import { ModelAnimation } from './animation';
+import { disposeGLTFScene } from '@/lib/three-utils';
 
 export class ModelViewer {
   /** Scene object */
@@ -59,6 +60,7 @@ export class ModelViewer {
   private frameId: number | undefined;
   private progress: number = 0;
   private clock: Clock;
+  private renderTarget?: WebGLRenderTarget;
 
   animation?: ModelAnimation;
 
@@ -100,9 +102,8 @@ export class ModelViewer {
     this.controls.target.set(0, 0, 0);
     this.controls.update();
 
-    let renderTarget;
     if (this.renderer.capabilities.isWebGL2) {
-      renderTarget = new WebGLRenderTarget(
+      this.renderTarget = new WebGLRenderTarget(
         this.canvas.width,
         this.canvas.height,
         {
@@ -116,7 +117,7 @@ export class ModelViewer {
     }
 
     // Some composer things
-    this.composer = new EffectComposer(this.renderer, renderTarget);
+    this.composer = new EffectComposer(this.renderer, this.renderTarget);
     this.renderPass = new RenderPass(this.scene, this.camera);
     this.fxaaPass = new ShaderPass(FXAAShader);
     this.composer.addPass(this.renderPass);
@@ -129,6 +130,11 @@ export class ModelViewer {
   }
 
   setGltf(object: Group<Object3DEventMap>, update: boolean = true) {
+    if (this.object) {
+      disposeGLTFScene(this.object);
+      this.scene.remove(this.object);
+    }
+
     this.object = object;
 
     const box = new Box3().setFromObject(this.object);
@@ -169,16 +175,35 @@ export class ModelViewer {
 
   /** Proper dispose all components */
   dispose() {
-    this.renderer.dispose();
+    if (this.frameId) cancelAnimationFrame(this.frameId);
+
+    if (this.object) {
+      disposeGLTFScene(this.object);
+      this.scene.remove(this.object);
+    }
+
+    this.scene.remove(this.camera);
+    this.scene.remove(this.grid);
+
     this.cameraLight.dispose();
     this.ambientLight.dispose();
-    this.controls.dispose();
     this.grid.dispose();
-    this.composer.dispose();
+
+    this.controls.dispose();
+
     this.renderPass.dispose?.();
     this.fxaaPass.dispose?.();
+    this.composer.dispose();
+
+    if (this.renderTarget) {
+      if (this.renderTarget.depthTexture) {
+        this.renderTarget.depthTexture.dispose();
+      }
+      this.renderTarget.dispose();
+    }
+
+    this.renderer.dispose();
     this.renderer.forceContextLoss?.();
-    if (this.frameId) cancelAnimationFrame(this.frameId);
   }
 
   /** Sets render size */
