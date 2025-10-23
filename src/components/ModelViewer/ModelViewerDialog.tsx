@@ -15,6 +15,7 @@ import { ModelViewer } from './ModelViewer';
 import { InitialAnimation } from './animation';
 import { IconEye, IconX } from '@tabler/icons-react';
 import { disableScroll, enableScroll } from '@/lib/scroll';
+import { getAssetUrl } from '@/lib/api';
 
 const ModelViewerContext = createContext<ModelViewerDialogProps | undefined>(
   undefined,
@@ -82,7 +83,7 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
         });
 
         viewerRef.current
-          .loadGLTF(`/api/assets/${modelData.resource_id}`)
+          .loadGLTF(getAssetUrl(modelData.resource_id))
           .then(() => {
             if (modelData.meta?.render?.controls_target) {
               viewerRef.current!.controls.target.set(

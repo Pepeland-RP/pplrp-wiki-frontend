@@ -28,7 +28,6 @@
 
 .model_card {
     position: relative;
-    overflow: hidden;
     border-radius: 0.75rem;
     background-color: var(--color-level-1, #1a1a1a);
     border: 1px solid var(--color-border, #2a2a2a);
@@ -131,19 +130,23 @@
 }
 
 .model_info {
-    padding: 24px 20px;
+    padding: 1.2rem;
     background-color: var(--color-level-1, #1a1a1a);
 }
 
 .model_details {
     width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .model_name {
     font-size: 1rem;
     font-weight: 500;
     color: var(--color-text, #fff);
-    margin: 0 0 12px 0;
+    margin: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -154,6 +157,7 @@
     gap: 8px;
 }
 
+/*
 .model_icon_placeholder {
     width: 32px;
     height: 32px;
@@ -161,4 +165,9 @@
     border-radius: 0.5rem;
     background: var(--color-level-0, #0d0d0d);
     flex-shrink: 0;
+}*/
+
+.model_icon {
+    border-radius: 5px;
+    image-rendering: pixelated;
 }
