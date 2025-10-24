@@ -16,6 +16,8 @@ import { InitialAnimation } from './animation';
 import { IconEye, IconX } from '@tabler/icons-react';
 import { disableScroll, enableScroll } from '@/lib/scroll';
 import { getAssetUrl } from '@/lib/api';
+import { ModelIcon } from '../Models/ModelIcon';
+import style_card from '@/styles/Models/models.module.css';
 
 const ModelViewerContext = createContext<ModelViewerDialogProps | undefined>(
   undefined,
@@ -28,7 +30,7 @@ export const useModelViewerContext = () => {
 };
 
 export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
-  const [modelData, setModelData] = useState<GLTFData | null>(null);
+  const [modelData, setModelData] = useState<Model | null>(null);
   const [expanded, setExpanded] = useState<boolean>(false);
   const [loaded, setLoaded] = useState<boolean>(false);
   const viewerRef = useRef<ModelViewer>(null);
@@ -49,7 +51,7 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
-  const invoke = (props: GLTFData) => {
+  const invoke = (props: Model) => {
     setModelData(props);
     setExpanded(true);
     disableScroll();
@@ -83,17 +85,17 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
         });
 
         viewerRef.current
-          .loadGLTF(getAssetUrl(modelData.resource_id))
+          .loadGLTF(getAssetUrl(modelData.gltf!.resource_id))
           .then(() => {
-            if (modelData.meta?.render?.controls_target) {
+            if (modelData.gltf?.meta?.render?.controls_target) {
               viewerRef.current!.controls.target.set(
-                ...modelData.meta.render.controls_target,
+                ...modelData.gltf.meta.render.controls_target,
               );
             }
 
             viewerRef.current!.controls.update();
             viewerRef.current!.animation = new InitialAnimation(
-              modelData.meta?.render?.camera_position,
+              modelData.gltf?.meta?.render?.camera_position,
             );
             setLoaded(true);
           });
@@ -123,6 +125,9 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
     [modelData],
   );
 
+  const icons = modelData?.acceptable_items.map((el, i) => (
+    <ModelIcon key={i} {...el} />
+  ));
   return (
     <ModelViewerContext.Provider value={{ invoke, hide: close }}>
       <ReactCSSTransition
@@ -152,7 +157,8 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
                 />
               </div>
             </div>
-            <h1>Pumpkin</h1>
+            <h3 className={style_card.model_name}>{modelData?.name}</h3>
+            <div className={style_card.model_icons}>{icons}</div>
           </div>
         </div>
       </ReactCSSTransition>

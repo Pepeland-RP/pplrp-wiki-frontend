@@ -76,10 +76,7 @@ export default function ModelCard(props: Model) {
         onClick={() => {
           // TODO: Make proper handling of this)
           if (!props.gltf) return;
-          invoke({
-            resource_id: props.gltf.resource_id,
-            meta: props.gltf.meta,
-          });
+          invoke(props);
         }}
       >
         <div className={styles.grid_background} />

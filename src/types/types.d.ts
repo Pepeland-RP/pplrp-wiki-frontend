@@ -6,7 +6,7 @@ interface ModelViewerProps {
 }
 
 interface ModelViewerDialogProps {
-  invoke: (data: GLTFData) => void;
+  invoke: (data: Model) => void;
   hide: () => void;
 }
 
