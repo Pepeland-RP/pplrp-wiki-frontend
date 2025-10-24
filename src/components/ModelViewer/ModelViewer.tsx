@@ -9,7 +9,6 @@ import {
 } from 'three/examples/jsm/Addons.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import {
-  AmbientLight,
   Box3,
   Clock,
   DepthTexture,
@@ -18,7 +17,6 @@ import {
   Group,
   Object3DEventMap,
   PerspectiveCamera,
-  PointLight,
   Scene,
   Vector3,
   WebGLRenderer,
@@ -26,6 +24,10 @@ import {
 } from 'three';
 import { ModelAnimation } from './animation';
 import { disposeGLTFScene } from '@/lib/three-utils';
+import {
+  applyMinecraftShaderToGLTF,
+  type MinecraftLightingConfig,
+} from '@/lib/shaders/apply-minecraft-shader';
 
 export class ModelViewer {
   /** Scene object */
@@ -40,14 +42,12 @@ export class ModelViewer {
   /** Render canvas ref */
   canvas!: HTMLCanvasElement;
 
-  /** And... let be light! */
-  cameraLight!: PointLight;
-
-  /** Hmm... Can lights be without sun? */
-  ambientLight!: AmbientLight;
-
+  /** GLTF object with Minecraft shader applied */
   object!: Group<Object3DEventMap>;
   controls!: OrbitControls;
+
+  /** Minecraft lighting configuration */
+  minecraftLightingConfig: MinecraftLightingConfig;
 
   renderPaused: boolean = false;
 
@@ -89,12 +89,13 @@ export class ModelViewer {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(props.width, props.height);
 
-    this.cameraLight = new PointLight('#ffffff', 0.6);
-    this.camera.add(this.cameraLight);
     this.scene.add(this.camera);
 
-    this.ambientLight = new AmbientLight('#ffffff', 3);
-    this.scene.add(this.ambientLight);
+    // Initialize Minecraft lighting configuration
+    // All lighting is now handled by shaders, not Three.js lights
+    this.minecraftLightingConfig = {
+      // Default Minecraft lighting setup will be applied to models
+    };
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableZoom = true;
@@ -136,6 +137,7 @@ export class ModelViewer {
     }
 
     this.object = object;
+    applyMinecraftShaderToGLTF(this.object, this.minecraftLightingConfig);
 
     const box = new Box3().setFromObject(this.object);
     const size = new Vector3();
@@ -185,8 +187,6 @@ export class ModelViewer {
     this.scene.remove(this.camera);
     this.scene.remove(this.grid);
 
-    this.cameraLight.dispose();
-    this.ambientLight.dispose();
     this.grid.dispose();
 
     this.controls.dispose();
