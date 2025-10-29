@@ -13,6 +13,7 @@ import { getAssetUrl } from '@/lib/api';
 export default function ModelCard(props: Model) {
   const { invoke } = useModelViewerContext();
   const [loaded, setLoaded] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false); // соситояние ошибки
   const thumbnailRef = useRef<HTMLImageElement>(null);
   const gltfSceneRef = useRef<Group<Object3DEventMap> | null>(null);
 
@@ -20,37 +21,56 @@ export default function ModelCard(props: Model) {
     let isMounted = true;
 
     const renderThumbnail = async () => {
-      // TODO: Make proper handling of this)
-      if (!thumbnailRef.current || !props.gltf) return;
-
-      /**
-       * Поясню, что происходит ниже
-       * Сначала асинхронно подгружаем модельку из GLTF,
-       * затем она добавляется в конец очереди где ждет рендеринга,
-       * а потом уже устанавливается как `src` в thumbnail
-       */
-      const gltf = await new GLTFLoader().loadAsync(
-        getAssetUrl(props.gltf.resource_id),
-      );
-
-      if (!isMounted) {
-        // Component unmounted before loading completed, cleanup immediately
-        disposeGLTFScene(gltf.scene);
+      // Проверяем, что ref для миниатюры доступен
+      if (!thumbnailRef.current) {
+        console.warn(`Thumbnail ref не доступен для модели "${props.name}"`);
+        return;
+      }
+      // Проверяем, что у модели есть GLTF файл
+      if (!props.gltf) {
+        console.warn(
+          `Модель "${props.name}" не имеет GLTF файла для рендеринга миниатюры`,
+        );
+        setLoaded(true);
         return;
       }
 
-      // Store reference for cleanup
-      gltfSceneRef.current = gltf.scene;
+      try {
+        /**
+         * Поясню, что происходит ниже
+         * Сначала асинхронно подгружаем модельку из GLTF,
+         * затем она добавляется в конец очереди где ждет рендеринга,
+         * а потом уже устанавливается как `src` в thumbnail
+         */
+        const gltf = await new GLTFLoader().loadAsync(
+          getAssetUrl(props.gltf.resource_id),
+        );
 
-      // TODO: Этот промис может выкинуть эксцепшн, надо его схэндлить как-то (показать вместо картинки ошибку)
-      const dataURL = await renderQueue.enqueue({
-        object: gltf.scene,
-        meta: props.gltf.meta,
-      });
+        if (!isMounted) {
+          // Component unmounted before loading completed, cleanup immediately
+          disposeGLTFScene(gltf.scene);
+          return;
+        }
+        // Store reference for cleanup
+        gltfSceneRef.current = gltf.scene;
 
-      if (isMounted && thumbnailRef.current) {
-        thumbnailRef.current.src = dataURL;
-        setLoaded(true);
+        // Рендерим миниатюру через очередь рендеринга
+        const dataURL = await renderQueue.enqueue({
+          object: gltf.scene,
+          meta: props.gltf.meta,
+        });
+
+        if (isMounted && thumbnailRef.current) {
+          thumbnailRef.current.src = dataURL;
+          setLoaded(true);
+        }
+      } catch (e) {
+        // Обрабатываем ошибки загрузки или рендеринга
+        console.error('Ошибка при загрузке/рендеринге GLTF или enqueue:', e);
+        if (isMounted) {
+          setError(true);
+          setLoaded(true);
+        }
       }
     };
 
@@ -69,14 +89,23 @@ export default function ModelCard(props: Model) {
   const icons = props.acceptable_items.map((el, i) => (
     <ModelIcon key={i} {...el} />
   ));
+
   return (
     <article className={styles.model_card}>
       <div
         className={styles.model_preview}
         onClick={() => {
-          // TODO: Make proper handling of this)
-          if (!props.gltf) return;
+          if (!props.gltf) {
+            console.warn(
+              `Модель "${props.name}" не имеет GLTF файла для просмотра`, // TODO: Make proper handling of this) <- сделано
+            );
+            return;
+          }
           invoke(props);
+        }}
+        style={{
+          cursor: props.gltf ? 'pointer' : 'not-allowed',
+          opacity: props.gltf ? 1 : 0.7,
         }}
       >
         <div className={styles.grid_background} />
@@ -84,7 +113,8 @@ export default function ModelCard(props: Model) {
           <div className={styles.model_badge}>{props.season.name}</div>
         )}
         <div className={styles.image_container}>
-          <img
+          {/* old */}
+          {/* <img
             ref={thumbnailRef}
             alt={props.name}
             width={300}
@@ -92,7 +122,22 @@ export default function ModelCard(props: Model) {
             className={`${styles.thumbnail} ${
               !loaded && styles.thumbnail_loading
             }`}
-          />
+          /> */}
+
+          {/* new */}
+          {!error ? (
+            <img
+              ref={thumbnailRef}
+              alt={props.name}
+              width={300}
+              height={300}
+              className={`${styles.thumbnail} ${
+                !loaded && styles.thumbnail_loading
+              }`}
+            />
+          ) : (
+            <div className={styles.error_text}>Ошибка при загрузке модели</div>
+          )}
         </div>
       </div>
 
