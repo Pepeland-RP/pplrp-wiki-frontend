@@ -94,7 +94,9 @@ export default function ModelCard(props: Model) {
   return (
     <article className={styles.model_card}>
       <div
-        className={styles.model_preview}
+        className={`${styles.model_preview} ${
+          error && styles.model_preview_error
+        }`}
         onClick={() => {
           if (!props.gltf) {
             console.warn(

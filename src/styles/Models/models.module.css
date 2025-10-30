@@ -67,6 +67,12 @@
     transition: opacity 0.5s ease;
 }
 
+.model_preview_error::after {
+    background: linear-gradient(to top,
+            oklch(63.7% 0.237 25.331) 0%,
+            transparent 100%);
+}
+
 .model_card:hover .model_preview::after {
     opacity: 0.3;
 }
@@ -110,6 +116,11 @@
     box-sizing: border-box;
     width: 100%;
     aspect-ratio: 1;
+    transition: transform 400ms;
+}
+
+.image_container:hover {
+    transform: scale(1.05);
 }
 
 .thumbnail {
@@ -125,10 +136,6 @@
 .thumbnail_loading {
     opacity: 0;
     transform: translateY(10px) scale(0.95);
-}
-
-.image_container:hover .thumbnail {
-    transform: scale(1.05);
 }
 
 .model_info {
