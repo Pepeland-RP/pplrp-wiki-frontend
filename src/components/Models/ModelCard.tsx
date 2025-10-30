@@ -13,7 +13,7 @@ import { getAssetUrl } from '@/lib/api';
 export default function ModelCard(props: Model) {
   const { invoke } = useModelViewerContext();
   const [loaded, setLoaded] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false); // соситояние ошибки
+  const [error, setError] = useState<boolean>(false); // состояние ошибки
   const thumbnailRef = useRef<HTMLImageElement>(null);
   const gltfSceneRef = useRef<Group<Object3DEventMap> | null>(null);
 
@@ -31,7 +31,8 @@ export default function ModelCard(props: Model) {
         console.warn(
           `Модель "${props.name}" не имеет GLTF файла для рендеринга миниатюры`,
         );
-        setLoaded(true);
+        setError(true);
+        setLoaded(false);
         return;
       }
 
@@ -66,7 +67,7 @@ export default function ModelCard(props: Model) {
         }
       } catch (e) {
         // Обрабатываем ошибки загрузки или рендеринга
-        console.error('Ошибка при загрузке/рендеринге GLTF или enqueue:', e);
+        console.error('Ошибка при загрузке/рендеринге GLTF или enqueue: ', e);
         if (isMounted) {
           setError(true);
           setLoaded(true);
@@ -74,7 +75,7 @@ export default function ModelCard(props: Model) {
       }
     };
 
-    renderThumbnail();
+    void renderThumbnail();
 
     return () => {
       isMounted = false;
@@ -97,7 +98,7 @@ export default function ModelCard(props: Model) {
         onClick={() => {
           if (!props.gltf) {
             console.warn(
-              `Модель "${props.name}" не имеет GLTF файла для просмотра`, // TODO: Make proper handling of this) <- сделано
+              `Модель "${props.name}" не имеет GLTF файла для просмотра`,
             );
             return;
           }
@@ -113,18 +114,6 @@ export default function ModelCard(props: Model) {
           <div className={styles.model_badge}>{props.season.name}</div>
         )}
         <div className={styles.image_container}>
-          {/* old */}
-          {/* <img
-            ref={thumbnailRef}
-            alt={props.name}
-            width={300}
-            height={300}
-            className={`${styles.thumbnail} ${
-              !loaded && styles.thumbnail_loading
-            }`}
-          /> */}
-
-          {/* new */}
           {!error ? (
             <img
               ref={thumbnailRef}
@@ -136,7 +125,7 @@ export default function ModelCard(props: Model) {
               }`}
             />
           ) : (
-            <div className={styles.error_text}>Ошибка при загрузке модели</div>
+            <span>Ошибка при загрузке модели</span>
           )}
         </div>
       </div>
