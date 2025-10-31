@@ -9,11 +9,13 @@ import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { useModelViewerContext } from '../ModelViewer/ModelViewerDialog';
 import { ModelIcon } from './ModelIcon';
 import { getAssetUrl } from '@/lib/api';
+import { IconCopy, IconCheck } from '@tabler/icons-react';
 
 export default function ModelCard(props: Model) {
   const { invoke } = useModelViewerContext();
   const [loaded, setLoaded] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false); // состояние ошибки
+  const [error, setError] = useState<boolean>(false);
+  const [copied, setCopied] = useState<boolean>(false);
   const thumbnailRef = useRef<HTMLImageElement>(null);
   const gltfSceneRef = useRef<Group<Object3DEventMap> | null>(null);
 
@@ -21,12 +23,10 @@ export default function ModelCard(props: Model) {
     let isMounted = true;
 
     const renderThumbnail = async () => {
-      // Проверяем, что ref для миниатюры доступен
       if (!thumbnailRef.current) {
         console.warn(`Thumbnail ref не доступен для модели "${props.name}"`);
         return;
       }
-      // Проверяем, что у модели есть GLTF файл
       if (!props.gltf) {
         console.warn(
           `Модель "${props.name}" не имеет GLTF файла для рендеринга миниатюры`,
@@ -37,25 +37,16 @@ export default function ModelCard(props: Model) {
       }
 
       try {
-        /**
-         * Поясню, что происходит ниже
-         * Сначала асинхронно подгружаем модельку из GLTF,
-         * затем она добавляется в конец очереди где ждет рендеринга,
-         * а потом уже устанавливается как `src` в thumbnail
-         */
         const gltf = await new GLTFLoader().loadAsync(
           getAssetUrl(props.gltf.resource_id),
         );
 
         if (!isMounted) {
-          // Component unmounted before loading completed, cleanup immediately
           disposeGLTFScene(gltf.scene);
           return;
         }
-        // Store reference for cleanup
         gltfSceneRef.current = gltf.scene;
 
-        // Рендерим миниатюру через очередь рендеринга
         const dataURL = await renderQueue.enqueue({
           object: gltf.scene,
           meta: props.gltf.meta,
@@ -66,7 +57,6 @@ export default function ModelCard(props: Model) {
           setLoaded(true);
         }
       } catch (e) {
-        // Обрабатываем ошибки загрузки или рендеринга
         console.error('Ошибка при загрузке/рендеринге GLTF или enqueue: ', e);
         if (isMounted) {
           setError(true);
@@ -79,13 +69,22 @@ export default function ModelCard(props: Model) {
 
     return () => {
       isMounted = false;
-      // Cleanup GLTF scene on unmount
       if (gltfSceneRef.current) {
         disposeGLTFScene(gltfSceneRef.current);
         gltfSceneRef.current = null;
       }
     };
   }, []);
+
+  const handleCopyName = async () => {
+    try {
+      await navigator.clipboard.writeText(props.name);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Ошибка копирования:', err);
+    }
+  };
 
   const icons = props.acceptable_items.map((el, i) => (
     <ModelIcon key={i} {...el} />
@@ -134,7 +133,21 @@ export default function ModelCard(props: Model) {
 
       <div className={styles.model_info}>
         <div className={styles.model_details}>
-          <h3 className={styles.model_name}>{props.name}</h3>
+          <div className={styles.model_name_row}>
+            <h3 className={styles.model_name}>{props.name}</h3>
+            <button
+              className={styles.copy_button}
+              onClick={handleCopyName}
+              title="Скопировать"
+              aria-label="Скопировать модель"
+            >
+              {copied ? (
+                <IconCheck size={18} stroke={2} />
+              ) : (
+                <IconCopy size={18} stroke={2} />
+              )}
+            </button>
+          </div>
           <div className={styles.model_icons}>{icons}</div>
         </div>
       </div>
