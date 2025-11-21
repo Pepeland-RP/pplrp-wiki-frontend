@@ -16,8 +16,6 @@ import { InitialAnimation } from './animation';
 import { IconEye, IconX } from '@tabler/icons-react';
 import { disableScroll, enableScroll } from '@/lib/scroll';
 import { getAssetUrl } from '@/lib/api';
-import { ModelIcon } from '../Models/ModelIcon';
-import style_card from '@/styles/Models/models.module.css';
 
 const ModelViewerContext = createContext<ModelViewerDialogProps | undefined>(
   undefined,
@@ -125,9 +123,6 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
     [modelData],
   );
 
-  const icons = modelData?.acceptable_items.map((el, i) => (
-    <ModelIcon key={i} {...el} />
-  ));
   return (
     <ModelViewerContext.Provider value={{ invoke, hide: close }}>
       <ReactCSSTransition
@@ -157,8 +152,6 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
                 />
               </div>
             </div>
-            <h3 className={style_card.model_name}>{modelData?.name}</h3>
-            <div className={style_card.model_icons}>{icons}</div>
           </div>
         </div>
       </ReactCSSTransition>

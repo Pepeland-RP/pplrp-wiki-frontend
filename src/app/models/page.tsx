@@ -7,7 +7,7 @@ import useSWR from 'swr';
 import { useState, useEffect } from 'react';
 
 const fetcher = async (): Promise<Model[]> => {
-  const response = await axios.get('http://localhost:3001/api/models');
+  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/models`);
   return response.data;
 };
 
