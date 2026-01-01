@@ -132,6 +132,7 @@
     border: 1px solid var(--color-border, #2a2a2a);
     transition: all 0.3s ease;
     width: 100%;
+    box-sizing: border-box;
 
     /* Простая анимация fade */
     opacity: 0;
