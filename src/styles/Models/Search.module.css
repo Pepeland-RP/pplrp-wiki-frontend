@@ -25,6 +25,14 @@
     transition: 150ms border;
 }
 
+.search_container input:-webkit-autofill,
+.search_container input:-webkit-autofill:hover,
+.search_container input:-webkit-autofill:focus,
+.search_container input:-webkit-autofill:active {
+    background-color: var(--color-level-1) !important;
+    appearance: unset !important;
+}
+
 
 .search_container button {
     background-color: var(--color-level-1);
