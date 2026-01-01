@@ -5,9 +5,10 @@ import styles from '@/styles/Models/models.module.css';
 import axios from 'axios';
 import useSWR from 'swr';
 import { useState, useEffect } from 'react';
+import { getApiUrl } from '@/lib/api';
 
 const fetcher = async (): Promise<Model[]> => {
-  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/models`);
+  const response = await axios.get(`${getApiUrl()}/models`);
   return response.data;
 };
 
