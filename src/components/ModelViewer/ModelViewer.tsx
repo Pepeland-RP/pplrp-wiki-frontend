@@ -99,7 +99,7 @@ export class ModelViewer {
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableZoom = true;
-    this.controls.enablePan = false;
+    this.controls.enablePan = true;
     this.controls.target.set(0, 0, 0);
     this.controls.update();
 
