@@ -7,6 +7,7 @@ import { useModelViewerContext } from '../ModelViewer/ModelViewerDialog';
 import { ModelIcon } from './ModelIcon';
 import { getAssetUrl } from '@/lib/api';
 import { IconCopy, IconCheck } from '@tabler/icons-react';
+import { idbGet, idbSet } from '@/lib/idb';
 
 export default function ModelCard(props: Model) {
   const { invoke } = useModelViewerContext();
@@ -23,6 +24,13 @@ export default function ModelCard(props: Model) {
         console.warn(`Thumbnail ref не доступен для модели "${props.name}"`);
         return;
       }
+      const cache = await idbGet('renders', `v1-model-${props.gltf?.resource_id}`);
+      if (cache) {
+        thumbnailRef.current.src = cache;
+        setLoaded(true);
+        return;
+      }
+
       if (!props.gltf) {
         console.warn(
           `Модель "${props.name}" не имеет GLTF файла для рендеринга миниатюры`,
@@ -40,6 +48,7 @@ export default function ModelCard(props: Model) {
 
         if (isMounted && thumbnailRef.current) {
           thumbnailRef.current.src = dataURL;
+          void idbSet('renders', `v1-model-${props.gltf?.resource_id}`, dataURL);
           setLoaded(true);
         }
       } catch (e) {

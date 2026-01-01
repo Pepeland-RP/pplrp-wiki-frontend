@@ -13,6 +13,7 @@
     "@svgr/webpack": "^8.1.0",
     "@tabler/icons-react": "^3.36.0",
     "axios": "^1.13.2",
+    "idb": "^8.0.3",
     "next": "16.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
