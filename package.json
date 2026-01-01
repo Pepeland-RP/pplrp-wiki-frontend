@@ -17,8 +17,10 @@
     "next": "16.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-select": "^5.10.2",
     "swr": "^2.3.8",
-    "three": "^0.182.0"
+    "three": "^0.182.0",
+    "zustand": "^5.0.9"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

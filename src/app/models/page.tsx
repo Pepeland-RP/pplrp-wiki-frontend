@@ -6,14 +6,40 @@ import axios from 'axios';
 import useSWR from 'swr';
 import { useState, useEffect } from 'react';
 import { getApiUrl } from '@/lib/api';
+import Search from '@/components/Models/Search';
+import Selectors from '@/components/Models/Selectors';
+import { useModelsStore } from '@/lib/store';
 
-const fetcher = async (): Promise<Model[]> => {
-  const response = await axios.get(`${getApiUrl()}/models`);
+const fetcher = async (params: Record<string, string>): Promise<Model[]> => {
+  const response = await axios.get(`${getApiUrl()}/models`, { params });
   return response.data;
 };
 
 export default function ModelsPage() {
-  const { data, isLoading } = useSWR('models', async () => fetcher());
+  const {
+    search,
+    seasons,
+    page,
+    categories,
+    take,
+    setSearch,
+    setCategories,
+    setSeasons,
+    setTake,
+  } = useModelsStore();
+
+  const { data, isLoading } = useSWR(
+    `models-${search}-${seasons}-${page}-${take}-${categories}-${page}`,
+    async () =>
+      fetcher({
+        search,
+        seasons: seasons.join(','),
+        categories: categories.join(','),
+        page: page.toString(),
+        take: take.toString(),
+      }),
+    { keepPreviousData: true },
+  );
   const [showContent, setShowContent] = useState(false);
   const [hideLoader, setHideLoader] = useState(false);
 
@@ -37,14 +63,23 @@ export default function ModelsPage() {
         <div className={styles.models_header}>
           <h1 className={styles.models_title}>Модели</h1>
         </div>
-
+        <Search onSearch={setSearch} />
+        <Selectors
+          onChange={data => {
+            setCategories(data.categories);
+            setSeasons(data.seasons);
+            setTake(data.take);
+          }}
+        />
         {!showContent ? (
           <div
-            className={`${styles.loading_background} ${hideLoader ? styles.loading_background_exit : ''}`}
+            className={`${styles.loading_background} ${
+              hideLoader ? styles.loading_background_exit : ''
+            }`}
           >
             <div className={styles.loading_viewer}>
               <img
-                src="/logos/ppl-only-logo.svg" // ничего кроме той анимации которая щас на старом сайте не придумал. Можем потом что-то другое придумать.
+                src="/logos/ppl-only-logo.svg"
                 alt="Loading"
                 className={styles.loading_logo}
               />

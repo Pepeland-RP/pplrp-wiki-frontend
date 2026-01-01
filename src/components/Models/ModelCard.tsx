@@ -24,8 +24,11 @@ export default function ModelCard(props: Model) {
         console.warn(`Thumbnail ref не доступен для модели "${props.name}"`);
         return;
       }
-      const cache = await idbGet('renders', `v1-model-${props.gltf?.resource_id}`);
-      if (cache) {
+      const cache = await idbGet(
+        'renders',
+        `v1-model-${props.gltf?.resource_id}`,
+      );
+      if (cache && thumbnailRef.current) {
         thumbnailRef.current.src = cache;
         setLoaded(true);
         return;
@@ -48,7 +51,11 @@ export default function ModelCard(props: Model) {
 
         if (isMounted && thumbnailRef.current) {
           thumbnailRef.current.src = dataURL;
-          void idbSet('renders', `v1-model-${props.gltf?.resource_id}`, dataURL);
+          void idbSet(
+            'renders',
+            `v1-model-${props.gltf?.resource_id}`,
+            dataURL,
+          );
           setLoaded(true);
         }
       } catch (e) {

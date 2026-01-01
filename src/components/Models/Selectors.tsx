@@ -1,0 +1,124 @@
+'use client';
+
+import { getApiUrl } from '@/lib/api';
+import axios from 'axios';
+import { useEffect, useRef, useState } from 'react';
+import Select from 'react-select';
+import useSWR from 'swr';
+import styles from '@/styles/Models/Selectors.module.css';
+
+type APIFiltersType = {
+  seasons: {
+    id: number;
+    name: string;
+  }[];
+  categories: {
+    id: number;
+    name: string;
+  }[];
+};
+
+type PropsData = {
+  seasons: number[];
+  categories: number[];
+  take: number;
+};
+
+type SelectType = { value: number; label: string }[];
+
+const fetcher = async (): Promise<APIFiltersType> => {
+  const response = await axios.get(`${getApiUrl()}/models/filters`);
+  return response.data;
+};
+
+const take_params = Array.from({ length: 8 }).map((_, i) => ({
+  value: (i + 1) * 12,
+  label: `Показать ${(i + 1) * 12}`,
+}));
+
+interface SelectorsProps {
+  onChange: (data: PropsData) => void;
+}
+
+const Selectors = ({ onChange }: SelectorsProps) => {
+  const { data, isLoading } = useSWR('filters', async () => fetcher());
+  const [seasons, setSeasons] = useState<SelectType>([]);
+  const [categories, setCategories] = useState<SelectType>([]);
+
+  const propsData = useRef<PropsData>({
+    categories: [],
+    seasons: [],
+    take: 12,
+  });
+
+  useEffect(() => {
+    if (!data) return;
+    setSeasons(
+      data.seasons.map(season => ({ value: season.id, label: season.name })),
+    );
+    setCategories(
+      data.categories.map(category => ({
+        value: category.id,
+        label: category.name,
+      })),
+    );
+  }, [data]);
+
+  return (
+    <div className={styles.container}>
+      <Select
+        options={seasons}
+        className={`react-select-container ${styles.select}`}
+        classNamePrefix="react-select"
+        isSearchable
+        instanceId="select-1"
+        isLoading={isLoading}
+        placeholder="Сезоны"
+        onChange={e => {
+          propsData.current = {
+            ...propsData.current,
+            seasons: e.map(i => i.value),
+          };
+          onChange(propsData.current);
+        }}
+        isMulti
+        isClearable
+      />
+      <Select
+        options={categories}
+        className={`react-select-container ${styles.select}`}
+        classNamePrefix="react-select"
+        isSearchable
+        instanceId="select-2"
+        isLoading={isLoading}
+        placeholder="Категории"
+        onChange={e => {
+          propsData.current = {
+            ...propsData.current,
+            categories: e.map(i => i.value),
+          };
+          onChange(propsData.current);
+        }}
+        isClearable
+        isMulti
+      />
+      <Select
+        options={take_params}
+        defaultValue={take_params[0]}
+        className={`react-select-container ${styles.select}`}
+        classNamePrefix="react-select"
+        isSearchable={false}
+        instanceId="select-3"
+        onChange={e => {
+          propsData.current = {
+            ...propsData.current,
+            take: e!.value,
+          };
+          onChange(propsData.current);
+        }}
+      />
+    </div>
+  );
+};
+
+export default Selectors;
