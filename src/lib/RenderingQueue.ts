@@ -1,10 +1,10 @@
 'use client';
 
 import { ModelViewer } from '@/components/ModelViewer/ModelViewer';
-import { Group, Object3DEventMap } from 'three';
+import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 
 type TaskDTO = {
-  object: Group<Object3DEventMap>;
+  object_url: string;
   meta?: GLTFMeta | null;
 };
 
@@ -101,11 +101,12 @@ export class RenderingQueue {
       }
 
       this.renderer!.controls.update();
+      const gltf = await new GLTFLoader().loadAsync(task.data.object_url);
 
       // Пробуем рендерить
-      this.renderer!.setGltf(task.data.object, should_center);
+      this.renderer!.setGltf(gltf.scene, should_center);
       const dataURL = this.canvas.toDataURL();
-      this.renderer!.scene.remove(task.data.object);
+      this.renderer!.scene.remove(gltf.scene);
 
       task.resolve(dataURL);
     } catch (e) {

@@ -1,11 +1,8 @@
 'use client';
 
 import { renderQueue } from '@/lib/RenderingQueue';
-import { disposeGLTFScene } from '@/lib/three-utils';
 import styles from '@/styles/Models/models.module.css';
 import { useEffect, useRef, useState } from 'react';
-import { Group, Object3DEventMap } from 'three';
-import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { useModelViewerContext } from '../ModelViewer/ModelViewerDialog';
 import { ModelIcon } from './ModelIcon';
 import { getAssetUrl } from '@/lib/api';
@@ -17,7 +14,6 @@ export default function ModelCard(props: Model) {
   const [error, setError] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const thumbnailRef = useRef<HTMLImageElement>(null);
-  const gltfSceneRef = useRef<Group<Object3DEventMap> | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -37,18 +33,8 @@ export default function ModelCard(props: Model) {
       }
 
       try {
-        const gltf = await new GLTFLoader().loadAsync(
-          getAssetUrl(props.gltf.resource_id),
-        );
-
-        if (!isMounted) {
-          disposeGLTFScene(gltf.scene);
-          return;
-        }
-        gltfSceneRef.current = gltf.scene;
-
         const dataURL = await renderQueue.enqueue({
-          object: gltf.scene,
+          object_url: getAssetUrl(props.gltf.resource_id),
           meta: props.gltf.meta,
         });
 
@@ -69,10 +55,6 @@ export default function ModelCard(props: Model) {
 
     return () => {
       isMounted = false;
-      if (gltfSceneRef.current) {
-        disposeGLTFScene(gltfSceneRef.current);
-        gltfSceneRef.current = null;
-      }
     };
   }, []);
 
