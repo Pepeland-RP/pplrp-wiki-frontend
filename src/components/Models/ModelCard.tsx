@@ -28,6 +28,7 @@ export default function ModelCard(props: Model) {
         'renders',
         `v1-model-${props.gltf?.resource_id}`,
       );
+
       if (cache && thumbnailRef.current) {
         thumbnailRef.current.src = cache;
         setLoaded(true);

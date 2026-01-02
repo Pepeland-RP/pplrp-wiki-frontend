@@ -16,6 +16,7 @@ import {
   FloatType,
   GridHelper,
   Group,
+  MathUtils,
   Object3DEventMap,
   PerspectiveCamera,
   Scene,
@@ -165,6 +166,7 @@ export class ModelViewer {
 
     this.object = object;
     applyMinecraftShaderToGLTF(this.object, this.minecraftLightingConfig);
+    this.object.updateWorldMatrix(true, true);
 
     const box = new Box3().setFromObject(this.object);
     const size = new Vector3();
@@ -172,12 +174,25 @@ export class ModelViewer {
     box.getSize(size);
     box.getCenter(center);
 
-    this.object.position.x -= center.x;
-    this.object.position.y -= box.min.y;
-    this.object.position.z -= center.z;
+    this.object.position.sub(center);
+    this.grid.position.y -= center.y;
+
+    const maxSize = Math.max(size.x, size.y, size.z);
+
+    const fov = MathUtils.degToRad(this.camera.fov);
+    let distance = maxSize / (2 * Math.tan(fov / 2));
+    distance *= 1.5;
+
+    this.camera.position.set(-distance, distance / 1.5, -distance);
+    this.camera.lookAt(0, 0, 0);
+
+    this.camera.near = distance / 100;
+    this.camera.far = distance * 100;
+    this.camera.updateProjectionMatrix();
 
     if (update) {
-      this.controls.target.y = center.y;
+      this.controls.target.set(0, 0, 0);
+      this.controls.update();
     }
 
     this.scene.add(this.object);
