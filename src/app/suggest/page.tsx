@@ -4,49 +4,47 @@ import { useState } from 'react';
 import { IconPlus, IconX, IconUpload } from '@tabler/icons-react';
 import styles from '@/styles/Suggest/Suggest.module.css';
 
+interface ImageType {
+  data: string;
+  size: number;
+  valid: boolean;
+}
+
 export default function SuggestPage() {
   const [nickname, setNickname] = useState('');
   const [suggestion, setSuggestion] = useState('');
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<ImageType[]>([]);
   const [links, setLinks] = useState<string[]>(['']);
   const [isDragging, setIsDragging] = useState(false);
-  const [uploadError, setUploadError] = useState('');
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
-      processFiles(files);
+      void processFiles(files);
     }
+    e.target.value = '';
   };
 
-  const processFiles = (files: FileList) => {
-    setUploadError('');
-    const newImages: string[] = [];
-    const invalidFiles: string[] = [];
-
-    Array.from(files).forEach((file) => {
-      if (file.size > 25 * 1024 * 1024) {
-        invalidFiles.push(file.name);
-        return;
-      }
+  const asyncReader = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        newImages.push(reader.result as string);
-        if (newImages.length + invalidFiles.length === files.length) {
-          if (invalidFiles.length > 0) {
-            setUploadError(`Файлы превышают максимальный размер 25MB: ${invalidFiles.join(', ')}`);
-          }
-          if (newImages.length > 0) {
-            setImages([...images, ...newImages]);
-          }
-        }
-      };
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
       reader.readAsDataURL(file);
     });
 
-    if (invalidFiles.length === files.length) {
-      setUploadError(`Файлы превышают максимальный размер 25MB`);
+  const processFiles = async (files: FileList) => {
+    const newImages: ImageType[] = [];
+
+    for (const file of Array.from(files)) {
+      const b64 = await asyncReader(file);
+      newImages.push({
+        data: b64,
+        size: file.size,
+        valid: file.size < 5 * 1024 * 1024,
+      });
     }
+    setImages(prev => [...prev, ...newImages].slice(0, 10));
   };
 
   const handleDragEnter = (e: React.DragEvent) => {
@@ -73,7 +71,7 @@ export default function SuggestPage() {
 
     const files = e.dataTransfer.files;
     if (files && files.length > 0) {
-      processFiles(files);
+      void processFiles(files);
     }
   };
 
@@ -97,7 +95,12 @@ export default function SuggestPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ nickname, suggestion, images, links });
+    console.log({
+      nickname,
+      suggestion,
+      images: images.filter(i => i.valid),
+      links,
+    });
   };
 
   return (
@@ -115,7 +118,7 @@ export default function SuggestPage() {
               <input
                 type="text"
                 value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
+                onChange={e => setNickname(e.target.value)}
                 placeholder="CyCeKu"
                 className={styles.input}
                 required
@@ -126,7 +129,7 @@ export default function SuggestPage() {
               <label className={styles.label}>Ваше предложение</label>
               <textarea
                 value={suggestion}
-                onChange={(e) => setSuggestion(e.target.value)}
+                onChange={e => setSuggestion(e.target.value)}
                 placeholder="Опишите костюм, который хотели бы видеть в ресурспаке. Желательно приложить референсы или детальное описание..."
                 className={styles.textarea}
                 rows={6}
@@ -135,7 +138,6 @@ export default function SuggestPage() {
             </div>
 
             <div className={styles.formGroup}>
-
               <div className={styles.attachments}>
                 <div className={styles.imagesSection}>
                   <div className={styles.sectionHeader}>
@@ -143,12 +145,17 @@ export default function SuggestPage() {
                   </div>
 
                   <div
-                    className={`${styles.dropzone} ${isDragging ? styles.dragActive : ''}`}
+                    className={
+                      `${styles.dropzone} ` +
+                      `${isDragging && styles.dragActive}`
+                    }
                     onDragEnter={handleDragEnter}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
-                    onClick={() => document.getElementById('fileInput')?.click()}
+                    onClick={() =>
+                      document.getElementById('fileInput')?.click()
+                    }
                   >
                     <input
                       id="fileInput"
@@ -158,22 +165,20 @@ export default function SuggestPage() {
                       onChange={handleImageUpload}
                       className={styles.fileInput}
                     />
-                    <IconUpload size={32} stroke={1.5} className={styles.uploadIcon} />
+                    <IconUpload size={32} stroke={1.5} />
                     <p className={styles.dropzoneText}>
-                      Drop image here or click to upload
+                      Загрузите до 10 изображений
                     </p>
-                    <p className={styles.dropzoneSubtext}>Max size: 25MB</p>
+                    <p className={styles.dropzoneSubtext}>
+                      Максимальный размер: 25MB
+                    </p>
                   </div>
-
-                  {uploadError && (
-                    <p className={styles.errorMessage}>{uploadError}</p>
-                  )}
 
                   {images.length > 0 && (
                     <div className={styles.imageGrid}>
                       {images.map((image, index) => (
                         <div key={index} className={styles.imagePreview}>
-                          <img src={image} alt={`Preview ${index + 1}`} />
+                          <img src={image.data} alt={`Preview ${index + 1}`} />
                           <button
                             type="button"
                             onClick={() => handleRemoveImage(index)}
@@ -181,6 +186,12 @@ export default function SuggestPage() {
                           >
                             <IconX size={16} stroke={2} />
                           </button>
+                          {!image.valid && (
+                            <span className={styles.fileTooBigError}>
+                              Файл слишком большой (
+                              {Math.ceil(image.size / (1024 * 1024))} МБ)
+                            </span>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -204,7 +215,9 @@ export default function SuggestPage() {
                         <input
                           type="url"
                           value={link}
-                          onChange={(e) => handleLinkChange(index, e.target.value)}
+                          onChange={e =>
+                            handleLinkChange(index, e.target.value)
+                          }
                           placeholder="https://example.com"
                           className={styles.input}
                         />

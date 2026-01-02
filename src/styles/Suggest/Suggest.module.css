@@ -122,7 +122,6 @@
   color: var(--color-text, #eeeeee);
 }
 
-.uploadButton,
 .addButton {
   padding: 6px 6px;
   background-color: transparent;
@@ -135,7 +134,6 @@
   user-select: none;
 }
 
-.uploadButton:hover,
 .addButton:hover {
   background-color: color-mix(in hsl, var(--color-level-1), white 3%);
   border-color: var(--color-border-focus, #2b2b2b);
@@ -170,21 +168,32 @@
   color: var(--color-text-secondary, #a5a5a5);
   font-size: 0.95rem;
   text-align: center;
+  margin: 0;
 }
 
 .dropzoneSubtext {
   color: var(--color-text-secondary, #a5a5a5);
   font-size: 0.8rem;
   text-align: center;
+  margin: 0;
 }
 
-.errorMessage {
-  margin: 0;
-  margin-top: 8px;
-  color: #ff4444;
-  font-size: 0.875rem;
-  text-align: left;
+.fileTooBigError {
+  position: absolute;
+  text-wrap: wrap;
+
+  color: var(--error-color);
+  font-size: .8rem;
+  font-weight: 600;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 5px;
+
+  background-color: color-mix(in srgb, var(--color-level-1) 80%, transparent 20%);
 }
+
 
 .fileInput {
   display: none;
