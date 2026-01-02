@@ -100,6 +100,9 @@ export class RenderingQueue {
         );
       }
 
+      this.renderer!.renderDoubleSided =
+        task.data.meta?.render?.double_sided ?? true;
+
       this.renderer!.controls.update();
       await this.renderer?.loadGLTF(task.data.object_url, should_center);
       const dataURL = this.canvas.toDataURL();

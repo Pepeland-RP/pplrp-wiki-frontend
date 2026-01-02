@@ -278,7 +278,6 @@
     box-sizing: border-box;
     width: 100%;
     aspect-ratio: 1;
-    padding: 15px;
     transition: transform 400ms;
     border-radius: 1rem;
     overflow: hidden;

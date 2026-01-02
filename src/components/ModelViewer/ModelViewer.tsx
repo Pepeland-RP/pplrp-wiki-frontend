@@ -312,4 +312,10 @@ export class ModelViewer {
       1 / (h * pixelRatio),
     );
   }
+
+  set renderDoubleSided(state: boolean) {
+    this.minecraftLightingConfig = {
+      textureSide: state ? 2 : 0,
+    };
+  }
 }

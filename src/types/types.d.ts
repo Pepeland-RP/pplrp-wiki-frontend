@@ -47,5 +47,6 @@ interface GLTFMeta {
   render?: {
     camera_position?: [number, number, number];
     controls_target?: [number, number, number];
+    double_sided?: boolean;
   };
 }
