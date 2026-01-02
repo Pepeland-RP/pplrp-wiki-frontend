@@ -7,6 +7,9 @@ import { IconHexagons, IconBulb, IconPackage, IconDots, IconHome } from '@tabler
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '@/styles/Sidebar.module.css';
+import PplLogo from '@/resources/ppl-only-logo.svg';
+import ModrinthLogo from '@/resources/modrinth.svg';
+import BoostyLogo from '@/resources/boosty.svg';
 
 interface NavItem {
   href: string;
@@ -22,8 +25,8 @@ const mainNavItems: NavItem[] = [
 ];
 
 const externalLinks = [
-  { href: 'https://modrinth.com/resourcepack/pepelandrp', label: 'Modrinth', icon: 'modrinth', size: 20 },
-  { href: 'https://boosty.to/pepelandresourcepack', label: 'Boosty', icon: 'boosty', size: 24 },
+  { href: 'https://modrinth.com/resourcepack/pepelandrp', label: 'Modrinth', icon: ModrinthLogo, size: 20 },
+  { href: 'https://boosty.to/pepelandresourcepack', label: 'Boosty', icon: BoostyLogo, size: 24 },
 ];
 
 function useIsMobile(bp = 768) {
@@ -103,20 +106,23 @@ export default function Sidebar() {
     mounted && isMobile && isMenuOpen && menuPos
       ? createPortal(
           <div className={styles.dropdownMobile} style={{ left: menuPos.left, bottom: menuPos.bottom }}>
-            {externalLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.dropdownLink}
-              >
-                <div className={styles.dropdownIcon}>
-                  <Image src={`/resources/${link.icon}.svg`} alt={link.label} width={link.size} height={link.size} />
-                </div>
-                <span>{link.label}</span>
-              </a>
-            ))}
+            {externalLinks.map((link) => {
+              const IconComponent = link.icon;
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.dropdownLink}
+                >
+                  <div className={styles.dropdownIcon}>
+                    <IconComponent width={link.size} height={link.size} style={{ fill: 'currentColor' }} />
+                  </div>
+                  <span>{link.label}</span>
+                </a>
+              );
+            })}
           </div>,
           document.body
         )
@@ -125,7 +131,7 @@ export default function Sidebar() {
   return (
     <aside className={styles.sidebar}>
       <div className={styles.logo}>
-        <Image src="/logos/ppl-only-logo.svg" alt="ppl logo" width={32} height={32} />
+        <PplLogo width={32} height={32} />
       </div>
 
       <nav className={styles.bottomNav}>
@@ -181,20 +187,23 @@ export default function Sidebar() {
 
             {!isMobile && isMenuOpen && (
               <div className={styles.dropdown}>
-                {externalLinks.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.dropdownLink}
-                  >
-                    <div className={styles.dropdownIcon}>
-                      <Image src={`/logos/${link.icon}.svg`} alt={link.label} width={link.size} height={link.size} />
-                    </div>
-                    <span>{link.label}</span>
-                  </a>
-                ))}
+                {externalLinks.map((link) => {
+                  const IconComponent = link.icon;
+                  return (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.dropdownLink}
+                    >
+                      <div className={styles.dropdownIcon}>
+                        <IconComponent width={link.size} height={link.size} style={{ fill: 'currentColor' }} />
+                      </div>
+                      <span>{link.label}</span>
+                    </a>
+                  );
+                })}
               </div>
             )}
           </div>
