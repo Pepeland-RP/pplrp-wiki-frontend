@@ -81,6 +81,7 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
           width: 400,
           height: 400,
           panoramaUrl: '/static/panorama_image.png',
+          renderDoubleSide: true,
         });
 
         viewerRef.current

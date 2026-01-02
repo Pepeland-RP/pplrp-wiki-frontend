@@ -133,7 +133,7 @@ export default function ModelsPage() {
   );
 }
 
-export const BottomPaginator = (
+const BottomPaginator = (
   props: PaginatorProps & { elements: unknown[] | null | undefined },
 ) => {
   if (props.elements == null) return;
