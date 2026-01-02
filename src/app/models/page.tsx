@@ -11,6 +11,7 @@ import Selectors from '@/components/Models/Selectors';
 import { useModelsStore } from '@/lib/store';
 import { numbersTxt } from '@/lib/textUtils';
 import { Paginator, PaginatorProps } from '@/components/Models/Paginator';
+import Logo from '@/resources/ppl-only-logo.svg';
 
 const fetcher = async (
   params: Record<string, string>,
@@ -103,16 +104,13 @@ export default function ModelsPage() {
         />
         {!showContent ? (
           <div
-            className={`${styles.loading_background} ${
-              hideLoader ? styles.loading_background_exit : ''
-            }`}
+            className={
+              `${styles.loading_background}` +
+              `${hideLoader && styles.loading_background_exit}`
+            }
           >
             <div className={styles.loading_viewer}>
-              <img
-                src="/logos/ppl-only-logo.svg"
-                alt="Loading"
-                className={styles.loading_logo}
-              />
+              <Logo className={styles.loading_logo} />
             </div>
           </div>
         ) : (
