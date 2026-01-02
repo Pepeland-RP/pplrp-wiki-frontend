@@ -86,7 +86,8 @@ export default function ModelsPage() {
         />
         <div className={styles.count_page_container}>
           <p className={styles.models_count}>
-            Найдено <span>{totalCount}</span>{' '}
+            {numbersTxt(totalCount, ['Найдена', 'Найдено', 'Найдено'])}{' '}
+            <span>{totalCount}</span>{' '}
             {numbersTxt(totalCount, ['модель', 'модели', 'моделей'])}
           </p>
           <p className={styles.models_count}>
