@@ -10,6 +10,11 @@ interface ModelViewerDialogProps {
   hide: () => void;
 }
 
+interface ModelResponse {
+  data: Model[];
+  total_count: number;
+}
+
 interface Model {
   id: number;
   name: string;

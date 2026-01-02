@@ -38,9 +38,10 @@ const take_params = Array.from({ length: 8 }).map((_, i) => ({
 
 interface SelectorsProps {
   onChange: (data: PropsData) => void;
+  total_count: number;
 }
 
-const Selectors = ({ onChange }: SelectorsProps) => {
+const Selectors = ({ onChange, total_count }: SelectorsProps) => {
   const { data, isLoading } = useSWR('filters', async () => fetcher());
   const [seasons, setSeasons] = useState<SelectType>([]);
   const [categories, setCategories] = useState<SelectType>([]);
@@ -103,7 +104,10 @@ const Selectors = ({ onChange }: SelectorsProps) => {
         isMulti
       />
       <Select
-        options={take_params}
+        options={[
+          ...take_params,
+          { value: total_count, label: 'Показать все' },
+        ]}
         defaultValue={take_params[0]}
         className={`react-select-container ${styles.select}`}
         classNamePrefix="react-select"

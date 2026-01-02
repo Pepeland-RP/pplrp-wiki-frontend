@@ -20,7 +20,7 @@
     border: 1px var(--color-border) solid;
     border-radius: .75rem;
 
-    width: min(70%, 70vh);
+    width: min(85%, 70vh);
     aspect-ratio: 0.9 / 1;
     max-height: 70%;
 

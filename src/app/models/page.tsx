@@ -10,7 +10,9 @@ import Search from '@/components/Models/Search';
 import Selectors from '@/components/Models/Selectors';
 import { useModelsStore } from '@/lib/store';
 
-const fetcher = async (params: Record<string, string>): Promise<Model[]> => {
+const fetcher = async (
+  params: Record<string, string>,
+): Promise<ModelResponse> => {
   const response = await axios.get(`${getApiUrl()}/models`, { params });
   return response.data;
 };
@@ -26,6 +28,7 @@ export default function ModelsPage() {
     setCategories,
     setSeasons,
     setTake,
+    setTotalCount,
   } = useModelsStore();
 
   const { data, isLoading } = useSWR(
@@ -53,6 +56,7 @@ export default function ModelsPage() {
         setShowContent(true);
       }, 300);
 
+      setTotalCount(data.total_count);
       return () => clearTimeout(timer);
     }
   }, [data, isLoading]);
@@ -65,6 +69,7 @@ export default function ModelsPage() {
         </div>
         <Search onSearch={setSearch} />
         <Selectors
+          total_count={data?.total_count ?? 0}
           onChange={data => {
             setCategories(data.categories);
             setSeasons(data.seasons);
@@ -87,7 +92,7 @@ export default function ModelsPage() {
           </div>
         ) : (
           <div className={`${styles.models_grid} ${styles.show}`}>
-            {data!.map(element => (
+            {data!.data.map(element => (
               <ModelCard key={element.id} {...element} />
             ))}
           </div>
