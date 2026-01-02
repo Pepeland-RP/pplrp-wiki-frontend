@@ -150,6 +150,9 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
               onMouseDown={() => {
                 if (viewerRef.current) viewerRef.current.animation = undefined;
               }}
+              onTouchStart={() => {
+                if (viewerRef.current) viewerRef.current.animation = undefined;
+              }}
             >
               <div className={style.render_container} id="viewer">
                 <canvas
