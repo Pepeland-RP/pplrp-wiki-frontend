@@ -1,9 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { IconHexagons, IconBulb, IconPackage, IconDots, IconHome } from '@tabler/icons-react';
+import {
+  IconHexagons,
+  IconBulb,
+  IconPackage,
+  IconDots,
+  IconHome,
+} from '@tabler/icons-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '@/styles/Sidebar.module.css';
@@ -25,8 +30,18 @@ const mainNavItems: NavItem[] = [
 ];
 
 const externalLinks = [
-  { href: 'https://modrinth.com/resourcepack/pepelandrp', label: 'Modrinth', icon: ModrinthLogo, size: 20 },
-  { href: 'https://boosty.to/pepelandresourcepack', label: 'Boosty', icon: BoostyLogo, size: 24 },
+  {
+    href: 'https://modrinth.com/resourcepack/pepelandrp',
+    label: 'Modrinth',
+    icon: ModrinthLogo,
+    size: 20,
+  },
+  {
+    href: 'https://boosty.to/pepelandresourcepack',
+    label: 'Boosty',
+    icon: BoostyLogo,
+    size: 24,
+  },
 ];
 
 function useIsMobile(bp = 768) {
@@ -56,7 +71,10 @@ export default function Sidebar() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const [menuPos, setMenuPos] = useState<{ left: number; bottom: number } | null>(null);
+  const [menuPos, setMenuPos] = useState<{
+    left: number;
+    bottom: number;
+  } | null>(null);
 
   const canHover = useMemo(() => {
     if (typeof window === 'undefined') return false;
@@ -74,7 +92,9 @@ export default function Sidebar() {
     const onDown = (event: MouseEvent) => {
       const t = event.target as Node;
       const inWrap = menuWrapRef.current?.contains(t);
-      const inMobileDropdown = (t as HTMLElement | null)?.closest?.(`.${styles.dropdownMobile}`);
+      const inMobileDropdown = (t as HTMLElement | null)?.closest?.(
+        `.${styles.dropdownMobile}`,
+      );
       if (!inWrap && !inMobileDropdown) setIsMenuOpen(false);
     };
 
@@ -105,8 +125,11 @@ export default function Sidebar() {
   const mobileDropdown =
     mounted && isMobile && isMenuOpen && menuPos
       ? createPortal(
-          <div className={styles.dropdownMobile} style={{ left: menuPos.left, bottom: menuPos.bottom }}>
-            {externalLinks.map((link) => {
+          <div
+            className={styles.dropdownMobile}
+            style={{ left: menuPos.left, bottom: menuPos.bottom }}
+          >
+            {externalLinks.map(link => {
               const IconComponent = link.icon;
               return (
                 <a
@@ -117,14 +140,18 @@ export default function Sidebar() {
                   className={styles.dropdownLink}
                 >
                   <div className={styles.dropdownIcon}>
-                    <IconComponent width={link.size} height={link.size} style={{ fill: 'currentColor' }} />
+                    <IconComponent
+                      width={link.size}
+                      height={link.size}
+                      style={{ fill: 'currentColor' }}
+                    />
                   </div>
                   <span>{link.label}</span>
                 </a>
               );
             })}
           </div>,
-          document.body
+          document.body,
         )
       : null;
 
@@ -137,7 +164,7 @@ export default function Sidebar() {
       <nav className={styles.bottomNav}>
         <div className={styles.bottomNavInner}>
           <div className={styles.mainItems}>
-            {mainNavItems.map((item) => {
+            {mainNavItems.map(item => {
               const Icon = item.icon;
               const active = isActive(item.href);
               const hovered = hoveredItem === item.href;
@@ -146,16 +173,24 @@ export default function Sidebar() {
                 <div key={item.href} className={styles.navItemWrapper}>
                   <Link
                     href={item.href}
-                    className={`${styles.navButton} ${active ? styles.active : ''}`}
-                    onMouseEnter={canHover ? () => setHoveredItem(item.href) : undefined}
-                    onMouseLeave={canHover ? () => setHoveredItem(null) : undefined}
+                    className={`${styles.navButton} ${
+                      active ? styles.active : ''
+                    }`}
+                    onMouseEnter={
+                      canHover ? () => setHoveredItem(item.href) : undefined
+                    }
+                    onMouseLeave={
+                      canHover ? () => setHoveredItem(null) : undefined
+                    }
                   >
                     <Icon size={24} stroke={1.5} />
                     <span className={styles.navLabel}>{item.label}</span>
                   </Link>
 
                   {canHover && hovered && !isMobile && (
-                    <div className={`${styles.staticTooltip} ${styles.staticTooltipEnter}`}>
+                    <div
+                      className={`${styles.staticTooltip} ${styles.staticTooltipEnter}`}
+                    >
                       {item.label}
                       <div className={styles.pointer} />
                     </div>
@@ -165,12 +200,17 @@ export default function Sidebar() {
             })}
           </div>
 
-          <div className={`${styles.navItemWrapper} ${styles.menuItem} ${styles.menuCompact}`} ref={menuWrapRef}>
+          <div
+            className={`${styles.navItemWrapper} ${styles.menuItem} ${styles.menuCompact}`}
+            ref={menuWrapRef}
+          >
             <button
               ref={menuBtnRef}
               type="button"
-              className={`${styles.navButton} ${styles.menuButton} ${isMenuOpen ? styles.active : ''}`}
-              onClick={() => setIsMenuOpen((v) => !v)}
+              className={`${styles.navButton} ${styles.menuButton} ${
+                isMenuOpen ? styles.active : ''
+              }`}
+              onClick={() => setIsMenuOpen(v => !v)}
               onMouseEnter={canHover ? () => setHoveredItem('menu') : undefined}
               onMouseLeave={canHover ? () => setHoveredItem(null) : undefined}
               aria-label="Меню"
@@ -179,7 +219,9 @@ export default function Sidebar() {
             </button>
 
             {canHover && hoveredItem === 'menu' && !isMobile && (
-              <div className={`${styles.staticTooltip} ${styles.staticTooltipEnter}`}>
+              <div
+                className={`${styles.staticTooltip} ${styles.staticTooltipEnter}`}
+              >
                 Меню
                 <div className={styles.pointer} />
               </div>
@@ -187,7 +229,7 @@ export default function Sidebar() {
 
             {!isMobile && isMenuOpen && (
               <div className={styles.dropdown}>
-                {externalLinks.map((link) => {
+                {externalLinks.map(link => {
                   const IconComponent = link.icon;
                   return (
                     <a
@@ -198,7 +240,11 @@ export default function Sidebar() {
                       className={styles.dropdownLink}
                     >
                       <div className={styles.dropdownIcon}>
-                        <IconComponent width={link.size} height={link.size} style={{ fill: 'currentColor' }} />
+                        <IconComponent
+                          width={link.size}
+                          height={link.size}
+                          style={{ fill: 'currentColor' }}
+                        />
                       </div>
                       <span>{link.label}</span>
                     </a>

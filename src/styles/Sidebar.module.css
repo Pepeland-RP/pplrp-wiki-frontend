@@ -120,6 +120,7 @@ button.navButton {
   pointer-events: none;
   opacity: 1;
   animation: tooltipFadeIn 200ms ease-out;
+  user-select: none;
 }
 
 .pointer {
@@ -128,7 +129,7 @@ button.navButton {
   top: 50%;
   width: 8px;
   aspect-ratio: 1;
-  transform: translateY(-50%) rotate(45deg);
+  transform: translate(50%, -50%) rotate(-45deg);
   background-color: var(--color-level-1, #0a0a0a);
   border: 1px solid var(--color-border, #141414);
   border-right: none;
@@ -145,6 +146,7 @@ button.navButton {
     opacity: 0;
     transform: translateY(-50%) translateX(-4px);
   }
+
   to {
     opacity: 1;
     transform: translateY(-50%) translateX(0);
@@ -211,6 +213,7 @@ button.navButton {
     opacity: 0;
     transform: translateX(-8px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -222,6 +225,7 @@ button.navButton {
     opacity: 0;
     transform: translateX(-50%) translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
