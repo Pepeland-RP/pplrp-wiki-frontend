@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import '@/styles/globals.css';
 import { Inter } from 'next/font/google';
+import Sidebar from '@/components/Sidebar';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -23,7 +24,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <Sidebar />
+        <main className="appMain">
+          {children}
+        </main>
+      </body>
     </html>
   );
 }

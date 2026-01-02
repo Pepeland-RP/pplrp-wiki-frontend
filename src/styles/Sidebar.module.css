@@ -1,0 +1,338 @@
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 72px;
+  background-color: var(--color-level-1, #0a0a0a);
+  border-right: 1px solid var(--color-border, #141414);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 12px;
+  box-sizing: border-box;
+  z-index: 50;
+  overflow: visible;
+}
+
+.logo {
+  margin-bottom: 32px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bottomNav {
+  flex: 1;
+  width: 100%;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+}
+
+.bottomNavInner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.mainItems {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.navItemWrapper {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+.menuItem {
+  margin-top: auto;
+}
+
+.navButton {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-text-secondary, #a5a5a5);
+  text-decoration: none;
+  flex-direction: column;
+  gap: 2px;
+  font: inherit;
+  line-height: 1;
+  padding: 0;
+  transition: all 0.2s ease-out;
+}
+
+button.navButton {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.navButton:hover {
+  color: var(--color-text, #eeeeee);
+  background-color: var(--color-level-2, #1b1b1b);
+  border-color: var(--color-border, #141414);
+}
+
+.active {
+  background-color: var(--color-level-2, #1b1b1b);
+  color: var(--color-text, #eeeeee);
+  border-color: var(--color-border, #141414);
+}
+
+.navLabel {
+  display: none;
+}
+
+.menuButton {
+  width: 48px;
+}
+
+.staticTooltip {
+  position: absolute;
+  z-index: 60;
+  top: 50%;
+  left: calc(100% + 10px);
+  transform: translateY(-50%);
+  background-color: var(--color-level-1, #0a0a0a);
+  border: 1px solid var(--color-border, #141414);
+  border-radius: 6px;
+  padding: 6px 10px;
+  box-sizing: border-box;
+  font-size: 13px;
+  text-align: center;
+  white-space: nowrap;
+  color: var(--color-text, #eeeeee);
+  pointer-events: none;
+  opacity: 1;
+  animation: tooltipFadeIn 200ms ease-out;
+}
+
+.pointer {
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  width: 8px;
+  aspect-ratio: 1;
+  transform: translateY(-50%) rotate(45deg);
+  background-color: var(--color-level-1, #0a0a0a);
+  border: 1px solid var(--color-border, #141414);
+  border-right: none;
+  border-bottom: none;
+  box-sizing: border-box;
+}
+
+.staticTooltipEnter {
+  animation: tooltipFadeIn 200ms ease-out;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+.dropdown {
+  position: absolute;
+  left: calc(100% + 8px);
+  bottom: 0;
+  background-color: var(--color-level-1, #0a0a0a);
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--color-border, #141414);
+  overflow: hidden;
+  min-width: 180px;
+  z-index: 9999;
+  animation: dropdownSlideIn 200ms ease-out;
+}
+
+.dropdownMobile {
+  position: fixed;
+  transform: translateX(-50%);
+  background-color: var(--color-level-1, #0a0a0a);
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--color-border, #141414);
+  overflow: hidden;
+  min-width: 180px;
+  z-index: 999999;
+  animation: dropdownSlideInMobile 200ms ease-out;
+}
+
+.dropdownLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: var(--color-text-secondary, #a5a5a5);
+  text-decoration: none;
+  transition: all 0.15s ease-out;
+}
+
+.dropdownLink:hover {
+  color: var(--color-text, #eeeeee);
+  background-color: var(--color-level-2, #1b1b1b);
+}
+
+.dropdownIcon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dropdownLink span {
+  font-size: 14px;
+}
+
+@keyframes dropdownSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes dropdownSlideInMobile {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  .logo {
+    display: none;
+  }
+
+  .bottomNav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    padding: 6px 0 calc(6px + env(safe-area-inset-bottom)) 0;
+
+    background-color: var(--color-level-1, #0a0a0a);
+    border-top: 1px solid var(--color-border, #141414);
+
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+
+    scroll-snap-type: x mandatory;
+    z-index: 9999;
+
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+    backface-visibility: hidden;
+
+    overscroll-behavior-x: contain;
+    touch-action: pan-x;
+  }
+
+  .bottomNav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .bottomNavInner {
+    width: max-content;
+    min-width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 6px;
+    padding: 0 6px;
+    box-sizing: border-box;
+  }
+
+  .mainItems {
+    display: contents;
+  }
+
+  .bottomNavInner a,
+  .bottomNavInner button {
+    touch-action: pan-x;
+  }
+
+  .navItemWrapper {
+    flex: 1 1 0;
+    width: 0;
+    min-width: 96px;
+    scroll-snap-align: start;
+  }
+
+  .menuCompact {
+    flex: 0 0 56px;
+    width: 56px;
+    min-width: 56px;
+  }
+
+  .menuItem {
+    margin-top: 0;
+  }
+
+  .navButton {
+    height: 56px;
+    padding: 6px 6px;
+    gap: 4px;
+  }
+
+  .menuButton {
+    width: 56px;
+    border-radius: 12px;
+  }
+
+  .navLabel {
+    display: block;
+    font-size: 10px;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+
+  .staticTooltip {
+    display: none !important;
+  }
+}
