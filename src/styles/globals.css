@@ -25,6 +25,7 @@ body {
     --color-border-focus: #2b2b2b;
     --color-border: #141414;
     --color-text: #eeeeee;
+    --color-text-secondary: #a5a5a5;
 
     color: var(--color-text);
 }

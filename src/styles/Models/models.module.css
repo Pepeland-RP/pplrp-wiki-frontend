@@ -21,6 +21,22 @@
     margin: 0;
 }
 
+.count_page_container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.models_count {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: .97rem;
+}
+
+.models_count span {
+    color: var(--color-text);
+}
+
 .models_grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

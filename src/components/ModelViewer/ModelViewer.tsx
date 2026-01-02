@@ -12,12 +12,14 @@ import {
   Box3,
   Clock,
   DepthTexture,
+  EquirectangularReflectionMapping,
   FloatType,
   GridHelper,
   Group,
   Object3DEventMap,
   PerspectiveCamera,
   Scene,
+  Texture,
   Vector3,
   WebGLRenderer,
   WebGLRenderTarget,
@@ -28,6 +30,16 @@ import {
   applyMinecraftShaderToGLTF,
   type MinecraftLightingConfig,
 } from '@/lib/shaders/apply-minecraft-shader';
+
+const AsyncImage = (src: string): Promise<HTMLImageElement> =>
+  new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
 
 export class ModelViewer {
   /** Scene object */
@@ -61,6 +73,7 @@ export class ModelViewer {
   private progress: number = 0;
   private clock: Clock;
   private renderTarget?: WebGLRenderTarget;
+  private backgroundTexture: Texture | null = null;
 
   animation?: ModelAnimation;
 
@@ -70,6 +83,20 @@ export class ModelViewer {
     this.canvas = props.canvas;
     this.canvas.width = props.width;
     this.canvas.height = props.height;
+
+    if (props.panoramaUrl) {
+      if (this.backgroundTexture != null) {
+        this.backgroundTexture.dispose();
+      }
+
+      AsyncImage(props.panoramaUrl).then(image => {
+        this.backgroundTexture = new Texture();
+        this.backgroundTexture.image = image;
+        this.backgroundTexture.mapping = EquirectangularReflectionMapping;
+        this.backgroundTexture.needsUpdate = true;
+        this.scene.background = this.backgroundTexture;
+      });
+    }
 
     this.renderPaused = props.renderPaused === true;
 

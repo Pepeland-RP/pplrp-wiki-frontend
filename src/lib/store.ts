@@ -18,7 +18,7 @@ interface FilterState {
 
 export const useModelsStore = create<FilterState>(set => ({
   page: 0,
-  take: 12,
+  take: 24,
   search: '',
   seasons: [],
   categories: [],

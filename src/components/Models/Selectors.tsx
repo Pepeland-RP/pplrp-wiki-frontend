@@ -49,7 +49,7 @@ const Selectors = ({ onChange, total_count }: SelectorsProps) => {
   const propsData = useRef<PropsData>({
     categories: [],
     seasons: [],
-    take: 12,
+    take: 24,
   });
 
   useEffect(() => {
@@ -108,7 +108,7 @@ const Selectors = ({ onChange, total_count }: SelectorsProps) => {
           ...take_params,
           { value: total_count, label: 'Показать все' },
         ]}
-        defaultValue={take_params[0]}
+        defaultValue={take_params[1]}
         className={`react-select-container ${styles.select}`}
         classNamePrefix="react-select"
         isSearchable={false}

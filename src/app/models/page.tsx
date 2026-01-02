@@ -9,6 +9,8 @@ import { getApiUrl } from '@/lib/api';
 import Search from '@/components/Models/Search';
 import Selectors from '@/components/Models/Selectors';
 import { useModelsStore } from '@/lib/store';
+import { numbersTxt } from '@/lib/textUtils';
+import { Paginator, PaginatorProps } from '@/components/Models/Paginator';
 
 const fetcher = async (
   params: Record<string, string>,
@@ -24,11 +26,13 @@ export default function ModelsPage() {
     page,
     categories,
     take,
+    totalCount,
     setSearch,
     setCategories,
     setSeasons,
     setTake,
     setTotalCount,
+    setPage,
   } = useModelsStore();
 
   const { data, isLoading } = useSWR(
@@ -61,6 +65,10 @@ export default function ModelsPage() {
     }
   }, [data, isLoading]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [page]);
+
   return (
     <div className={styles.models_page}>
       <div className={styles.models_container}>
@@ -69,12 +77,28 @@ export default function ModelsPage() {
         </div>
         <Search onSearch={setSearch} />
         <Selectors
-          total_count={data?.total_count ?? 0}
+          total_count={totalCount}
           onChange={data => {
             setCategories(data.categories);
             setSeasons(data.seasons);
             setTake(data.take);
           }}
+        />
+        <div className={styles.count_page_container}>
+          <p className={styles.models_count}>
+            Найдено <span>{totalCount}</span>{' '}
+            {numbersTxt(totalCount, ['модель', 'модели', 'моделей'])}
+          </p>
+          <p className={styles.models_count}>
+            Страница <span>{page + 1}</span> из{' '}
+            <span>{Math.ceil(totalCount / take)}</span>
+          </p>
+        </div>
+        <Paginator
+          onChange={setPage}
+          total_count={totalCount}
+          take={take}
+          page={page}
         />
         {!showContent ? (
           <div
@@ -97,7 +121,24 @@ export default function ModelsPage() {
             ))}
           </div>
         )}
+        <BottomPaginator
+          elements={data?.data}
+          onChange={setPage}
+          total_count={totalCount}
+          take={take}
+          page={page}
+        />
       </div>
     </div>
   );
 }
+
+export const BottomPaginator = (
+  props: PaginatorProps & { elements: unknown[] | null | undefined },
+) => {
+  if (props.elements == null) return;
+  if (props.elements.length === 0) return;
+  if (props.total_count < props.take) return;
+
+  return <Paginator {...props} />;
+};

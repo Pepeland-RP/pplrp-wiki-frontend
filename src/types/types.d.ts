@@ -3,6 +3,7 @@ interface ModelViewerProps {
   width: number;
   height: number;
   renderPaused?: boolean;
+  panoramaUrl?: string;
 }
 
 interface ModelViewerDialogProps {

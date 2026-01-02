@@ -80,6 +80,7 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
           canvas: element,
           width: 400,
           height: 400,
+          panoramaUrl: '/static/panorama_image.png',
         });
 
         viewerRef.current
