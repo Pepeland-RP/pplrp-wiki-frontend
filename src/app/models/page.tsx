@@ -11,6 +11,7 @@ import Selectors from '@/components/Models/Selectors';
 import { useModelsStore } from '@/lib/store';
 import { numbersTxt } from '@/lib/textUtils';
 import { Paginator, PaginatorProps } from '@/components/Models/Paginator';
+import Logo from '@/resources/ppl-only-logo.svg';
 
 const fetcher = async (
   params: Record<string, string>,
@@ -86,7 +87,8 @@ export default function ModelsPage() {
         />
         <div className={styles.count_page_container}>
           <p className={styles.models_count}>
-            Найдено <span>{totalCount}</span>{' '}
+            {numbersTxt(totalCount, ['Найдена', 'Найдено', 'Найдено'])}{' '}
+            <span>{totalCount}</span>{' '}
             {numbersTxt(totalCount, ['модель', 'модели', 'моделей'])}
           </p>
           <p className={styles.models_count}>
@@ -102,16 +104,13 @@ export default function ModelsPage() {
         />
         {!showContent ? (
           <div
-            className={`${styles.loading_background} ${
-              hideLoader ? styles.loading_background_exit : ''
-            }`}
+            className={
+              `${styles.loading_background}` +
+              `${hideLoader && styles.loading_background_exit}`
+            }
           >
             <div className={styles.loading_viewer}>
-              <img
-                src="/logos/ppl-only-logo.svg"
-                alt="Loading"
-                className={styles.loading_logo}
-              />
+              <Logo className={styles.loading_logo} />
             </div>
           </div>
         ) : (
@@ -133,7 +132,7 @@ export default function ModelsPage() {
   );
 }
 
-export const BottomPaginator = (
+const BottomPaginator = (
   props: PaginatorProps & { elements: unknown[] | null | undefined },
 ) => {
   if (props.elements == null) return;

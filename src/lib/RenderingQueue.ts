@@ -1,7 +1,6 @@
 'use client';
 
 import { ModelViewer } from '@/components/ModelViewer/ModelViewer';
-import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 
 type TaskDTO = {
   object_url: string;
@@ -35,6 +34,7 @@ export class RenderingQueue {
       width: 400,
       height: 400,
       renderPaused: true,
+      renderDoubleSide: true,
     });
 
     this.renderer.scene.remove(this.renderer.grid);
@@ -100,13 +100,13 @@ export class RenderingQueue {
         );
       }
 
-      this.renderer!.controls.update();
-      const gltf = await new GLTFLoader().loadAsync(task.data.object_url);
+      this.renderer!.renderDoubleSided =
+        task.data.meta?.render?.double_sided ?? true;
 
-      // Пробуем рендерить
-      this.renderer!.setGltf(gltf.scene, should_center);
+      this.renderer!.controls.update();
+      await this.renderer?.loadGLTF(task.data.object_url, should_center);
       const dataURL = this.canvas.toDataURL();
-      this.renderer!.scene.remove(gltf.scene);
+      this.renderer!.scene.remove(this.renderer!.gltf!);
 
       task.resolve(dataURL);
     } catch (e) {

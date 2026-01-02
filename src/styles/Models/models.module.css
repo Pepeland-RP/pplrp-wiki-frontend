@@ -278,7 +278,6 @@
     box-sizing: border-box;
     width: 100%;
     aspect-ratio: 1;
-    padding: 15px;
     transition: transform 400ms;
     border-radius: 1rem;
     overflow: hidden;
@@ -289,14 +288,13 @@
 }
 
 .thumbnail {
-    /* width: 150%; Цыц, нафиг, фигня практика. Это делается конфигами рендера */
+    width: 100%;
     height: auto;
     opacity: 1;
     transform: none;
     transition:
         transform 400ms,
         opacity 400ms;
-    border-radius: 1rem;
 }
 
 .thumbnail_loading {

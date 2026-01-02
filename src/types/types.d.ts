@@ -4,6 +4,7 @@ interface ModelViewerProps {
   height: number;
   renderPaused?: boolean;
   panoramaUrl?: string;
+  renderDoubleSide?: boolean;
 }
 
 interface ModelViewerDialogProps {
@@ -46,5 +47,6 @@ interface GLTFMeta {
   render?: {
     camera_position?: [number, number, number];
     controls_target?: [number, number, number];
+    double_sided?: boolean;
   };
 }

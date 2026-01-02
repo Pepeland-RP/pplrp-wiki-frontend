@@ -81,6 +81,7 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
           width: 400,
           height: 400,
           panoramaUrl: '/static/panorama_image.png',
+          renderDoubleSide: modelData.gltf?.meta?.render?.double_sided ?? true,
         });
 
         viewerRef.current
@@ -144,7 +145,15 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
                 <IconX />
               </button>
             </div>
-            <div className={style.render_container_container}>
+            <div
+              className={style.render_container_container}
+              onMouseDown={() => {
+                if (viewerRef.current) viewerRef.current.animation = undefined;
+              }}
+              onTouchStart={() => {
+                if (viewerRef.current) viewerRef.current.animation = undefined;
+              }}
+            >
               <div className={style.render_container} id="viewer">
                 <canvas
                   ref={callbackRef}
