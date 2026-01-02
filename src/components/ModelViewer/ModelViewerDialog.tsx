@@ -145,7 +145,12 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
                 <IconX />
               </button>
             </div>
-            <div className={style.render_container_container}>
+            <div
+              className={style.render_container_container}
+              onMouseDown={() => {
+                if (viewerRef.current) viewerRef.current.animation = undefined;
+              }}
+            >
               <div className={style.render_container} id="viewer">
                 <canvas
                   ref={callbackRef}

@@ -72,6 +72,12 @@
     position: relative;
     width: 100%;
     height: 100%;
+
+    cursor: grab;
+}
+
+.render_container_container:active {
+    cursor: grabbing;
 }
 
 .render_container {
