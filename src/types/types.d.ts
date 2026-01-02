@@ -4,6 +4,7 @@ interface ModelViewerProps {
   height: number;
   renderPaused?: boolean;
   panoramaUrl?: string;
+  renderDoubleSide?: boolean;
 }
 
 interface ModelViewerDialogProps {

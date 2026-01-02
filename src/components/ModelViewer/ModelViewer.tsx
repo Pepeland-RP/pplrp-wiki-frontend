@@ -16,8 +16,8 @@ import {
   FloatType,
   GridHelper,
   Group,
-  MathUtils,
   Object3DEventMap,
+  OrthographicCamera,
   PerspectiveCamera,
   Scene,
   Texture,
@@ -43,6 +43,8 @@ const AsyncImage = (src: string): Promise<HTMLImageElement> =>
   });
 
 export class ModelViewer {
+  gltf: Group<Object3DEventMap> | null = null;
+
   /** Scene object */
   scene!: Scene;
 
@@ -50,7 +52,7 @@ export class ModelViewer {
   renderer!: WebGLRenderer;
 
   /** Camera!!! */
-  camera!: PerspectiveCamera;
+  camera!: OrthographicCamera;
 
   /** Render canvas ref */
   canvas!: HTMLCanvasElement;
@@ -74,6 +76,9 @@ export class ModelViewer {
   private progress: number = 0;
   private clock: Clock;
   private renderTarget?: WebGLRenderTarget;
+
+  private skyScene: Scene | null = null;
+  private skyCamera: PerspectiveCamera | null = null;
   private backgroundTexture: Texture | null = null;
 
   animation?: ModelAnimation;
@@ -84,28 +89,18 @@ export class ModelViewer {
     this.canvas = props.canvas;
     this.canvas.width = props.width;
     this.canvas.height = props.height;
-
-    if (props.panoramaUrl) {
-      if (this.backgroundTexture != null) {
-        this.backgroundTexture.dispose();
-      }
-
-      AsyncImage(props.panoramaUrl).then(image => {
-        this.backgroundTexture = new Texture();
-        this.backgroundTexture.image = image;
-        this.backgroundTexture.mapping = EquirectangularReflectionMapping;
-        this.backgroundTexture.needsUpdate = true;
-        this.scene.background = this.backgroundTexture;
-      });
-    }
-
     this.renderPaused = props.renderPaused === true;
 
     this.scene = new Scene();
-    this.camera = new PerspectiveCamera(
-      70,
-      props.width / props.height,
-      0.1,
+    const aspect = props.width / props.height;
+    const frustumSize = 1;
+
+    this.camera = new OrthographicCamera(
+      (-frustumSize * aspect) / 2,
+      (frustumSize * aspect) / 2,
+      frustumSize / 2,
+      -frustumSize / 2,
+      -2000,
       2000,
     );
 
@@ -116,13 +111,35 @@ export class ModelViewer {
     });
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(props.width, props.height);
-
     this.scene.add(this.camera);
 
-    // Initialize Minecraft lighting configuration
-    // All lighting is now handled by shaders, not Three.js lights
+    if (props.panoramaUrl) {
+      this.skyScene = new Scene();
+      this.skyCamera = new PerspectiveCamera(
+        75,
+        this.canvas.width / this.canvas.height,
+        0.1,
+        10,
+      );
+      this.skyCamera.position.set(0, 0, 0);
+
+      if (props.panoramaUrl) {
+        if (this.backgroundTexture != null) {
+          this.backgroundTexture.dispose();
+        }
+
+        AsyncImage(props.panoramaUrl).then(image => {
+          this.backgroundTexture = new Texture();
+          this.backgroundTexture.image = image;
+          this.backgroundTexture.mapping = EquirectangularReflectionMapping;
+          this.backgroundTexture.needsUpdate = true;
+          this.skyScene!.background = this.backgroundTexture;
+        });
+      }
+    }
+
     this.minecraftLightingConfig = {
-      // Default Minecraft lighting setup will be applied to models
+      textureSide: props.renderDoubleSide ? 2 : 0,
     };
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -148,6 +165,12 @@ export class ModelViewer {
     // Some composer things
     this.composer = new EffectComposer(this.renderer, this.renderTarget);
     this.renderPass = new RenderPass(this.scene, this.camera);
+    if (this.skyScene && this.skyCamera) {
+      const rr = new RenderPass(this.skyScene, this.skyCamera);
+      this.composer.addPass(rr);
+      this.renderPass.clear = false;
+    }
+
     this.fxaaPass = new ShaderPass(FXAAShader);
     this.composer.addPass(this.renderPass);
     this.composer.addPass(this.fxaaPass);
@@ -177,17 +200,24 @@ export class ModelViewer {
     this.object.position.sub(center);
     this.grid.position.y -= center.y;
 
-    const maxSize = Math.max(size.x, size.y, size.z);
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const padding = 2;
 
-    const fov = MathUtils.degToRad(this.camera.fov);
-    let distance = maxSize / (2 * Math.tan(fov / 2));
-    distance *= 1.5;
+    const aspect = this.canvas.width / this.canvas.height;
+    const frustumSize = maxDim * padding;
 
-    this.camera.position.set(-distance, distance / 1.5, -distance);
+    this.camera.left = (-frustumSize * aspect) / 2;
+    this.camera.right = (frustumSize * aspect) / 2;
+    this.camera.top = frustumSize / 2;
+    this.camera.bottom = -frustumSize / 2;
+
+    this.camera.near = -1000;
+    this.camera.far = 1000;
+
+    const isoDistance = 10;
+    this.camera.position.set(-isoDistance, isoDistance / 1.5, -isoDistance);
+
     this.camera.lookAt(0, 0, 0);
-
-    this.camera.near = distance / 100;
-    this.camera.far = distance * 100;
     this.camera.updateProjectionMatrix();
 
     if (update) {
@@ -199,19 +229,26 @@ export class ModelViewer {
     this.render();
   }
 
-  async loadGLTF(path: string) {
-    const gltf = await new GLTFLoader().loadAsync(path);
-    this.setGltf(gltf.scene);
+  async loadGLTF(path: string, should_center?: boolean) {
+    this.gltf = (await new GLTFLoader().loadAsync(path)).scene;
+    this.setGltf(this.gltf, should_center);
   }
 
   render() {
-    //console.log(this.camera.position, this.controls.target);
     this.progress += this.clock.getDelta();
     if (this.animation) this.animation.animate(this, this.progress);
 
     this.controls.update();
-    this.composer.render();
+    if (this.skyCamera) {
+      this.skyCamera.position.copy(this.camera.position);
+      this.skyCamera.lookAt(this.controls.target);
+    }
 
+    this.renderer.autoClear = false;
+    this.renderer.clear();
+    this.renderer.clearDepth();
+
+    this.composer.render();
     if (!this.renderPaused) {
       this.frameId = requestAnimationFrame(this.render);
     }
@@ -250,16 +287,29 @@ export class ModelViewer {
 
   /** Sets render size */
   setSize(w: number, h: number) {
-    this.camera.aspect = w / h;
+    const aspect = w / h;
+
+    if (this.skyCamera) {
+      this.skyCamera.aspect = aspect;
+      this.skyCamera.updateProjectionMatrix();
+    }
+
+    const frustumHeight = this.camera.top - this.camera.bottom;
+    const frustumWidth = frustumHeight * aspect;
+
+    this.camera.left = -frustumWidth / 2;
+    this.camera.right = frustumWidth / 2;
     this.camera.updateProjectionMatrix();
+
     this.renderer.setSize(w, h);
 
     this.composer.setSize(w, h);
     const pixelRatio = this.renderer.getPixelRatio();
     this.composer.setPixelRatio(pixelRatio);
-    this.fxaaPass.material.uniforms['resolution'].value.x =
-      1 / (w * pixelRatio);
-    this.fxaaPass.material.uniforms['resolution'].value.y =
-      1 / (h * pixelRatio);
+
+    this.fxaaPass.material.uniforms.resolution.value.set(
+      1 / (w * pixelRatio),
+      1 / (h * pixelRatio),
+    );
   }
 }

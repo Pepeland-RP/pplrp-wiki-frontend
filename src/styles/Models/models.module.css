@@ -289,14 +289,13 @@
 }
 
 .thumbnail {
-    /* width: 150%; Цыц, нафиг, фигня практика. Это делается конфигами рендера */
+    width: 100%;
     height: auto;
     opacity: 1;
     transform: none;
     transition:
         transform 400ms,
         opacity 400ms;
-    border-radius: 1rem;
 }
 
 .thumbnail_loading {
