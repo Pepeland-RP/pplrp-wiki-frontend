@@ -198,10 +198,10 @@ export class ModelViewer {
     box.getCenter(center);
 
     this.object.position.sub(center);
-    this.grid.position.y -= center.y;
+    this.grid.position.y -= size.y / 2;
 
     const maxDim = Math.max(size.x, size.y, size.z);
-    const padding = 2;
+    const padding = 1.7;
 
     const aspect = this.canvas.width / this.canvas.height;
     const frustumSize = maxDim * padding;

@@ -29,11 +29,13 @@ export default function ModelCard(props: Model) {
         `v1-model-${props.gltf?.resource_id}`,
       );
 
+      /*
       if (cache && thumbnailRef.current) {
         thumbnailRef.current.src = cache;
         setLoaded(true);
         return;
       }
+        */
 
       if (!props.gltf) {
         console.warn(
