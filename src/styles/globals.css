@@ -168,3 +168,15 @@ body {
         transform: scaleY(1);
     }
 }
+
+.appMain {
+  margin-left: 72px;
+}
+
+@media (max-width: 768px) {
+  .appMain {
+    margin-left: 0;
+    padding-bottom: calc(56px + 12px + env(safe-area-inset-bottom));
+  }
+}
+
