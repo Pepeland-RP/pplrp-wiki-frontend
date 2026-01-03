@@ -16,7 +16,7 @@ export async function checkMe(): Promise<AdminUserType | null> {
     validateStatus: () => true,
   });
   if (response.status !== 200) {
-    deleteCookie('sessionId');
+    if (response.status === 401) deleteCookie('sessionId');
     return null;
   }
   return response.data;
