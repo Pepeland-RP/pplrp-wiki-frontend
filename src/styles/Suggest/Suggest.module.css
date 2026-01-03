@@ -132,6 +132,9 @@
   cursor: pointer;
   transition: all 150ms;
   user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .addButton:hover {
