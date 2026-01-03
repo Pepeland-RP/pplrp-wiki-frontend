@@ -364,7 +364,16 @@
     gap: 8px;
 }
 
+.model_icon_cont {
+    width: 32px;
+    height: 32px;
+}
+
 .model_icon {
     border-radius: 5px;
     image-rendering: pixelated;
+
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
 }
