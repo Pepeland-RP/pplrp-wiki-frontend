@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import '@/styles/globals.css';
 import { Inter } from 'next/font/google';
 import Sidebar from '@/components/Sidebar';
+import { CookieProvider } from 'use-next-cookie';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -23,13 +24,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru">
-      <body className={inter.className}>
-        <Sidebar />
-        <main className="appMain">
-          {children}
-        </main>
-      </body>
-    </html>
+    <CookieProvider>
+      <html lang="ru">
+        <body className={inter.className}>
+          <Sidebar />
+          <main className="appMain">{children}</main>
+        </body>
+      </html>
+    </CookieProvider>
   );
 }

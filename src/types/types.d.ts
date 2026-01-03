@@ -50,3 +50,9 @@ interface GLTFMeta {
     double_sided?: boolean;
   };
 }
+
+interface AdminUserType {
+  user_id: number;
+  login: string;
+  permissions_mask: number;
+}

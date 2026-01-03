@@ -1,0 +1,61 @@
+.container {
+    justify-content: center;
+    align-items: center;
+    margin-right: 1rem;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    inset: 0;
+    margin-left: 72px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+
+    background-color: var(--color-level-1);
+    padding: 2rem;
+    border-radius: 10px;
+    border: 1px solid var(--color-border);
+}
+
+.card input {
+    background-color: var(--color-level-1);
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    color: var(--color-text);
+
+    padding: .5rem;
+    outline: none;
+
+    margin-bottom: 1rem;
+    font-family: inherit;
+
+    transition: border 250ms;
+}
+
+.card input:focus {
+    border-color: var(--color-border-focus);
+}
+
+.card input[type="submit"] {
+    margin: 0;
+    cursor: pointer;
+    font-size: .9rem;
+    font-weight: 500;
+
+    transition: background-color 250ms, border-color 250ms;
+}
+
+.card input[type="submit"]:hover {
+    background-color:
+        color-mix(in hsl, var(--color-level-1), white 3%);
+    border-color: var(--color-border-focus, #2b2b2b);
+}
+
+.error {
+    font-size: .8rem;
+    max-width: 80%;
+    color: var(--error-color);
+}

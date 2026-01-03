@@ -13,6 +13,7 @@
     "@svgr/webpack": "^8.1.0",
     "@tabler/icons-react": "^3.36.0",
     "axios": "^1.13.2",
+    "cookies-next": "^6.1.1",
     "idb": "^8.0.3",
     "next": "16.1.1",
     "react": "19.2.3",
@@ -20,6 +21,7 @@
     "react-select": "^5.10.2",
     "swr": "^2.3.8",
     "three": "^0.182.0",
+    "use-next-cookie": "^0.1.8",
     "zustand": "^5.0.9"
   },
   "devDependencies": {
