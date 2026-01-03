@@ -208,13 +208,13 @@
 
 .model_preview {
     position: relative;
-    overflow: hidden;
     background: var(--color-level-0, #0d0d0d);
     border-radius: 0.75rem;
     cursor: pointer;
 }
 
 .model_preview::after {
+    border-radius: 0.75rem;
     content: '';
     position: absolute;
     bottom: 0;
@@ -255,10 +255,6 @@
 }
 
 .model_badge {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    z-index: 20;
     padding: 6px 12px;
     font-size: 0.75rem;
     font-weight: 500;
@@ -358,22 +354,30 @@
     transform: scale(0.95);
 }
 
+.model_header {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 12px;
+    box-sizing: border-box;
+
+    z-index: 99;
+}
+
 .model_icons {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
 }
 
-.model_icon_cont {
-    width: 32px;
-    height: 32px;
-}
-
 .model_icon {
     border-radius: 5px;
     image-rendering: pixelated;
 
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     object-fit: contain;
 }

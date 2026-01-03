@@ -110,9 +110,12 @@ export default function ModelCard(props: Model) {
         }}
       >
         <div className={styles.grid_background} />
-        {props.season && (
-          <div className={styles.model_badge}>{props.season.name}</div>
-        )}
+        <div className={styles.model_header}>
+          <div className={styles.model_icons}>{icons}</div>
+          {props.season && (
+            <div className={styles.model_badge}>{props.season.name}</div>
+          )}
+        </div>
         <div className={styles.image_container}>
           {!error ? (
             <img
@@ -147,7 +150,6 @@ export default function ModelCard(props: Model) {
               )}
             </button>
           </div>
-          <div className={styles.model_icons}>{icons}</div>
         </div>
       </div>
     </article>
