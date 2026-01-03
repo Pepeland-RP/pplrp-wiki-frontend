@@ -1,0 +1,30 @@
+{
+    "base": {
+        "title": "PepeLandRP Wiki",
+        "description": "Вики ресурспака PPL",
+        "icons": {
+            "icon": "/logos/favicon.ico",
+            "shortcut": "/logos/favicon.ico",
+            "apple": "/logos/favicon.ico"
+        },
+        "creator": "PPLRp Team"
+    },
+    "/models": {
+        "title": "Модели · PepeLandRP Wiki",
+        "openGraph": {
+            "title": "Модели · PepeLandRP Wiki"
+        }
+    },
+    "/suggest": {
+        "title": "Предложить идею · PepeLandRP Wiki",
+        "openGraph": {
+            "title": "Предложить идею · PepeLandRP Wiki"
+        }
+    },
+    "/pack-mod": {
+        "title": "Модификация пака · PepeLandRP Wiki",
+        "openGraph": {
+            "title": "Модификация пака · PepeLandRP Wiki"
+        }
+    }
+}
