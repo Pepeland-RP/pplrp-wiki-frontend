@@ -56,3 +56,10 @@ interface AdminUserType {
   login: string;
   permissions_mask: number;
 }
+
+interface MinecraftItem {
+  id: number;
+  name: string;
+  str_id: string;
+  resource_id: string;
+}

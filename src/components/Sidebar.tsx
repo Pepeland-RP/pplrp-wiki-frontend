@@ -8,6 +8,7 @@ import {
   IconPackage,
   IconDots,
   IconHome,
+  IconSettings,
 } from '@tabler/icons-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -15,18 +16,30 @@ import styles from '@/styles/Sidebar.module.css';
 import PplLogo from '@/resources/ppl-only-logo.svg';
 import ModrinthLogo from '@/resources/modrinth.svg';
 import BoostyLogo from '@/resources/boosty.svg';
+import { useNextCookie } from 'use-next-cookie';
 
 interface NavItem {
   href: string;
   icon: React.ComponentType<{ size?: number; stroke?: number }>;
   label: string;
+  admin_only?: boolean;
 }
 
 const mainNavItems: NavItem[] = [
   { href: '/', icon: IconHome, label: 'Главная' },
   { href: '/models', icon: IconHexagons, label: 'Модели' },
   { href: '/suggest', icon: IconBulb, label: 'Предложения' },
-  { href: '/pack-mod', icon: IconPackage, label: 'Модификация пака' },
+  {
+    href: '/pack-mod',
+    icon: IconPackage,
+    label: 'Модификация пака',
+  },
+  {
+    href: '/admin',
+    icon: IconSettings,
+    label: 'Админ-панель',
+    admin_only: true,
+  },
 ];
 
 const externalLinks = [
@@ -59,6 +72,7 @@ function useIsMobile(bp = 768) {
 }
 
 export default function Sidebar() {
+  const logged_in = !!useNextCookie('sessionId', 1000);
   const pathname = usePathname();
   const isMobile = useIsMobile(768);
 
@@ -168,6 +182,7 @@ export default function Sidebar() {
               const Icon = item.icon;
               const active = isActive(item.href);
               const hovered = hoveredItem === item.href;
+              if (item.admin_only && !logged_in) return;
 
               return (
                 <div key={item.href} className={styles.navItemWrapper}>

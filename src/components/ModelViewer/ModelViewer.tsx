@@ -31,16 +31,7 @@ import {
   applyMinecraftShaderToGLTF,
   type MinecraftLightingConfig,
 } from '@/lib/shaders/apply-minecraft-shader';
-
-const AsyncImage = (src: string): Promise<HTMLImageElement> =>
-  new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.src = src;
-  });
+import { AsyncImage } from '@/lib/AsyncImage';
 
 export class ModelViewer {
   gltf: Group<Object3DEventMap> | null = null;

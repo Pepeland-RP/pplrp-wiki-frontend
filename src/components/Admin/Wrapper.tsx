@@ -17,5 +17,5 @@ export const Wrapper = ({ children }: { children: React.ReactNode }) => {
 
   if (!sessionId && pathname_relative === '') return <Login />;
   if (!sessionId) redirect('/admin');
-  return children;
+  return <div style={{ padding: '3rem', paddingTop: '1rem' }}>{children}</div>;
 };

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { IconPlus, IconX, IconUpload } from '@tabler/icons-react';
 import styles from '@/styles/Suggest/Suggest.module.css';
+import { AsyncReader } from '@/lib/AsyncImage';
 
 interface ImageType {
   data: string;
@@ -25,19 +26,11 @@ export default function SuggestPage() {
     e.target.value = '';
   };
 
-  const asyncReader = (file: File): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-
   const processFiles = async (files: FileList) => {
     const newImages: ImageType[] = [];
 
     for (const file of Array.from(files)) {
-      const b64 = await asyncReader(file);
+      const b64 = await AsyncReader(file);
       newImages.push({
         data: b64,
         size: file.size,
