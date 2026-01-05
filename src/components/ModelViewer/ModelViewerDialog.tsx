@@ -87,25 +87,7 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
         viewerRef.current
           .loadGLTF(getAssetUrl(modelData.gltf!.resource_id))
           .then(() => {
-            if (modelData.gltf?.meta?.render?.controls_target) {
-              viewerRef.current!.controls.target.set(
-                ...modelData.gltf.meta.render.controls_target,
-              );
-            }
-
-            if (modelData.gltf?.meta?.render?.camera_position) {
-              viewerRef.current!.camera.position.set(
-                ...modelData.gltf?.meta?.render?.camera_position,
-              );
-            }
-
-            if (modelData.gltf?.meta?.render?.camera_zoom) {
-              viewerRef.current!.camera.zoom =
-                modelData.gltf?.meta?.render?.camera_zoom;
-              viewerRef.current?.camera.updateProjectionMatrix();
-            }
-
-            viewerRef.current!.controls.update();
+            viewerRef.current?.applyMeta(modelData.gltf?.meta ?? null);
             viewerRef.current!.animation = new InitialAnimation(
               modelData.gltf?.meta?.render?.camera_position,
             );

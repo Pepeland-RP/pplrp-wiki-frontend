@@ -87,23 +87,7 @@ export class RenderingQueue {
 
     try {
       await this.renderer?.loadGLTF(task.data.object_url, true);
-      if (task.data.meta?.render?.camera_position) {
-        this.renderer!.camera.position.set(
-          ...task.data.meta.render.camera_position,
-        );
-      }
-
-      if (task.data.meta?.render?.controls_target) {
-        this.renderer!.controls.target.set(
-          ...task.data.meta.render.controls_target,
-        );
-        this.renderer!.controls.update();
-      }
-
-      if (task.data.meta?.render?.camera_zoom) {
-        this.renderer!.camera.zoom = task.data.meta?.render?.camera_zoom;
-        this.renderer!.camera.updateProjectionMatrix();
-      }
+      this.renderer?.applyMeta(task.data.meta ?? null);
 
       this.renderer?.setDoubleSided(
         task.data.meta?.render?.double_sided ?? true,

@@ -50,25 +50,7 @@ export const ModelSettings = (props: ModelSettingsProps) => {
       viewerRef.current
         .loadGLTF(getAssetUrl(props.model.gltf!.resource_id))
         .then(() => {
-          if (props.model!.gltf?.meta?.render?.controls_target) {
-            viewerRef.current!.controls.target.set(
-              ...props.model!.gltf.meta.render.controls_target,
-            );
-            viewerRef.current!.controls.update();
-          }
-
-          if (props.model!.gltf?.meta?.render?.camera_position) {
-            viewerRef.current!.camera.position.set(
-              ...props.model!.gltf?.meta.render.camera_position,
-            );
-          }
-
-          console.log(props.model!.gltf?.meta?.render);
-          if (props.model!.gltf?.meta?.render?.camera_zoom) {
-            viewerRef.current!.camera.zoom =
-              props.model!.gltf?.meta?.render?.camera_zoom;
-            viewerRef.current?.camera.updateProjectionMatrix();
-          }
+          viewerRef.current?.applyMeta(props.model?.gltf?.meta ?? null);
         });
     }
     viewerRef.current?.render();

@@ -228,6 +228,23 @@ export class ModelViewer {
     this.controls.update();
   }
 
+  applyMeta(meta: NonNullable<Model['gltf']>['meta']) {
+    if (meta?.render?.controls_target) {
+      this.controls.target.set(...meta?.render?.controls_target);
+    }
+
+    if (meta?.render?.camera_position) {
+      this!.camera.position.set(...meta?.render?.camera_position);
+    }
+
+    if (meta?.render?.camera_zoom) {
+      this.camera.zoom = meta?.render?.camera_zoom;
+      this.camera.updateProjectionMatrix();
+    }
+
+    this.controls.update();
+  }
+
   async loadGLTF(path: string, should_center?: boolean) {
     this.gltf = (await new GLTFLoader().loadAsync(path)).scene;
     this.setGltf(this.gltf, should_center);
