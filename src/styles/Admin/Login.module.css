@@ -6,7 +6,7 @@
     flex-direction: column;
     position: absolute;
     inset: 0;
-    margin-left: 72px;
+    margin-left: calc(72px + 1rem);
 }
 
 .card {
@@ -58,4 +58,11 @@
     font-size: .8rem;
     max-width: 80%;
     color: var(--error-color);
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin-left: 1rem;
+        padding-bottom: calc(56px + 12px + env(safe-area-inset-bottom));
+    }
 }

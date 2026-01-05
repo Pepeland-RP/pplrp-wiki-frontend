@@ -96,6 +96,9 @@
     outline: none;
 
     transition: border-color 150ms;
+
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .inputs_container input:focus {
