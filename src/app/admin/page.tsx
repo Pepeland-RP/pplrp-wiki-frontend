@@ -12,7 +12,7 @@ const decodeJWT = (jwt: string) => {
 const Admin = () => {
   const sessionId = useNextCookie('sessionId', 1000);
 
-  const login = sessionId ? decodeJWT(sessionId).user.login : 'error';
+  const login = sessionId ? decodeJWT(sessionId)?.user?.login : 'error';
   return <p>Добро пожаловать, {login}</p>;
 };
 
