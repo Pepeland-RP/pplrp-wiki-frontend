@@ -344,6 +344,7 @@
     justify-content: center;
     width: 28px;
     height: 28px;
+    box-sizing: border-box;
 }
 
 .copy_button:hover {

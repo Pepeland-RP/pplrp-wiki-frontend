@@ -1,8 +1,10 @@
 'use client';
 
 import { useNextCookie } from 'use-next-cookie';
+import styles from '@/styles/Admin/page.module.css';
+import Link from 'next/link';
+import { IconEdit, IconLayoutGridAdd, IconSword } from '@tabler/icons-react';
 
-/** Это все для теста */
 const decodeJWT = (jwt: string) => {
   const fr = jwt.split('.').at(1);
   if (!fr) return null;
@@ -13,7 +15,28 @@ const Admin = () => {
   const sessionId = useNextCookie('sessionId', 1000);
 
   const login = sessionId ? decodeJWT(sessionId)?.user?.login : 'error';
-  return <p>Добро пожаловать, {login}</p>;
+  return (
+    <div className={styles.container}>
+      <h2>
+        Добро пожаловать, <b>{login}</b>
+      </h2>
+      <p>
+        <i>
+          Для изменения уже существующих моделей, перейдите в{' '}
+          <Link href="/models">публичный каталог</Link> и нажмите на кнопку{' '}
+          <IconEdit /> соответствующей модели.{' '}
+        </i>
+      </p>
+      <Link href="/admin/create-model" className={styles.links}>
+        <IconLayoutGridAdd />
+        Создать новую модель
+      </Link>
+      <Link href="/admin/items" className={styles.links}>
+        <IconSword />
+        Управление Minecraft предметами
+      </Link>
+    </div>
+  );
 };
 
 export default Admin;

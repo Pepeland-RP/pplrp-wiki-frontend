@@ -1,0 +1,57 @@
+.container {
+    background-color: var(--color-level-1);
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    padding: 1rem;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.container i {
+    font-size: .9rem;
+}
+
+.container label {
+    user-select: none;
+}
+
+.render_container {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.render_container canvas {
+    display: block;
+    box-sizing: border-box;
+}
+
+.button {
+    background-color: var(--color-level-2);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-family: inherit;
+    font-weight: 500;
+    padding: .4rem;
+    cursor: pointer;
+    border-radius: 5px;
+
+    transition: background-color 150ms;
+}
+
+.button:hover {
+    background-color: var(--color-border-focus);
+}
+
+.buttons_cont {
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+}

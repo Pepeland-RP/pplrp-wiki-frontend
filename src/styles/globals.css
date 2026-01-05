@@ -14,6 +14,10 @@ textarea,
     -webkit-tap-highlight-color: transparent;
 }
 
+a {
+    color: var(--color-text);
+}
+
 body {
     overflow-y: scroll;
     margin: 0;

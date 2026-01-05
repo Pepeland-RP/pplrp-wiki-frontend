@@ -12,10 +12,13 @@ import {
   Box3,
   Clock,
   DepthTexture,
+  DoubleSide,
   EquirectangularReflectionMapping,
   FloatType,
+  FrontSide,
   GridHelper,
   Group,
+  Mesh,
   Object3DEventMap,
   OrthographicCamera,
   PerspectiveCamera,
@@ -71,6 +74,7 @@ export class ModelViewer {
   private skyScene: Scene | null = null;
   private skyCamera: PerspectiveCamera | null = null;
   private backgroundTexture: Texture | null = null;
+  private doubleSided: boolean = false;
 
   animation?: ModelAnimation;
 
@@ -81,6 +85,7 @@ export class ModelViewer {
     this.canvas.width = props.width;
     this.canvas.height = props.height;
     this.renderPaused = props.renderPaused === true;
+    this.doubleSided = props.renderDoubleSide ?? false;
 
     this.scene = new Scene();
     const aspect = props.width / props.height;
@@ -129,11 +134,10 @@ export class ModelViewer {
       }
     }
 
-    this.minecraftLightingConfig = {
-      textureSide: props.renderDoubleSide ? 2 : 0,
-    };
+    this.minecraftLightingConfig = {};
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.controls.enableRotate = true;
     this.controls.enableZoom = true;
     this.controls.enablePan = true;
     this.controls.target.set(0, 0, 0);
@@ -172,7 +176,7 @@ export class ModelViewer {
     this.render = this.render.bind(this);
   }
 
-  setGltf(object: Group<Object3DEventMap>, update: boolean = true) {
+  setGltf(object: Group<Object3DEventMap>, center: boolean = true) {
     if (this.object) {
       disposeGLTFScene(this.object);
       this.scene.remove(this.object);
@@ -180,6 +184,14 @@ export class ModelViewer {
 
     this.object = object;
     applyMinecraftShaderToGLTF(this.object, this.minecraftLightingConfig);
+
+    if (center) this.centerModel();
+    this.setDoubleSided(this.doubleSided);
+    this.scene.add(this.object);
+  }
+
+  centerModel() {
+    if (!this.object) return;
     this.object.updateWorldMatrix(true, true);
 
     const box = new Box3().setFromObject(this.object);
@@ -189,7 +201,7 @@ export class ModelViewer {
     box.getCenter(center);
 
     this.object.position.sub(center);
-    this.grid.position.y -= size.y / 2;
+    this.grid.position.y = -size.y / 2;
 
     const maxDim = Math.max(size.x, size.y, size.z);
     const padding = 1.7;
@@ -204,6 +216,7 @@ export class ModelViewer {
 
     this.camera.near = -1000;
     this.camera.far = 1000;
+    this.camera.zoom = 1;
 
     const isoDistance = 10;
     this.camera.position.set(-isoDistance, isoDistance / 1.5, -isoDistance);
@@ -211,13 +224,8 @@ export class ModelViewer {
     this.camera.lookAt(0, 0, 0);
     this.camera.updateProjectionMatrix();
 
-    if (update) {
-      this.controls.target.set(0, 0, 0);
-      this.controls.update();
-    }
-
-    this.scene.add(this.object);
-    this.render();
+    this.controls.target.set(0, 0, 0);
+    this.controls.update();
   }
 
   async loadGLTF(path: string, should_center?: boolean) {
@@ -304,9 +312,31 @@ export class ModelViewer {
     );
   }
 
-  set renderDoubleSided(state: boolean) {
-    this.minecraftLightingConfig = {
-      textureSide: state ? 2 : 0,
-    };
+  setDoubleSided(state: boolean) {
+    if (!this.object) return;
+    this.doubleSided = state;
+
+    this.object.traverse(child => {
+      if (child instanceof Mesh) {
+        const materials = Array.isArray(child.material)
+          ? child.material
+          : [child.material];
+
+        materials.forEach(mat => {
+          if (state) {
+            const box = new Box3().setFromObject(child);
+            const size = new Vector3();
+            box.getSize(size);
+            const minSize = Math.min(size.x, size.y, size.z);
+
+            mat.side = minSize > 0.5 ? DoubleSide : FrontSide;
+          } else {
+            mat.side = FrontSide;
+          }
+        });
+      }
+
+      return child;
+    });
   }
 }

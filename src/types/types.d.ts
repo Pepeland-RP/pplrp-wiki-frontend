@@ -48,6 +48,7 @@ interface GLTFMeta {
     camera_position?: [number, number, number];
     controls_target?: [number, number, number];
     double_sided?: boolean;
+    camera_zoom?: number;
   };
 }
 

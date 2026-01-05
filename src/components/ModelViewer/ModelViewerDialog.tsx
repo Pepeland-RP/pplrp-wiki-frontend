@@ -93,11 +93,25 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
               );
             }
 
+            if (modelData.gltf?.meta?.render?.camera_position) {
+              viewerRef.current!.camera.position.set(
+                ...modelData.gltf?.meta?.render?.camera_position,
+              );
+            }
+
+            if (modelData.gltf?.meta?.render?.camera_zoom) {
+              viewerRef.current!.camera.zoom =
+                modelData.gltf?.meta?.render?.camera_zoom;
+              viewerRef.current?.camera.updateProjectionMatrix();
+            }
+
             viewerRef.current!.controls.update();
             viewerRef.current!.animation = new InitialAnimation(
               modelData.gltf?.meta?.render?.camera_position,
             );
             setLoaded(true);
+
+            viewerRef.current?.render();
           });
 
         const viewerElement = document.getElementById('viewer');

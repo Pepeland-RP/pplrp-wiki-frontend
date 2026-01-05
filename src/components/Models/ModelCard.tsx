@@ -6,10 +6,14 @@ import { useEffect, useRef, useState } from 'react';
 import { useModelViewerContext } from '../ModelViewer/ModelViewerDialog';
 import { ModelIcon } from './ModelIcon';
 import { getAssetUrl } from '@/lib/api';
-import { IconCopy, IconCheck } from '@tabler/icons-react';
+import { IconCopy, IconCheck, IconEdit } from '@tabler/icons-react';
 import { idbGet, idbSet } from '@/lib/idb';
+import Link from 'next/link';
+import { useNextCookie } from 'use-next-cookie';
+import { sha256 } from 'js-sha256';
 
 export default function ModelCard(props: Model) {
+  const loggedIn = !!useNextCookie('sessionId');
   const { invoke } = useModelViewerContext();
   const [loaded, setLoaded] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
@@ -20,14 +24,15 @@ export default function ModelCard(props: Model) {
     let isMounted = true;
 
     const renderThumbnail = async () => {
+      const sha = sha256(
+        JSON.stringify(props.gltf?.meta) + props.gltf?.resource_id,
+      );
+
       if (!thumbnailRef.current) {
         console.warn(`Thumbnail ref не доступен для модели "${props.name}"`);
         return;
       }
-      const cache = await idbGet(
-        'renders',
-        `v1-model-${props.gltf?.resource_id}`,
-      );
+      const cache = await idbGet('renders', `v1-model-${sha}`);
 
       if (cache && thumbnailRef.current) {
         thumbnailRef.current.src = cache;
@@ -52,11 +57,7 @@ export default function ModelCard(props: Model) {
 
         if (isMounted && thumbnailRef.current) {
           thumbnailRef.current.src = dataURL;
-          void idbSet(
-            'renders',
-            `v1-model-${props.gltf?.resource_id}`,
-            dataURL,
-          );
+          void idbSet('renders', `v1-model-${sha}`, dataURL);
           setLoaded(true);
         }
       } catch (e) {
@@ -137,6 +138,15 @@ export default function ModelCard(props: Model) {
         <div className={styles.model_details}>
           <div className={styles.model_name_row}>
             <h3 className={styles.model_name}>{props.name}</h3>
+            {loggedIn && (
+              <Link
+                href={`/admin/edit-model?id=${props.id}`}
+                className={styles.copy_button}
+                title="Отредактировать"
+              >
+                <IconEdit size={18} stroke={2} />
+              </Link>
+            )}
             <button
               className={styles.copy_button}
               onClick={handleCopyName}

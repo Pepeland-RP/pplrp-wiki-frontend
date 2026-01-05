@@ -7,10 +7,8 @@ import {
   MeshStandardMaterial,
   MeshBasicMaterial,
   Texture,
-  FrontSide,
-  Box3,
 } from 'three';
-import type { Group, Object3DEventMap, Side } from 'three';
+import type { Group, Object3DEventMap } from 'three';
 import {
   MinecraftVertexShader,
   MinecraftFragmentShader,
@@ -36,8 +34,6 @@ export interface MinecraftLightingConfig {
 
   // Options
   enableSmoothLighting?: boolean;
-
-  textureSide?: Side;
 }
 
 const defaultConfig: Required<MinecraftLightingConfig> = {
@@ -60,8 +56,6 @@ const defaultConfig: Required<MinecraftLightingConfig> = {
 
   // Smooth lighting (modern Minecraft default)
   enableSmoothLighting: true,
-
-  textureSide: FrontSide,
 };
 
 /**
@@ -146,16 +140,6 @@ export function applyMinecraftShaderToGLTF(
           mat.uniforms.hasTexture.value = true;
         }
 
-        const box = new Box3().setFromObject(child);
-        const size = new Vector3();
-        box.getSize(size);
-        const minSize = Math.min(size.x, size.y, size.z);
-
-        if (minSize > 0.5) {
-          mat.side = config.textureSide ?? FrontSide;
-        } else {
-          mat.side = FrontSide;
-        }
         return mat;
       });
 

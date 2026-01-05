@@ -86,7 +86,7 @@ export class RenderingQueue {
     this.working = true;
 
     try {
-      let should_center = true;
+      await this.renderer?.loadGLTF(task.data.object_url, true);
       if (task.data.meta?.render?.camera_position) {
         this.renderer!.camera.position.set(
           ...task.data.meta.render.camera_position,
@@ -94,17 +94,22 @@ export class RenderingQueue {
       }
 
       if (task.data.meta?.render?.controls_target) {
-        should_center = false;
         this.renderer!.controls.target.set(
           ...task.data.meta.render.controls_target,
         );
+        this.renderer!.controls.update();
       }
 
-      this.renderer!.renderDoubleSided =
-        task.data.meta?.render?.double_sided ?? true;
+      if (task.data.meta?.render?.camera_zoom) {
+        this.renderer!.camera.zoom = task.data.meta?.render?.camera_zoom;
+        this.renderer!.camera.updateProjectionMatrix();
+      }
 
-      this.renderer!.controls.update();
-      await this.renderer?.loadGLTF(task.data.object_url, should_center);
+      this.renderer?.setDoubleSided(
+        task.data.meta?.render?.double_sided ?? true,
+      );
+
+      this.renderer?.render();
       const dataURL = this.canvas.toDataURL();
       this.renderer!.scene.remove(this.renderer!.gltf!);
 
