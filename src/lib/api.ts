@@ -83,3 +83,8 @@ export const deleteMinecraftItem = async (id: number) => {
     validateStatus: () => true,
   });
 };
+
+export const getFilters = async (): Promise<APIFiltersType> => {
+  const response = await axios.get(`${getApiUrl()}/models/filters`);
+  return response.data;
+};

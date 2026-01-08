@@ -1,22 +1,10 @@
 'use client';
 
-import { getApiUrl } from '@/lib/api';
-import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import Select from 'react-select';
 import useSWR from 'swr';
 import styles from '@/styles/Models/Selectors.module.css';
-
-type APIFiltersType = {
-  seasons: {
-    id: number;
-    name: string;
-  }[];
-  categories: {
-    id: number;
-    name: string;
-  }[];
-};
+import { getFilters } from '@/lib/api';
 
 type PropsData = {
   seasons: number[];
@@ -25,11 +13,6 @@ type PropsData = {
 };
 
 type SelectType = { value: number; label: string }[];
-
-const fetcher = async (): Promise<APIFiltersType> => {
-  const response = await axios.get(`${getApiUrl()}/models/filters`);
-  return response.data;
-};
 
 const take_params = Array.from({ length: 8 }).map((_, i) => ({
   value: (i + 1) * 12,
@@ -42,7 +25,7 @@ interface SelectorsProps {
 }
 
 const Selectors = ({ onChange, total_count }: SelectorsProps) => {
-  const { data, isLoading } = useSWR('filters', async () => fetcher());
+  const { data, isLoading } = useSWR('filters', async () => getFilters());
   const [seasons, setSeasons] = useState<SelectType>([]);
   const [categories, setCategories] = useState<SelectType>([]);
 

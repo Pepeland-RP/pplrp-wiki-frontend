@@ -64,3 +64,14 @@ interface MinecraftItem {
   str_id: string;
   resource_id: string;
 }
+
+type APIFiltersType = {
+  seasons: {
+    id: number;
+    name: string;
+  }[];
+  categories: {
+    id: number;
+    name: string;
+  }[];
+};
