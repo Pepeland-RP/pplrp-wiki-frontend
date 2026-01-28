@@ -30,6 +30,7 @@ body {
     --color-border: #141414;
     --color-text: #eeeeee;
     --color-text-secondary: #a5a5a5;
+    --color-text-thirdly: #868686;
     --error-color: #ff6467;
 
     color: var(--color-text);
@@ -129,12 +130,15 @@ body {
 }
 
 .react-select-container .react-select__input-container,
-.react-select-container .react-select__placeholder,
 .react-select-container .react-select__single-value {
     color: var(--color-text);
     transition-property: border-color, box-shadow, background-color, color;
     transition-duration: 150ms;
     transition-timing-function: ease-in-out;
+}
+
+.react-select-container .react-select__placeholder {
+    color: var(--color-text-thirdly);
 }
 
 .react-select-container .react-select__multi-value {

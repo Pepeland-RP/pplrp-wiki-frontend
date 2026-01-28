@@ -29,7 +29,6 @@ const SeasonSelector = ({
   loading,
 }: Props) => {
   // Вообще пофиг
-  const max = isMulti ? 1 : 10;
   const [inputValue, setInputValue] = useState('');
   const [selectedOptions, setSelectedOptions] =
     useState<string[]>(defaultValue);
@@ -68,11 +67,25 @@ const SeasonSelector = ({
     return result;
   }, [inputValue, existedList]);
 
+  const selectedValue = useMemo(() => {
+    if (isMulti) {
+      return selectedOptions.map(tag => ({
+        value: tag,
+        label: tag,
+      }));
+    }
+
+    return selectedOptions[0]
+      ? { value: selectedOptions[0], label: selectedOptions[0] }
+      : null;
+  }, [selectedOptions, isMulti]);
+
   return (
     <Select
-      isMulti
+      isMulti={isMulti}
       isLoading={loading}
       isSearchable
+      value={selectedValue}
       options={options}
       className="react-select-container"
       classNamePrefix="react-select"
@@ -83,14 +96,21 @@ const SeasonSelector = ({
         value: tag,
         label: tag,
       }))}
-      isOptionDisabled={() => selectedOptions.length >= max}
+      isOptionDisabled={() => selectedOptions.length >= 10}
       onInputChange={(value, action) => {
         if (action.action === 'input-change') {
           setInputValue(normalize(value));
         }
       }}
       onChange={newValue => {
-        setSelectedOptions(Array.isArray(newValue) ? [...newValue] : []);
+        if (Array.isArray(newValue)) {
+          setSelectedOptions(newValue.map(e => e.value));
+        } else if (newValue && 'value' in newValue) {
+          setSelectedOptions([newValue.value]);
+        } else {
+          setSelectedOptions([]);
+        }
+        setInputValue('');
       }}
     />
   );

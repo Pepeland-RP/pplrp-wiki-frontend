@@ -7,11 +7,7 @@ import styles from '@/styles/Admin/create/Model.module.css';
 
 interface ModelSettingsProps {
   model?: Model;
-  onChange: (props: {
-    model: File;
-    double_side: boolean;
-    meta: object;
-  }) => void;
+  onChange: (props: { model: File; meta: object }) => void;
 }
 
 export const ModelSettings = (props: ModelSettingsProps) => {
@@ -79,7 +75,11 @@ export const ModelSettings = (props: ModelSettingsProps) => {
     if (!viewerRef.current) return;
 
     viewerRef.current.setDoubleSided(doubleSide);
-    if (model) props.onChange({ model, double_side: doubleSide, meta });
+    if (model)
+      props.onChange({
+        model,
+        meta: { render: { ...meta, ...{ double_sided: doubleSide } } },
+      });
   }, [doubleSide, meta, model]);
 
   const handleModelSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
