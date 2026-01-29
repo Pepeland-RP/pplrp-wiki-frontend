@@ -53,14 +53,14 @@ const Page = () => {
       categories,
       JSON.stringify(meta),
     )
-      .then(() => router.push('/admin'))
+      .then(() => router.push('/models'))
       .catch(e => alert(e.message));
   };
 
   const del = () => {
     if (!confirm('Удалить модель?')) return;
     deleteModel(data!.id.toString())
-      .then(() => router.push('/admin'))
+      .then(() => router.push('/models'))
       .catch(e => alert(e.message));
   };
 
