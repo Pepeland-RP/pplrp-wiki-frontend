@@ -3,7 +3,13 @@
 import { useNextCookie } from 'use-next-cookie';
 import styles from '@/styles/Admin/page.module.css';
 import Link from 'next/link';
-import { IconEdit, IconLayoutGridAdd, IconSword } from '@tabler/icons-react';
+import {
+  IconEdit,
+  IconLayoutGridAdd,
+  IconLogout,
+  IconSword,
+} from '@tabler/icons-react';
+import { deleteCookie } from 'cookies-next';
 
 const decodeJWT = (jwt: string) => {
   const fr = jwt.split('.').at(1);
@@ -35,6 +41,14 @@ const Admin = () => {
         <IconSword />
         Управление Minecraft предметами
       </Link>
+
+      <button
+        className={styles.links}
+        onClick={() => deleteCookie('sessionId')}
+      >
+        <IconLogout />
+        Выйти
+      </button>
     </div>
   );
 };
