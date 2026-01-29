@@ -10,7 +10,7 @@ interface MinecraftItemsSelectProps {
 }
 
 interface Value {
-  value: number;
+  value: string;
   label: JSX.Element;
 }
 
@@ -22,7 +22,7 @@ const MinecraftItemsSelect = (props: MinecraftItemsSelectProps) => {
 
   const genOption = (c: MinecraftItem) => {
     return {
-      value: c.id,
+      value: `${c.name}&${c.id}`,
       label: (
         <span className={styles.minecraftItem}>
           <img
@@ -55,7 +55,7 @@ const MinecraftItemsSelect = (props: MinecraftItemsSelectProps) => {
       instanceId="tag-search"
       placeholder="Выберите предметы..."
       onChange={e => {
-        props.onChange?.(e.map(i => i.value));
+        props.onChange?.(e.map(i => parseInt(i.value.split('&').at(1)!)));
         setValue(e as Value[]);
       }}
       isLoading={itemsLoading}
