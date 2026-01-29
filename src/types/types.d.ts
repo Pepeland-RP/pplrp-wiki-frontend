@@ -28,6 +28,7 @@ interface Model {
   /** Категория это костюм, тотем и тд */
   category: { name: string }[];
   acceptable_items: {
+    id: number;
     name: string;
     texture_id: string;
   }[];

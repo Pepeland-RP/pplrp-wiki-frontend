@@ -76,6 +76,16 @@
     border-color: var(--color-border-focus);
 }
 
+.create_button:disabled {
+    border: 1px solid var(--color-level-1);
+    background-color: color-mix(in srgb, var(--color-level-1) 80%, black 10%);
+    cursor: not-allowed;
+}
+
+.delete_button {
+    width: 100%;
+}
+
 @media (max-width: 768px) {
     .container {
         width: auto;

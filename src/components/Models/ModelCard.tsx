@@ -140,7 +140,7 @@ export default function ModelCard(props: Model) {
             <h3 className={styles.model_name}>{props.name}</h3>
             {loggedIn && (
               <Link
-                href={`/admin/edit-model?id=${props.id}`}
+                href={`/admin/edit-model/${props.id}`}
                 className={styles.copy_button}
                 title="Отредактировать"
               >
