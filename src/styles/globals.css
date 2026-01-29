@@ -78,7 +78,7 @@ body {
 
 .react-select-container .react-select__menu-list {
     max-height: 10rem;
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(8px);
     border-radius: 5px;
 }
 
@@ -92,15 +92,14 @@ body {
 }
 
 .react-select-container .react-select__group {
-    background-color: var(--color-level-2);
     transition-property: border-color, box-shadow, background-color, color;
     transition-duration: 150ms;
     transition-timing-function: ease-in-out;
 }
 
 .react-select-container .react-select__group-heading {
-    color: var(--color-text);
-    background-color: var(--color-level-2);
+    color: var(--color-text-secondary);
+    background-color: transparent;
     padding-bottom: 0.25em;
     margin-bottom: 0;
     transition-property: border-color, box-shadow, background-color, color;
