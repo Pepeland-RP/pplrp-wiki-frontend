@@ -17,7 +17,7 @@ export class InitialAnimation extends ModelAnimation {
     super();
     if (target) {
       this.target_pos = target;
-      this.initial_pos = [target[0] - 0.2, target[1] + 0.4, target[2] + 0.5];
+      this.initial_pos = [target[0] - 8, target[1] + 8, target[2]];
     }
   }
 
