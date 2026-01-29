@@ -71,7 +71,7 @@ const Page = () => {
   if (!data) return undefined;
   return (
     <main className={styles.container}>
-      <h2>Новая модель</h2>
+      <h2>Редактирование модели</h2>
       <MoveBack />
       <div className={styles.container_container}>
         <div>
