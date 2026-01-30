@@ -4,7 +4,7 @@ import { ModelViewer } from '@/components/ModelViewer/ModelViewer';
 import { useEffect, useRef, useState } from 'react';
 import styles from '@/styles/page.module.css';
 import { Caveat } from 'next/font/google';
-import { IconDownload, IconHexagons } from '@tabler/icons-react';
+import { IconDownload, IconHexagons, IconX } from '@tabler/icons-react';
 import Link from 'next/link';
 
 const caveat = Caveat({ subsets: ['latin'] });
@@ -102,6 +102,11 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <p className={styles.created_by}>
+        site created by <Link href="https://manukq.systems">Manukq</Link>{' '}
+        <IconX size={12} />{' '}
+        <Link href="https://andcool.ru">AndcoolSystems</Link>
+      </p>
     </main>
   );
 }
