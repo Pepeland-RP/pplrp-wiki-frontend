@@ -73,10 +73,8 @@ export default function ModelsPage() {
   return (
     <div className={styles.models_page}>
       <div className={styles.models_container}>
-        <div className={styles.models_header}>
-          <h1 className={styles.models_title}>Модели</h1>
-        </div>
-        <Search onSearch={setSearch} />
+        <h1 className={styles.models_title}>Модели</h1>
+        <Search onSearch={setSearch} defaultValue={search} />
         <Selectors
           total_count={totalCount}
           onChange={data => {
@@ -84,6 +82,9 @@ export default function ModelsPage() {
             setSeasons(data.seasons);
             setTake(data.take);
           }}
+          defaultCategories={categories}
+          defaultSeasons={seasons}
+          defaultTake={take}
         />
         <div className={styles.count_page_container}>
           <p className={styles.models_count}>

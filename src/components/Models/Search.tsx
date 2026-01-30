@@ -5,10 +5,11 @@ import { IconSearch } from '@tabler/icons-react';
 import { useRef } from 'react';
 
 interface SearchProps {
+  defaultValue: string;
   onSearch: (text: string) => void;
 }
 
-const Search = ({ onSearch }: SearchProps) => {
+const Search = ({ defaultValue, onSearch }: SearchProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -18,6 +19,7 @@ const Search = ({ onSearch }: SearchProps) => {
         id="input-id"
         type="text"
         placeholder="Введите название модели..."
+        defaultValue={defaultValue}
         onKeyUp={e => {
           if (e.code == 'Enter' || e.code == 'NumpadEnter') {
             onSearch?.(inputRef.current!.value);

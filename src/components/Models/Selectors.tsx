@@ -22,12 +22,25 @@ const take_params = Array.from({ length: 8 }).map((_, i) => ({
 interface SelectorsProps {
   onChange: (data: PropsData) => void;
   total_count: number;
+
+  defaultCategories: number[];
+  defaultSeasons: number[];
+  defaultTake: number;
 }
 
-const Selectors = ({ onChange, total_count }: SelectorsProps) => {
+const Selectors = ({
+  onChange,
+  total_count,
+  defaultCategories,
+  defaultSeasons,
+  defaultTake,
+}: SelectorsProps) => {
   const { data, isLoading } = useSWR('filters', async () => getFilters());
   const [seasons, setSeasons] = useState<SelectType>([]);
   const [categories, setCategories] = useState<SelectType>([]);
+
+  const [selectorSeasons, setSelectorSeasons] = useState<SelectType>();
+  const [selectorCategories, setSelectorCategories] = useState<SelectType>();
 
   const propsData = useRef<PropsData>({
     categories: [],
@@ -37,14 +50,20 @@ const Selectors = ({ onChange, total_count }: SelectorsProps) => {
 
   useEffect(() => {
     if (!data) return;
-    setSeasons(
-      data.seasons.map(season => ({ value: season.id, label: season.name })),
-    );
-    setCategories(
-      data.categories.map(category => ({
-        value: category.id,
-        label: category.name,
-      })),
+    const seasons = data.seasons.map(season => ({
+      value: season.id,
+      label: season.name,
+    }));
+    const categories = data.categories.map(category => ({
+      value: category.id,
+      label: category.name,
+    }));
+    setSeasons(seasons);
+    setCategories(categories);
+
+    setSelectorSeasons(seasons.filter(p => defaultSeasons.includes(p.value)));
+    setSelectorCategories(
+      categories.filter(p => defaultCategories.includes(p.value)),
     );
   }, [data]);
 
@@ -52,6 +71,7 @@ const Selectors = ({ onChange, total_count }: SelectorsProps) => {
     <div className={styles.container}>
       <Select
         options={seasons}
+        value={selectorSeasons}
         className={`react-select-container ${styles.select}`}
         classNamePrefix="react-select"
         isSearchable
@@ -59,6 +79,7 @@ const Selectors = ({ onChange, total_count }: SelectorsProps) => {
         isLoading={isLoading}
         placeholder="Сезоны"
         onChange={e => {
+          setSelectorSeasons(e as SelectType);
           propsData.current = {
             ...propsData.current,
             seasons: e.map(i => i.value),
@@ -70,6 +91,7 @@ const Selectors = ({ onChange, total_count }: SelectorsProps) => {
       />
       <Select
         options={categories}
+        value={selectorCategories}
         className={`react-select-container ${styles.select}`}
         classNamePrefix="react-select"
         isSearchable
@@ -77,6 +99,7 @@ const Selectors = ({ onChange, total_count }: SelectorsProps) => {
         isLoading={isLoading}
         placeholder="Категории"
         onChange={e => {
+          setSelectorCategories(e as SelectType);
           propsData.current = {
             ...propsData.current,
             categories: e.map(i => i.value),
@@ -91,7 +114,9 @@ const Selectors = ({ onChange, total_count }: SelectorsProps) => {
           ...take_params,
           { value: total_count, label: 'Показать все' },
         ]}
-        defaultValue={take_params[1]}
+        defaultValue={
+          take_params.find(p => p.value === defaultTake) ?? take_params[1]
+        }
         className={`react-select-container ${styles.select}`}
         classNamePrefix="react-select"
         isSearchable={false}
