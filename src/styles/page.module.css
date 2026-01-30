@@ -1,0 +1,114 @@
+.container {
+    position: fixed;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    display: flex;
+    inset: 0;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.pepe_render {
+    mask-image: linear-gradient(270deg, #000 0%, #0000 80%);
+    mask-size: 100% 100%;
+
+    opacity: .8;
+
+    width: 50% !important;
+    height: auto !important;
+
+    transition: transform 800ms, opacity 800ms;
+}
+
+.loading {
+    transform: translateX(-10px);
+    opacity: 0;
+}
+
+.texts_container {
+    position: absolute;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.texts_container h1 {
+    font-size: 5rem;
+    margin-bottom: 2rem;
+}
+
+.description {
+    max-width: 70%;
+    margin-bottom: 3rem;
+    text-align: center;
+
+    font-size: 1.3rem;
+    font-weight: 600;
+
+    background: linear-gradient(to top, #838383 0%, var(--color-text) 100%);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.links_container {
+    display: flex;
+    gap: 1rem;
+}
+
+.links_container a {
+    text-decoration: none;
+
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+
+    background-color: var(--color-level-0);
+    border: 1px solid var(--color-border);
+    padding: .7rem 1.3rem;
+
+    border-radius: 10px;
+
+    transition: background-color 150ms;
+    box-sizing: border-box;
+}
+
+.links_container a:hover {
+    background-color: var(--color-level-2);
+}
+
+@media (max-width: 1200px) {
+    .pepe_render {
+        width: 80% !important;
+    }
+}
+
+@media (max-width: 500px) {
+    .links_container {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .links_container a {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .texts_container h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .description {
+        font-size: 1rem;
+        max-width: unset;
+
+        margin-bottom: 2rem;
+    }
+
+    .pepe_render {
+        width: 130% !important;
+    }
+}
