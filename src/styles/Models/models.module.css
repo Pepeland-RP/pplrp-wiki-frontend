@@ -12,8 +12,6 @@
     gap: 1rem;
 }
 
-.models_header {}
-
 .models_title {
     font-size: 2rem;
     font-weight: 700;
@@ -253,6 +251,7 @@
             rgba(255, 255, 255, 0.03) 1px,
             transparent 1px);
     background-size: 30px 30px;
+    border-radius: 1rem;
     background-position: center center;
 }
 
@@ -293,6 +292,27 @@
     transition:
         transform 400ms,
         opacity 400ms;
+}
+
+.icon_rotate {
+    position: absolute;
+    z-index: 20;
+    left: .5rem;
+    bottom: .5rem;
+
+    pointer-events: none;
+
+    background-color: var(--color-level-1);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    padding: .3rem;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 150ms;
+}
+
+.image_container:hover+.icon_rotate {
+    opacity: 1;
 }
 
 .thumbnail_loading {

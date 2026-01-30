@@ -6,7 +6,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useModelViewerContext } from '../ModelViewer/ModelViewerDialog';
 import { ModelIcon } from './ModelIcon';
 import { getAssetUrl } from '@/lib/api';
-import { IconCopy, IconCheck, IconEdit } from '@tabler/icons-react';
+import {
+  IconCopy,
+  IconCheck,
+  IconEdit,
+  IconRotate3d,
+} from '@tabler/icons-react';
 import { idbGet, idbSet } from '@/lib/idb';
 import Link from 'next/link';
 import { useNextCookie } from 'use-next-cookie';
@@ -124,14 +129,16 @@ export default function ModelCard(props: Model) {
               alt={props.name}
               width={300}
               height={300}
-              className={`${styles.thumbnail} ${
-                !loaded && styles.thumbnail_loading
-              }`}
+              className={
+                `${styles.thumbnail} ` +
+                `${!loaded && styles.thumbnail_loading}`
+              }
             />
           ) : (
             <span>Ошибка при загрузке модели</span>
           )}
         </div>
+        <IconRotate3d className={styles.icon_rotate} size={18} />
       </div>
 
       <div className={styles.model_info}>
