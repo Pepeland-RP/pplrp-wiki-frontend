@@ -8,19 +8,24 @@ type TaskDTO = {
 };
 
 type Task = {
+  id: number;
   data: TaskDTO;
   resolve: (value: string) => void;
   reject: (err: unknown) => void;
+  cancelled: boolean;
 };
 
 export class RenderingQueue {
   private queue: Task[] = [];
   private working: boolean = false;
+  private taskIdCounter: number = 0;
 
   private renderer!: ModelViewer | null;
   private canvas!: HTMLCanvasElement;
   private disposed: boolean = false;
   private disposeTimer: NodeJS.Timeout | null = null;
+
+  private gltfRacePromiseReject?: () => void;
 
   constructor() {
     this.init();
@@ -45,15 +50,38 @@ export class RenderingQueue {
     this.disposed = false;
   }
 
-  async enqueue(task: TaskDTO): Promise<string> {
-    return new Promise((resolve, reject) => {
+  enqueue(task: TaskDTO): { result: Promise<string>; taskId: number } {
+    const taskId = this.taskIdCounter++;
+    const result = new Promise<string>((resolve, reject) => {
       this.queue.push({
+        id: taskId,
         resolve,
         reject,
         data: task,
+        cancelled: false,
       });
       this.process();
     });
+    return { result, taskId };
+  }
+
+  cancel(taskId: number): boolean {
+    const taskIndex = this.queue.findIndex(t => t.id === taskId);
+    if (taskIndex !== -1) {
+      const task = this.queue[taskIndex];
+      task.cancelled = true;
+      this.queue.splice(taskIndex, 1);
+      this.gltfRacePromiseReject?.();
+      this.gltfRacePromiseReject = undefined;
+
+      if (this.renderer?.gltf) {
+        this.renderer.scene.remove(this.renderer.gltf);
+      }
+
+      task.reject(new Error('Task cancelled'));
+      return true;
+    }
+    return false;
   }
 
   private async process() {
@@ -86,7 +114,12 @@ export class RenderingQueue {
     this.working = true;
 
     try {
-      await this.renderer?.loadGLTF(task.data.object_url, true);
+      // Да, я знаю что обрыв промиса лоадинга таким образом не остановит загрузку,
+      // но loadGltf не поддерживает контроллер абортов(((
+      await Promise.race([
+        new Promise((_, reject) => (this.gltfRacePromiseReject = reject)),
+        this.renderer?.loadGLTF(task.data.object_url, true),
+      ]);
       this.renderer?.applyMeta(task.data.meta ?? null);
 
       this.renderer?.setDoubleSided(
@@ -102,7 +135,7 @@ export class RenderingQueue {
       task.reject(e);
     } finally {
       this.working = false;
-      queueMicrotask(() => this.process());
+      setTimeout(() => this.process(), 0);
     }
   }
 }
