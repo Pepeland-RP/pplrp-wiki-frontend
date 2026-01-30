@@ -138,7 +138,7 @@
 
 @media (max-width: 768px) {
     .container {
-        margin-left: 1rem;
+        margin-left: 2rem;
         padding-bottom: calc(56px + 12px + env(safe-area-inset-bottom));
     }
 
