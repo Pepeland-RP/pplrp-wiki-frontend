@@ -298,7 +298,6 @@ export class ModelViewer {
     }
 
     this.renderer.dispose();
-    this.renderer.forceContextLoss?.();
   }
 
   /** Sets render size */

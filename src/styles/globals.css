@@ -1,3 +1,9 @@
+/* custom property фикс */
+:root {
+    --font-inter: 'Inter', sans-serif;
+    --font-onest: 'Onest', sans-serif;
+}
+
 /* Устранение задержки клика на мобильных устройствах */
 * {
     -webkit-tap-highlight-color: transparent;
@@ -22,7 +28,6 @@ body {
     overflow-y: scroll;
     margin: 0;
     background-color: black;
-    /* Для теста, можешь потом удалить*/
 
     --color-level-2: #1b1b1b;
     --color-level-1: #0a0a0a;
@@ -35,6 +40,11 @@ body {
     --error-color: #ff6467;
 
     color: var(--color-text);
+    font-family: var(--font-inter);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-onest), sans-serif;
 }
 
 .react-select-container .react-select__control {
