@@ -127,7 +127,7 @@ export class RenderingQueue {
       );
 
       this.renderer?.render();
-      const dataURL = this.canvas.toDataURL();
+      const dataURL = this.canvas.toDataURL('image/webp');
       this.renderer!.scene.remove(this.renderer!.gltf!);
 
       task.resolve(dataURL);
