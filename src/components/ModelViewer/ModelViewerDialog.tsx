@@ -15,7 +15,7 @@ import { ModelViewer } from './ModelViewer';
 import { InitialAnimation } from './animation';
 import { IconEye, IconX } from '@tabler/icons-react';
 import { disableScroll, enableScroll } from '@/lib/scroll';
-import { getAssetUrl } from '@/lib/api';
+import { getAssetUrl } from '@/lib/api/api';
 
 const ModelViewerContext = createContext<ModelViewerDialogProps | undefined>(
   undefined,
