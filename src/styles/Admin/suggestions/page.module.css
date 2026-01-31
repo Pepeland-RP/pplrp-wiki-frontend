@@ -58,7 +58,7 @@
     flex-grow: 0;
 
     min-width: 10%;
-    max-width: 100%;
+    max-width: min(100%, 500px);
 }
 
 .links {
