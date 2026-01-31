@@ -26,13 +26,13 @@ export class PepeTargetAnimation extends ModelAnimation {
   animate(viewer: ModelViewer, elapsed: number) {
     const delta = elapsed - this.lastTime;
     this.lastTime = elapsed;
+
     const rotDelta = this.targetRotationY - this.rotationY;
     const rotVelocity = rotDelta * this.speed;
     this.rotationY += rotVelocity * delta;
 
     const camDelta = this.targetCameraYOffset - this.cameraYOffset;
     const camVelocity = camDelta * this.speed;
-
     this.cameraYOffset += camVelocity * delta;
 
     if (viewer.gltf) {

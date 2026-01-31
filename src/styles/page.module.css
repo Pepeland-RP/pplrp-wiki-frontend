@@ -18,6 +18,8 @@
     width: 70% !important;
     height: auto !important;
 
+    pointer-events: none;
+
     transition: transform 800ms, opacity 800ms;
 }
 
