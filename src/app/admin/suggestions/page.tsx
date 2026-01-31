@@ -8,13 +8,13 @@ import Link from 'next/link';
 import useSWR from 'swr';
 
 import styles from '@/styles/Admin/suggestions/page.module.css';
-import { IconPackage } from '@tabler/icons-react';
+import { IconBulb } from '@tabler/icons-react';
 
 const Suggestion = ({ suggestion }: { suggestion: SuggestionType }) => {
   return (
     <div className={styles.suggestion}>
       <h3 className={styles.header}>
-        <IconPackage />
+        <IconBulb />
         Предложение от {formatDateHuman(new Date(suggestion.created_at), true)}
       </h3>
       <p className={styles.content}>{suggestion.content}</p>
