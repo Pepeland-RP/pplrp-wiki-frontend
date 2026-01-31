@@ -10,12 +10,12 @@
 }
 
 .pepe_render {
-    mask-image: linear-gradient(270deg, #000 0%, #0000 80%);
+    mask-image: linear-gradient(270deg, #000 0%, #0000 75%);
     mask-size: 100% 100%;
 
     opacity: .8;
 
-    width: 50% !important;
+    width: 70% !important;
     height: auto !important;
 
     transition: transform 800ms, opacity 800ms;
@@ -32,19 +32,21 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    transition: transform 800ms, opacity 800ms;
 }
 
 .texts_container h1 {
     font-size: 5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .description {
     max-width: 70%;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
     text-align: center;
 
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     font-weight: 600;
 
     background: linear-gradient(to top, #838383 0%, var(--color-text) 100%);

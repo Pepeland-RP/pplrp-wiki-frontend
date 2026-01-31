@@ -3,11 +3,8 @@
 import { ModelViewer } from '@/components/ModelViewer/ModelViewer';
 import { useEffect, useRef, useState } from 'react';
 import styles from '@/styles/page.module.css';
-import { Caveat } from 'next/font/google';
 import { IconDownload, IconHexagons, IconX } from '@tabler/icons-react';
 import Link from 'next/link';
-
-const caveat = Caveat({ subsets: ['latin'] });
 
 const default_camera_pos: [number, number, number] = [-7.27, 2.57, -13.6];
 const offset_scale_x = 0.02;
@@ -83,8 +80,8 @@ export default function Home() {
           ref={canvasRef}
           className={`${styles.pepe_render} ${!loaded && styles.loading}`}
         />
-        <div className={styles.texts_container}>
-          <h1 className={caveat.className}>Pepeland RP</h1>
+        <div className={`${styles.texts_container} ${!loaded && styles.loading}`}>
+          <h1>Pepeland RP</h1>
           <p className={styles.description}>
             Ресурспак с уникальными моделями и костюмами для вашего идеального
             образа на сервере PepeLand
