@@ -23,3 +23,18 @@ export const createSuggestion = async (
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 };
+
+export interface SuggestionType {
+  nickname: string;
+  content: string;
+  created_at: string;
+  images: {
+    id: number;
+    resource_id: string;
+  }[];
+  links: string[];
+}
+
+export const getAllSuggestions = async (): Promise<SuggestionType[]> => {
+  return (await axios.get(`${getApiUrl()}/suggestions`)).data;
+};
