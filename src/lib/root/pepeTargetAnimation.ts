@@ -29,11 +29,14 @@ export class PepeTargetAnimation extends ModelAnimation {
 
     const rotDelta = this.targetRotationY - this.rotationY;
     const rotVelocity = rotDelta * this.speed;
-    this.rotationY += rotVelocity * delta;
+    const rotDeltaSpeed = rotVelocity * delta;
+    this.rotationY += Math.abs(rotDeltaSpeed) >= 0.000001 ? rotDeltaSpeed : 0;
 
     const camDelta = this.targetCameraYOffset - this.cameraYOffset;
     const camVelocity = camDelta * this.speed;
-    this.cameraYOffset += camVelocity * delta;
+    const camDeltaVelocity = camVelocity * delta;
+    this.cameraYOffset +=
+      Math.abs(camDeltaVelocity) >= 0.000001 ? camDeltaVelocity : 0;
 
     if (viewer.gltf) {
       viewer.gltf.rotation.y = this.rotationY;
