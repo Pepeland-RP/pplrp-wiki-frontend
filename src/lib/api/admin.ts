@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { base64ToFile, getApiUrl } from './api';
-import { deleteCookie } from 'cookies-next';
+import { deleteCookie, setCookie} from 'cookies-next';
 
 export const updateMinecraftItem = async (
   create: boolean,
@@ -60,5 +60,8 @@ export async function login(login: string, password: string) {
 
   if (response.status !== 201)
     return { success: false, message: response.data.message };
+      setCookie('sessionId', response.data.token, {
+      maxAge: 1000 * 60 * 60 * 24 * 365,
+    });
   return { success: true, message: '' };
 }
