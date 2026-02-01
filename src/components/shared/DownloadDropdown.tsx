@@ -20,7 +20,7 @@ const options: DownloadOption[] = [
      {
           label: 'Зеркало',
           icon: <IconDownload size={20} />,
-          href: 'https://pepeland.net/wiki/game/resourcepack',
+          href: '/mirror-download',
      },
 ];
 
@@ -50,7 +50,7 @@ export default function DownloadDropdown() {
                     onClick={() => setIsOpen(!isOpen)}
                     aria-expanded={isOpen}
                >
-                    <IconDownload size={20} />
+                    <IconDownload size={24} />
                     Скачать пак
                     <IconChevronDown
                          size={18}
