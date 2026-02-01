@@ -91,7 +91,7 @@ export default function Home() {
         <div
           className={`${styles.texts_container} ${!loaded && styles.loading}`}
         >
-          <h1>Pepeland RP</h1>
+          <h1>Pepeland Pack</h1>
           <p className={styles.description}>
             Ресурспак с уникальными моделями и костюмами для вашего идеального
             образа на сервере PepeLand
