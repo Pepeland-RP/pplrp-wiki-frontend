@@ -1,0 +1,209 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(8px);
+}
+
+.header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+    padding: 20px 24px;
+}
+
+.headerContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.imageCounter {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.zoomControls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.zoomButton {
+    padding: 8px;
+    border-radius: 6px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: all 150ms;
+}
+
+.zoomButton:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.zoomButton:disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
+}
+
+.zoomLevel {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    font-family: monospace;
+    min-width: 50px;
+    text-align: center;
+}
+
+.closeButton {
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(0, 0, 0, 0.5);
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: all 150ms;
+}
+
+.closeButton:hover {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.navButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    padding: 0;
+    border-radius: 0;
+    border: none;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: all 150ms;
+    mix-blend-mode: difference;
+}
+
+.navButton:hover {
+    transform: translateY(-50%) scale(1.15);
+}
+
+.navButtonLeft {
+    left: 24px;
+}
+
+.navButtonRight {
+    right: 24px;
+}
+
+
+.imageContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 100px 80px 80px;
+}
+
+.imageContainer.zoomed {
+    cursor: grab;
+}
+
+.imageContainer.dragging {
+    cursor: grabbing;
+}
+
+.imageWrapper {
+    max-width: 100%;
+    max-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.imageWrapperAnimated {
+    transition: transform 0.2s ease;
+}
+
+.image {
+    max-width: 90vw;
+    max-height: 80vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    user-select: none;
+    pointer-events: none;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.indicators {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    border: none;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    padding: 0;
+    transition: all 200ms;
+}
+
+.indicator:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.indicatorActive {
+    width: 32px;
+    background: #fff;
+}

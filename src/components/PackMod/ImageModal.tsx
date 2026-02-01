@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { IconX, IconChevronLeft, IconChevronRight, IconZoomOut, IconZoomIn, IconArrowsMaximize } from '@tabler/icons-react';
+import styles from '@/styles/PackMod/imagemodal.module.css';
 
 interface ImageModalProps {
   isOpen: boolean;
@@ -144,69 +145,31 @@ export default function ImageModal({ isOpen, imageSrc, onClose, allImages, curre
   if (!isOpen) return null;
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.95)',
-          backdropFilter: 'blur(8px)'
-        }}
-        onClick={onClose}
-      />
+    <div className={styles.overlay}>
+      <div className={styles.backdrop} onClick={onClose} />
 
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 20,
-        background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent)',
-        padding: '20px 24px'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '1400px', margin: '0 auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <div style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.9rem', fontWeight: 500 }}>
+      <div className={styles.header}>
+        <div className={styles.headerContent}>
+          <div className={styles.headerLeft}>
+            <div className={styles.imageCounter}>
               {currentIndex + 1} / {allImages.length}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(0, 0, 0, 0.5)', borderRadius: '8px', padding: '4px' }}>
+            <div className={styles.zoomControls}>
               <button
                 onClick={zoomOut}
                 disabled={zoomLevel <= 1}
-                style={{
-                  padding: '8px',
-                  borderRadius: '6px',
-                  border: 'none',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  color: 'rgba(255, 255, 255, 0.9)',
-                  cursor: zoomLevel <= 1 ? 'not-allowed' : 'pointer',
-                  opacity: zoomLevel <= 1 ? 0.3 : 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  transition: 'all 150ms'
-                }}
+                className={styles.zoomButton}
                 title="Уменьшить"
               >
                 <IconZoomOut size={20} stroke={2} />
               </button>
-              <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.85rem', fontFamily: 'monospace', minWidth: '50px', textAlign: 'center' }}>
+              <span className={styles.zoomLevel}>
                 {Math.round(zoomLevel * 100)}%
               </span>
               <button
                 onClick={zoomIn}
                 disabled={zoomLevel >= 5}
-                style={{
-                  padding: '8px',
-                  borderRadius: '6px',
-                  border: 'none',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  color: 'rgba(255, 255, 255, 0.9)',
-                  cursor: zoomLevel >= 5 ? 'not-allowed' : 'pointer',
-                  opacity: zoomLevel >= 5 ? 0.3 : 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  transition: 'all 150ms'
-                }}
+                className={styles.zoomButton}
                 title="Увеличить"
               >
                 <IconZoomIn size={20} stroke={2} />
@@ -214,39 +177,14 @@ export default function ImageModal({ isOpen, imageSrc, onClose, allImages, curre
               <button
                 onClick={resetZoom}
                 disabled={zoomLevel === 1}
-                style={{
-                  padding: '8px',
-                  borderRadius: '6px',
-                  border: 'none',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  color: 'rgba(255, 255, 255, 0.9)',
-                  cursor: zoomLevel === 1 ? 'not-allowed' : 'pointer',
-                  opacity: zoomLevel === 1 ? 0.3 : 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  transition: 'all 150ms'
-                }}
+                className={styles.zoomButton}
                 title="Сбросить"
               >
                 <IconArrowsMaximize size={20} stroke={2} />
               </button>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            style={{
-              padding: '8px',
-              borderRadius: '8px',
-              border: 'none',
-              background: 'rgba(0, 0, 0, 0.5)',
-              color: 'rgba(255, 255, 255, 0.9)',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              transition: 'all 150ms'
-            }}
-            title="Закрыть"
-          >
+          <button onClick={onClose} className={styles.closeButton} title="Закрыть">
             <IconX size={24} stroke={2} />
           </button>
         </div>
@@ -255,23 +193,7 @@ export default function ImageModal({ isOpen, imageSrc, onClose, allImages, curre
       {currentIndex > 0 && (
         <button
           onClick={prevImage}
-          style={{
-            position: 'absolute',
-            left: '24px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            zIndex: 20,
-            padding: '12px 16px',
-            borderRadius: '8px',
-            border: 'none',
-            background: 'rgba(0, 0, 0, 0.6)',
-            backdropFilter: 'blur(4px)',
-            color: 'rgba(255, 255, 255, 0.9)',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            transition: 'background 150ms'
-          }}
+          className={`${styles.navButton} ${styles.navButtonLeft}`}
           title="Предыдущее"
         >
           <IconChevronLeft size={28} stroke={2} />
@@ -281,23 +203,7 @@ export default function ImageModal({ isOpen, imageSrc, onClose, allImages, curre
       {currentIndex < allImages.length - 1 && (
         <button
           onClick={nextImage}
-          style={{
-            position: 'absolute',
-            right: '24px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            zIndex: 20,
-            padding: '12px 16px',
-            borderRadius: '8px',
-            border: 'none',
-            background: 'rgba(0, 0, 0, 0.6)',
-            backdropFilter: 'blur(4px)',
-            color: 'rgba(255, 255, 255, 0.9)',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            transition: 'background 150ms'
-          }}
+          className={`${styles.navButton} ${styles.navButtonRight}`}
           title="Следующее"
         >
           <IconChevronRight size={28} stroke={2} />
@@ -305,17 +211,7 @@ export default function ImageModal({ isOpen, imageSrc, onClose, allImages, curre
       )}
 
       <div
-        style={{
-          position: 'relative',
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          overflow: 'hidden',
-          padding: '100px 80px 80px',
-          cursor: zoomLevel > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default'
-        }}
+        className={`${styles.imageContainer} ${zoomLevel > 1 ? (isDragging ? styles.dragging : styles.zoomed) : ''}`}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -325,47 +221,23 @@ export default function ImageModal({ isOpen, imageSrc, onClose, allImages, curre
         onTouchEnd={handleTouchEnd}
       >
         <div
+          className={`${styles.imageWrapper} ${!isDragging ? styles.imageWrapperAnimated : ''}`}
           style={{
-            transform: `scale(${zoomLevel}) translate(${position.x / zoomLevel}px, ${position.y / zoomLevel}px)`,
-            transition: isDragging ? 'none' : 'transform 0.2s ease',
-            maxWidth: '100%',
-            maxHeight: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
+            transform: `scale(${zoomLevel}) translate(${position.x / zoomLevel}px, ${position.y / zoomLevel}px)`
           }}
         >
           <img
             key={imageSrc}
             src={imageSrc}
             alt="Увеличенное изображение"
-            style={{
-              maxWidth: '90vw',
-              maxHeight: '80vh',
-              width: 'auto',
-              height: 'auto',
-              objectFit: 'contain',
-              borderRadius: '8px',
-              userSelect: 'none',
-              pointerEvents: 'none'
-            }}
+            className={styles.image}
             draggable={false}
           />
         </div>
       </div>
 
-      <div style={{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 20,
-        background: 'linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)',
-        padding: '20px',
-        display: 'flex',
-        justifyContent: 'center'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div className={styles.footer}>
+        <div className={styles.indicators}>
           {allImages.map((_, index) => (
             <button
               key={index}
@@ -373,16 +245,7 @@ export default function ImageModal({ isOpen, imageSrc, onClose, allImages, curre
                 onNavigate(index);
                 resetZoom();
               }}
-              style={{
-                width: index === currentIndex ? '32px' : '8px',
-                height: '8px',
-                borderRadius: '4px',
-                border: 'none',
-                background: index === currentIndex ? '#fff' : 'rgba(255, 255, 255, 0.3)',
-                cursor: 'pointer',
-                padding: 0,
-                transition: 'all 200ms'
-              }}
+              className={`${styles.indicator} ${index === currentIndex ? styles.indicatorActive : ''}`}
               title={`Изображение ${index + 1}`}
             />
           ))}
