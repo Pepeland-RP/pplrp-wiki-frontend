@@ -48,19 +48,17 @@
      overflow: hidden;
      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
      z-index: 100;
-     animation: slideDown 200ms ease;
+     transition: opacity 200ms, transform 200ms;
+
+     opacity: 1;
+     transform: translateY(0);
 }
 
-@keyframes slideDown {
-     from {
-          opacity: 0;
-          transform: translateY(-8px);
-     }
-     to {
-          opacity: 1;
-          transform: translateY(0);
-     }
+.menu_exit_active {
+     opacity: 0;
+     transform: translateY(-8px);
 }
+
 
 .option {
      display: flex;
