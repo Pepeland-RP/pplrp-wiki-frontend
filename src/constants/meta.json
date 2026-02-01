@@ -1,6 +1,6 @@
 {
     "base": {
-        "title": "PepeLandRP Wiki",
+        "title": "Pepeland Pack Wiki",
         "description": "Вики ресурспака PPL",
         "icons": {
             "icon": "/logos/favicon.ico",
@@ -10,21 +10,21 @@
         "creator": "PPLRP Team"
     },
     "/models": {
-        "title": "Модели · PepeLandRP Wiki",
+        "title": "Модели · Pepeland Pack Wiki",
         "openGraph": {
-            "title": "Модели · PepeLandRP Wiki"
+            "title": "Модели · Pepeland Pack Wiki"
         }
     },
     "/suggest": {
-        "title": "Предложить идею · PepeLandRP Wiki",
+        "title": "Предложить идею · Pepeland Pack Wiki",
         "openGraph": {
-            "title": "Предложить идею · PepeLandRP Wiki"
+            "title": "Предложить идею · Pepeland Pack Wiki"
         }
     },
     "/pack-mod": {
-        "title": "Модификация пака · PepeLandRP Wiki",
+        "title": "Модификация пака · Pepeland Pack Wiki",
         "openGraph": {
-            "title": "Модификация пака · PepeLandRP Wiki"
+            "title": "Модификация пака · Pepeland Pack Wiki"
         }
     }
 }
