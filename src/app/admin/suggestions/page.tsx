@@ -43,6 +43,9 @@ const Suggestion = ({ suggestion }: { suggestion: SuggestionType }) => {
         <IconBulb />
         Предложение от {formatDateHuman(new Date(suggestion.created_at), true)}
       </h3>
+      <p className={styles.author}>
+        <b>Автор</b>: {suggestion.nickname}
+      </p>
       <p className={styles.content}>{suggestion.content}</p>
 
       {suggestion.images.length !== 0 && (
@@ -67,11 +70,24 @@ const Suggestion = ({ suggestion }: { suggestion: SuggestionType }) => {
                     height={300}
                     className={`${styles.image} ${imageLoaded[imageKey] ? styles.imageLoaded : ''}`}
                     quality={90}
-                    onLoad={() => setImageLoaded(prev => ({ ...prev, [imageKey]: true }))}
+                    onLoad={() =>
+                      setImageLoaded(prev => ({ ...prev, [imageKey]: true }))
+                    }
                   />
                   <div className={styles.imageOverlay}>
-                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                    <svg
+                      width="18"
+                      height="18"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
+                      />
                     </svg>
                   </div>
                 </div>

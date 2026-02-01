@@ -36,6 +36,10 @@
     gap: .4rem;
 }
 
+.author {
+    margin: 0;
+}
+
 .content {
     margin: 0;
     font-style: italic;
