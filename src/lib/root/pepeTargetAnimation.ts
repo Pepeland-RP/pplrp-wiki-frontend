@@ -27,6 +27,9 @@ export class PepeTargetAnimation extends ModelAnimation {
     const delta = elapsed - this.lastTime;
     this.lastTime = elapsed;
 
+    // Считаем, что более 500мс между кадрами - это много
+    if (delta > 0.5) return;
+
     const rotDelta = this.targetRotationY - this.rotationY;
     const rotVelocity = rotDelta * this.speed;
     const rotDeltaSpeed = rotVelocity * delta;
