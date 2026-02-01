@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Select from 'react-select';
 import useSWR from 'swr';
 import styles from '@/styles/Models/Selectors.module.css';
-import { getFilters } from '@/lib/api';
+import { getFilters } from '@/lib/api/models';
 
 type PropsData = {
   seasons: number[];

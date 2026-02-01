@@ -3,12 +3,17 @@
 import { ModelSettings } from '@/components/Admin/create/Model';
 import { MoveBack } from '@/components/Admin/MoveBack';
 import styles from '@/styles/Admin/create/page.module.css';
-import { deleteModel, editModel, getFilters, getModelById } from '@/lib/api';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import SeasonSelector from '@/components/Admin/SeasonSelector';
 import MinecraftItemsSelect from '@/components/Admin/create/MinecraftItemsSelect';
+import {
+  deleteModel,
+  editModel,
+  getFilters,
+  getModelById,
+} from '@/lib/api/models';
 
 const Page = () => {
   const router = useRouter();

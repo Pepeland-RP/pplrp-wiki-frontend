@@ -1,16 +1,13 @@
 'use client';
 
-import {
-  deleteMinecraftItem,
-  getAssetUrl,
-  updateMinecraftItem,
-} from '@/lib/api';
 import { AsyncReader } from '@/lib/AsyncImage';
 import { useEffect, useRef, useState } from 'react';
 import styles from '@/styles/Admin/items/MinecraftItemCard.module.css';
 import { IconDeviceFloppy, IconEdit, IconTrash } from '@tabler/icons-react';
 import { mutate } from 'swr';
 import { AxiosResponse } from 'axios';
+import { getAssetUrl } from '@/lib/api/api';
+import { deleteMinecraftItem, updateMinecraftItem } from '@/lib/api/admin';
 
 export const MinecraftItemCard = ({
   data,

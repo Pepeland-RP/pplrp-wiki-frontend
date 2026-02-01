@@ -5,7 +5,7 @@ import styles from '@/styles/Models/models.module.css';
 import axios from 'axios';
 import useSWR from 'swr';
 import { useState, useEffect } from 'react';
-import { getApiUrl } from '@/lib/api';
+import { getApiUrl } from '@/lib/api/api';
 import Search from '@/components/Models/Search';
 import Selectors from '@/components/Models/Selectors';
 import { useModelsStore } from '@/lib/store';

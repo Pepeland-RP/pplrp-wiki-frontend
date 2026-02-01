@@ -1,7 +1,7 @@
 'use client';
 
 import { ModelViewer } from '@/components/ModelViewer/ModelViewer';
-import { getAssetUrl } from '@/lib/api';
+import { getAssetUrl } from '@/lib/api/api';
 import { useEffect, useRef, useState } from 'react';
 import styles from '@/styles/Admin/create/Model.module.css';
 

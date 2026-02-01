@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { IconPlus, IconX, IconUpload } from '@tabler/icons-react';
 import styles from '@/styles/Suggest/Suggest.module.css';
 import { AsyncReader } from '@/lib/AsyncImage';
+import { createSuggestion } from '@/lib/api/suggestions';
 
 interface ImageType {
   data: string;
@@ -88,12 +89,14 @@ export default function SuggestPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({
+    createSuggestion(
       nickname,
       suggestion,
-      images: images.filter(i => i.valid),
+      images.filter(i => i.valid).map(i => i.data),
       links,
-    });
+    )
+      .then(() => window.location.reload())
+      .catch(e => alert(e.response.message ?? e.message));
   };
 
   return (
@@ -126,6 +129,7 @@ export default function SuggestPage() {
                 placeholder="Опишите костюм, который хотели бы видеть в ресурспаке. Желательно приложить референсы или детальное описание..."
                 className={styles.textarea}
                 rows={6}
+                maxLength={2000}
                 required
               />
             </div>

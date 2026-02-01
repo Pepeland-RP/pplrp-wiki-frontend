@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import '@/styles/globals.css';
-import { Inter } from 'next/font/google';
+import { Inter, Onest } from 'next/font/google';
 import Sidebar from '@/components/Sidebar';
 import { CookieProvider } from 'use-next-cookie';
 import { headers } from 'next/headers';
@@ -23,20 +23,28 @@ export const viewport: Viewport = {
   userScalable: true,
 };
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-inter',
+});
+
+const onest = Onest({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-onest',
+});
 
 export default function RootLayout({
-  children,
-}: Readonly<{
+                                     children,
+                                   }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <CookieProvider>
-      <html lang="ru">
-        <body className={inter.className}>
-          <Sidebar />
-          <main className="appMain">{children}</main>
-        </body>
+      <html lang="ru" className={`${inter.variable} ${onest.variable}`}>
+      <body className={inter.className}>
+      <Sidebar />
+      <main className="appMain">{children}</main>
+      </body>
       </html>
     </CookieProvider>
   );

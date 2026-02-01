@@ -5,7 +5,7 @@ import styles from '@/styles/Models/models.module.css';
 import { useEffect, useRef, useState } from 'react';
 import { useModelViewerContext } from '../ModelViewer/ModelViewerDialog';
 import { ModelIcon } from './ModelIcon';
-import { getAssetUrl } from '@/lib/api';
+import { getAssetUrl } from '@/lib/api/api';
 import {
   IconCopy,
   IconCheck,
