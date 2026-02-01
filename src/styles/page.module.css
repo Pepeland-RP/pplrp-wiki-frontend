@@ -66,11 +66,6 @@
      gap: 1rem;
 }
 
-.links_container > * {
-     flex: 1;
-     min-width: 0;
-}
-
 .links_container a {
      text-decoration: none;
 

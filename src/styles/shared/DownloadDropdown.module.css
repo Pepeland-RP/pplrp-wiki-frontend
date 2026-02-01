@@ -1,7 +1,6 @@
 .dropdown {
      position: relative;
      display: flex;
-     flex: 1;
 }
 
 .trigger {
@@ -28,6 +27,11 @@
      background-color: var(--color-level-2);
 }
 
+.icon_download {
+     flex-grow: 0;
+     flex-shrink: 0;
+}
+
 .chevron {
      transition: transform 200ms ease;
      margin-left: -0.3rem;
@@ -50,6 +54,13 @@
      z-index: 100;
      transition: opacity 200ms, transform 200ms;
 
+     padding: .2rem;
+     box-sizing: border-box;
+
+     display: flex;
+     flex-direction: column;
+     gap: .3rem;
+
      opacity: 1;
      transform: translateY(0);
 }
@@ -70,6 +81,8 @@
      transition: background-color 150ms;
      cursor: pointer;
      white-space: nowrap;
+
+     border-radius: calc(10px - .2rem);
 }
 
 .option:hover {

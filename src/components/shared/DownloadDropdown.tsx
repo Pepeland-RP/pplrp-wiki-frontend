@@ -50,7 +50,7 @@ export default function DownloadDropdown() {
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
       >
-        <IconDownload size={24} />
+        <IconDownload className={styles.icon_download} />
         Скачать пак
         <IconChevronDown
           size={18}
