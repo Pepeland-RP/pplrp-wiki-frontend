@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from 'react';
 import styles from '@/styles/page.module.css';
 import { IconDownload, IconHexagons, IconX } from '@tabler/icons-react';
 import Link from 'next/link';
+import { PepeTargetAnimation } from '@/lib/root/pepeTargetAnimation';
 
-const default_camera_pos: [number, number, number] = [-7.27, 2.57, -13.6];
 const offset_scale_x = 0.02;
 const offset_scale_y = 0.5;
 
@@ -14,6 +14,7 @@ export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const viewerRef = useRef<ModelViewer>(null);
   const observerRef = useRef<ResizeObserver>(null);
+  const animationRef = useRef<PepeTargetAnimation>(null);
 
   const [loaded, setLoaded] = useState<boolean>(false);
 
@@ -33,10 +34,14 @@ export default function Home() {
     viewerRef.current.controls.enablePan = false;
 
     await viewerRef.current.loadGLTF('/static/ppl.gltf', true);
-    viewerRef.current.camera.position.set(...default_camera_pos);
+    viewerRef.current.camera.position.set(
+      ...PepeTargetAnimation.defaultCameraPos,
+    );
     viewerRef.current.controls.update();
     viewerRef.current.render();
 
+    animationRef.current = new PepeTargetAnimation();
+    viewerRef.current.animation = animationRef.current;
     observerRef.current = new ResizeObserver(e => {
       const target = e[0];
       if (!target) return;
@@ -64,13 +69,16 @@ export default function Home() {
   }, []);
 
   const mouseMoveEvent = (evt: React.MouseEvent<HTMLDivElement>) => {
-    if (!viewerRef.current || !viewerRef.current.gltf) return;
-    const offset_percent_x = evt.clientX / window.innerWidth - 0.5;
-    const offset_percent_y = evt.clientY / window.innerHeight - 0.5;
+    if (!animationRef.current) return;
+    const offset_x = evt.clientX / window.innerWidth - 0.5;
+    const offset_y = evt.clientY / window.innerHeight - 0.5;
 
-    viewerRef.current.gltf.rotation.y = offset_percent_x * offset_scale_x;
-    viewerRef.current.camera.position.y =
-      default_camera_pos[1] + offset_percent_y * offset_scale_y;
+    animationRef.current.setMouseOffset(
+      offset_x,
+      offset_y,
+      offset_scale_x,
+      offset_scale_y,
+    );
   };
 
   return (
@@ -80,8 +88,10 @@ export default function Home() {
           ref={canvasRef}
           className={`${styles.pepe_render} ${!loaded && styles.loading}`}
         />
-        <div className={`${styles.texts_container} ${!loaded && styles.loading}`}>
-          <h1>Pepeland RP</h1>
+        <div
+          className={`${styles.texts_container} ${!loaded && styles.loading}`}
+        >
+          <h1>Pepeland Pack</h1>
           <p className={styles.description}>
             Ресурспак с уникальными моделями и костюмами для вашего идеального
             образа на сервере PepeLand
