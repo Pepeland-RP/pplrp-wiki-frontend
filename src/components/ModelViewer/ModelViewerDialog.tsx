@@ -130,7 +130,13 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
           exitActive: style.background_exit_active,
         }}
       >
-        <div className={style.background}>
+        <div
+          className={style.background}
+          onClick={e => {
+            if (e.target !== e.currentTarget) return;
+            close();
+          }}
+        >
           <div className={style.viewer}>
             <div className={style.header}>
               <h3>
