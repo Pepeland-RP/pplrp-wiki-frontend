@@ -1,0 +1,15 @@
+services:
+  pplpack_site:
+    container_name: pplpack_site
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    networks:
+      - nginx
+    command: npm run start
+    restart: unless-stopped
+
+networks:
+  nginx:
+    external: true
+    name: nginx
