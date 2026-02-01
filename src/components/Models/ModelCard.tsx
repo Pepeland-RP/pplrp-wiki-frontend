@@ -5,7 +5,7 @@ import styles from '@/styles/Models/models.module.css';
 import { useEffect, useRef, useState } from 'react';
 import { useModelViewerContext } from '../ModelViewer/ModelViewerDialog';
 import { ModelIcon } from './ModelIcon';
-import { getAssetUrl } from '@/lib/api';
+import { getAssetUrl } from '@/lib/api/api';
 import {
   IconCopy,
   IconCheck,
@@ -24,6 +24,7 @@ export default function ModelCard(props: Model) {
   const [error, setError] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const thumbnailRef = useRef<HTMLImageElement>(null);
+  const taskIdRef = useRef<number | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -55,14 +56,16 @@ export default function ModelCard(props: Model) {
       }
 
       try {
-        const dataURL = await renderQueue.enqueue({
+        const { result: dataURL, taskId } = renderQueue.enqueue({
           object_url: getAssetUrl(props.gltf.resource_id),
           meta: props.gltf.meta,
         });
 
+        taskIdRef.current = taskId;
+
         if (isMounted && thumbnailRef.current) {
-          thumbnailRef.current.src = dataURL;
-          void idbSet('renders', `v1-model-${sha}`, dataURL);
+          thumbnailRef.current.src = await dataURL;
+          void idbSet('renders', `v1-model-${sha}`, thumbnailRef.current.src);
           setLoaded(true);
         }
       } catch (e) {
@@ -78,6 +81,10 @@ export default function ModelCard(props: Model) {
 
     return () => {
       isMounted = false;
+
+      if (taskIdRef.current !== null && !thumbnailRef.current) {
+        renderQueue.cancel(taskIdRef.current);
+      }
     };
   }, []);
 

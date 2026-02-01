@@ -1,6 +1,6 @@
 'use client';
 
-import { login } from '@/lib/api';
+import { login } from '@/lib/api/admin';
 import styles from '@/styles/Admin/Login.module.css';
 import { useRef, useState } from 'react';
 

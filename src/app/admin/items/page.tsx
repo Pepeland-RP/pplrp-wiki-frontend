@@ -2,7 +2,7 @@
 
 import { MinecraftItemCard } from '@/components/Admin/items/MinecraftItemCard';
 import { MoveBack } from '@/components/Admin/MoveBack';
-import { getMinecraftItems } from '@/lib/api';
+import { getMinecraftItems } from '@/lib/api/admin';
 import styles from '@/styles/Admin/items/page.module.css';
 import useSWR from 'swr';
 

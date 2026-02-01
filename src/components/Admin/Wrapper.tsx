@@ -1,10 +1,10 @@
 'use client';
 
-import { checkMe } from '@/lib/api';
 import { redirect, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import { useNextCookie } from 'use-next-cookie';
 import { Login } from './Login';
+import { checkMe } from '@/lib/api/admin';
 
 export const Wrapper = ({ children }: { children: React.ReactNode }) => {
   const sessionId = useNextCookie('sessionId', 1000);

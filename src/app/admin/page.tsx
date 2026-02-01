@@ -7,6 +7,7 @@ import {
   IconEdit,
   IconLayoutGridAdd,
   IconLogout,
+  IconBulb,
   IconSword,
 } from '@tabler/icons-react';
 import { deleteCookie } from 'cookies-next';
@@ -40,6 +41,11 @@ const Admin = () => {
       <Link href="/admin/items" className={styles.links}>
         <IconSword />
         Управление Minecraft предметами
+      </Link>
+
+      <Link href="/admin/suggestions" className={styles.links}>
+        <IconBulb />
+        Список предложений
       </Link>
 
       <button

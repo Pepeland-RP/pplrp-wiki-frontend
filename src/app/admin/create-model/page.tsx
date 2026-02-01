@@ -4,7 +4,7 @@ import MinecraftItemsSelect from '@/components/Admin/create/MinecraftItemsSelect
 import { ModelSettings } from '@/components/Admin/create/Model';
 import { MoveBack } from '@/components/Admin/MoveBack';
 import SeasonSelector from '@/components/Admin/SeasonSelector';
-import { createModel, getFilters } from '@/lib/api';
+import { createModel, getFilters } from '@/lib/api/models';
 import styles from '@/styles/Admin/create/page.module.css';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';

@@ -1,8 +1,9 @@
-import { getAssetUrl, getMinecraftItems } from '@/lib/api';
+import { getAssetUrl } from '@/lib/api/api';
 import Select from 'react-select';
 import useSWR from 'swr';
 import styles from '@/styles/Admin/create/page.module.css';
 import { JSX, useEffect, useState } from 'react';
+import { getMinecraftItems } from '@/lib/api/admin';
 
 interface MinecraftItemsSelectProps {
   defaultValue?: number[]; // minecraft items id
