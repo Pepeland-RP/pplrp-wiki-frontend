@@ -20,7 +20,7 @@ const options: DownloadOption[] = [
      {
           label: 'Зеркало',
           icon: <IconDownload size={20} />,
-          href: '/mirror-download',
+          href: 'https://pepeland.net/wiki/game/resourcepack',
      },
 ];
 
