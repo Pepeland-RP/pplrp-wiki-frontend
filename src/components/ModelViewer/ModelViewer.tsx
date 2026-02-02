@@ -170,7 +170,7 @@ export class ModelViewer {
     this.composer.addPass(this.renderPass);
     this.composer.addPass(this.fxaaPass);
 
-    this.grid = new GridHelper(1, 10, '#ffffff', '#aaaaaa');
+    this.grid = new GridHelper(1, 16, '#ffffff', '#aaaaaa');
     this.scene.add(this.grid);
 
     this.render = this.render.bind(this);
