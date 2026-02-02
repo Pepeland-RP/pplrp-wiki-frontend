@@ -245,9 +245,20 @@ export class ModelViewer {
     this.controls.update();
   }
 
+  gltfLoaderAbort?: () => GLTFLoader;
+
   async loadGLTF(path: string, should_center?: boolean) {
-    this.gltf = (await new GLTFLoader().loadAsync(path)).scene;
-    this.setGltf(this.gltf, should_center);
+    try {
+      const loader = new GLTFLoader();
+      this.gltfLoaderAbort = loader.abort;
+
+      this.gltf = (await loader.loadAsync(path)).scene;
+      this.setGltf(this.gltf, should_center);
+    } catch (e) {
+      throw e;
+    } finally {
+      this.gltfLoaderAbort = undefined;
+    }
   }
 
   render() {

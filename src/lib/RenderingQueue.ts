@@ -71,6 +71,7 @@ export class RenderingQueue {
       const task = this.queue[taskIndex];
       task.cancelled = true;
       this.queue.splice(taskIndex, 1);
+      this.renderer?.gltfLoaderAbort?.();
       this.gltfRacePromiseReject?.();
       this.gltfRacePromiseReject = undefined;
 
