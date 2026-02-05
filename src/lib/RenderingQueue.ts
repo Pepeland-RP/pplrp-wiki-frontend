@@ -73,8 +73,6 @@ export class RenderingQueue {
       this.queue.splice(taskIndex, 1);
       this.renderer?.gltfLoaderAbort?.();
       this.gltfRacePromiseReject?.();
-      this.gltfRacePromiseReject = undefined;
-
       if (this.renderer?.gltf) {
         this.renderer.scene.remove(this.renderer.gltf);
       }

@@ -30,10 +30,7 @@ import {
 } from 'three';
 import { ModelAnimation } from './animation';
 import { disposeGLTFScene } from '@/lib/three-utils';
-import {
-  applyMinecraftShaderToGLTF,
-  type MinecraftLightingConfig,
-} from '@/lib/shaders/apply-minecraft-shader';
+import { applyMinecraftShaderToGLTF } from '@/lib/shaders/apply-minecraft-shader';
 import { AsyncImage } from '@/lib/AsyncImage';
 
 export class ModelViewer {
@@ -54,9 +51,6 @@ export class ModelViewer {
   /** GLTF object with Minecraft shader applied */
   object!: Group<Object3DEventMap>;
   controls!: OrbitControls;
-
-  /** Minecraft lighting configuration */
-  minecraftLightingConfig: MinecraftLightingConfig;
 
   renderPaused: boolean = false;
 
@@ -105,7 +99,7 @@ export class ModelViewer {
       antialias: true,
       alpha: true,
     });
-    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer.setPixelRatio(1);
     this.renderer.setSize(props.width, props.height);
     this.scene.add(this.camera);
 
@@ -119,22 +113,18 @@ export class ModelViewer {
       );
       this.skyCamera.position.set(0, 0, 0);
 
-      if (props.panoramaUrl) {
-        if (this.backgroundTexture != null) {
-          this.backgroundTexture.dispose();
-        }
-
-        AsyncImage(props.panoramaUrl).then(image => {
-          this.backgroundTexture = new Texture();
-          this.backgroundTexture.image = image;
-          this.backgroundTexture.mapping = EquirectangularReflectionMapping;
-          this.backgroundTexture.needsUpdate = true;
-          this.skyScene!.background = this.backgroundTexture;
-        });
+      if (this.backgroundTexture != null) {
+        this.backgroundTexture.dispose();
       }
-    }
 
-    this.minecraftLightingConfig = {};
+      AsyncImage(props.panoramaUrl).then(image => {
+        this.backgroundTexture = new Texture();
+        this.backgroundTexture.image = image;
+        this.backgroundTexture.mapping = EquirectangularReflectionMapping;
+        this.backgroundTexture.needsUpdate = true;
+        this.skyScene!.background = this.backgroundTexture;
+      });
+    }
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableRotate = true;
@@ -183,7 +173,7 @@ export class ModelViewer {
     }
 
     this.object = object;
-    applyMinecraftShaderToGLTF(this.object, this.minecraftLightingConfig);
+    applyMinecraftShaderToGLTF(this.object);
 
     if (center) this.centerModel();
     this.setDoubleSided(this.doubleSided);
