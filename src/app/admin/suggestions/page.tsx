@@ -3,15 +3,19 @@
 import { useState } from 'react';
 import { MoveBack } from '@/components/Admin/MoveBack';
 import { getAssetUrl } from '@/lib/api/api';
-import { getAllSuggestions, SuggestionType } from '@/lib/api/suggestions';
+import {
+  deleteSuggestion,
+  getAllSuggestions,
+  SuggestionType,
+} from '@/lib/api/suggestions';
 import { formatDateHuman } from '@/lib/time';
 import Link from 'next/link';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import Image from 'next/image';
 import ImageModal from '@/components/PackMod/ImageModal';
 
 import styles from '@/styles/Admin/suggestions/page.module.css';
-import { IconBulb } from '@tabler/icons-react';
+import { IconBulb, IconTrash } from '@tabler/icons-react';
 
 const Suggestion = ({ suggestion }: { suggestion: SuggestionType }) => {
   const [modalImage, setModalImage] = useState<string | null>(null);
@@ -37,11 +41,22 @@ const Suggestion = ({ suggestion }: { suggestion: SuggestionType }) => {
     setModalImage(allImages[index]);
   };
 
+  const deleteSugg = () => {
+    if (!confirm('Удалить?')) return;
+    deleteSuggestion(suggestion.id)
+      .then(() => mutate('suggestions'))
+      .catch(err => alert(err.message));
+  };
+
   return (
     <div className={styles.suggestion}>
       <h3 className={styles.header}>
-        <IconBulb />
-        Предложение от {formatDateHuman(new Date(suggestion.created_at), true)}
+        <span className={styles.header_inner}>
+          <IconBulb />
+          Предложение от{' '}
+          {formatDateHuman(new Date(suggestion.created_at), true)}
+        </span>
+        <IconTrash className={styles.delete_btn} onClick={deleteSugg} />
       </h3>
       <p className={styles.author}>
         <b>Автор</b>: {suggestion.nickname}
@@ -132,6 +147,7 @@ const Suggestions = () => {
       <h2>Список предложений</h2>
       <MoveBack />
       <div className={styles.cont}>
+        {data.length === 0 && <span>Похоже, тут ничего нет</span>}
         {data.map((s, i) => (
           <Suggestion key={i} suggestion={s} />
         ))}

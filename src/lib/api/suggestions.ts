@@ -25,6 +25,7 @@ export const createSuggestion = async (
 };
 
 export interface SuggestionType {
+  id: number;
   nickname: string;
   content: string;
   created_at: string;
@@ -37,4 +38,8 @@ export interface SuggestionType {
 
 export const getAllSuggestions = async (): Promise<SuggestionType[]> => {
   return (await axios.get(`${getApiUrl()}/suggestions`)).data;
+};
+
+export const deleteSuggestion = async (id: number) => {
+  await axios.delete(`${getApiUrl()}/suggestions/${id}`);
 };

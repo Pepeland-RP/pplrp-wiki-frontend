@@ -191,6 +191,7 @@
 }
 
 .code {
+    word-break: break-all;
     display: inline-block;
     background-color: var(--color-level-2);
     border: 1px solid var(--color-border);
