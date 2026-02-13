@@ -12,7 +12,7 @@ import {
 import ReactCSSTransition from '@/components/shared/CSSTransition';
 import style from '@/styles/ModelViewer/common.module.css';
 import { ModelViewer } from './ModelViewer';
-import { InitialAnimation } from './animation';
+import { ExitAnimation, InitialAnimation } from './animation';
 import { IconEye, IconX } from '@tabler/icons-react';
 import { disableScroll, enableScroll } from '@/lib/scroll';
 import { getAssetUrl } from '@/lib/api/api';
@@ -56,6 +56,12 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const close = () => {
+    if (viewerRef.current) {
+      viewerRef.current.animation = new ExitAnimation(
+        viewerRef.current.camera.position.toArray(),
+      );
+    }
+
     setExpanded(false);
     setLoaded(false);
     enableScroll();

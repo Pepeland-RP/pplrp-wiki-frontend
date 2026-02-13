@@ -61,7 +61,7 @@ export class ModelViewer {
   grid!: GridHelper;
 
   private frameId: number | undefined;
-  private progress: number = 0;
+  progress: number = 0;
   private clock: Clock;
   private renderTarget?: WebGLRenderTarget;
 
