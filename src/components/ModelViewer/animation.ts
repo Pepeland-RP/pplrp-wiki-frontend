@@ -40,16 +40,17 @@ export class InitialAnimation extends ModelAnimation {
 export class ExitAnimation extends ModelAnimation {
   initial_pos!: Vector3Array;
   target_pos!: Vector3Array;
-  length = 1;
+  length = 2;
 
   initial_progress?: number;
 
   constructor(initial_pos: Vector3Array, target?: Vector3Array) {
     super();
+    const target_scale = initial_pos.map(i => Math.abs(i));
     this.initial_pos = initial_pos;
     this.target_pos = target ?? [
-      initial_pos[0] - 2,
-      initial_pos[1] + 2,
+      initial_pos[0] - 2 * target_scale[0],
+      initial_pos[1] + 2 * target_scale[1],
       initial_pos[2],
     ];
   }
