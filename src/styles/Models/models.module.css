@@ -339,13 +339,11 @@
 }
 
 .model_name {
-    font-size: 1rem;
+    font-size: .9rem;
     font-weight: 500;
     color: var(--color-text, #fff);
     margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    word-wrap: anywhere;
     flex: 1;
     min-width: 0;
 }

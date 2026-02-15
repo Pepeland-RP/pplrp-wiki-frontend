@@ -16,6 +16,7 @@ import { idbGet, idbSet } from '@/lib/idb';
 import Link from 'next/link';
 import { useNextCookie } from 'use-next-cookie';
 import { sha256 } from 'js-sha256';
+import { minecraftMono } from '@/fonts/Minecraft';
 
 export default function ModelCard(props: Model) {
   const loggedIn = !!useNextCookie('sessionId');
@@ -151,7 +152,9 @@ export default function ModelCard(props: Model) {
       <div className={styles.model_info}>
         <div className={styles.model_details}>
           <div className={styles.model_name_row}>
-            <h3 className={styles.model_name}>{props.name}</h3>
+            <h3 className={`${styles.model_name} ${minecraftMono.className}`}>
+              {props.name}
+            </h3>
             {loggedIn && (
               <Link
                 href={`/admin/edit-model/${props.id}`}
