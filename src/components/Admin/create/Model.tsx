@@ -124,7 +124,7 @@ export const ModelSettings = (props: ModelSettingsProps) => {
       <input
         id="fileInput"
         type="file"
-        accept="model/gltf-binary"
+        accept=".gltf"
         onChange={handleModelSelect}
         style={{ display: 'none' }}
       />
