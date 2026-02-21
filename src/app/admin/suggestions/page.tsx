@@ -48,6 +48,8 @@ const Suggestion = ({ suggestion }: { suggestion: SuggestionType }) => {
       .catch(err => alert(err.message));
   };
 
+  const suggestions_links = suggestion.links.filter(i => !!i);
+
   return (
     <div className={styles.suggestion}>
       <h3 className={styles.header}>
@@ -112,12 +114,12 @@ const Suggestion = ({ suggestion }: { suggestion: SuggestionType }) => {
         </div>
       )}
 
-      {suggestion.links.length !== 0 && (
+      {suggestions_links.length !== 0 && (
         <div>
           <hr />
           <h3 className={styles.pinned_sth}>Прикрепленные ссылки</h3>
           <div className={styles.links}>
-            {suggestion.links.map((link, i) => (
+            {suggestions_links.map((link, i) => (
               <Link href={link} key={i}>
                 {link}
               </Link>
