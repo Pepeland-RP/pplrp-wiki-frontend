@@ -7,6 +7,7 @@ import { IconHexagons, IconX } from '@tabler/icons-react';
 import Link from 'next/link';
 import { PepeTargetAnimation } from '@/lib/root/pepeTargetAnimation';
 import DownloadDropdown from '@/components/shared/DownloadDropdown';
+import BoostyLogo from '@/resources/boosty.svg';
 
 const offset_scale_x = 0.02;
 const offset_scale_y = 0.5;
@@ -83,7 +84,7 @@ export default function Home() {
      };
 
      return (
-          <main>
+          <main className={styles.main}>
                <div className={styles.container} onMouseMove={mouseMoveEvent}>
                     <canvas
                          ref={canvasRef}
@@ -103,6 +104,15 @@ export default function Home() {
                                    <IconHexagons />
                                    Каталог моделей
                               </Link>
+                              <a
+                                   href="https://boosty.to/pepelandresourcepack"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   className={styles.supportLink}
+                              >
+                                   <BoostyLogo width={24} height={24} />
+                                   Поддержать нас
+                              </a>
                          </div>
                     </div>
                </div>

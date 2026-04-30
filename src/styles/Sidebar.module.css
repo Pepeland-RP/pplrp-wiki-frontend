@@ -98,6 +98,14 @@ button.navButton {
   display: none;
 }
 
+.boostyIcon {
+  opacity: 0.78;
+}
+
+.boostyIcon path {
+  fill: currentColor;
+}
+
 .menuButton {
   width: 48px;
 }
@@ -119,7 +127,10 @@ button.navButton {
   color: var(--color-text, #eeeeee);
   pointer-events: none;
   opacity: 1;
-  animation: tooltipFadeIn 200ms ease-out;
+  transform: translateY(-50%) translateX(0);
+  transition:
+    opacity 200ms ease-out,
+    transform 200ms ease-out;
   user-select: none;
 }
 
@@ -137,20 +148,9 @@ button.navButton {
   box-sizing: border-box;
 }
 
-.staticTooltipEnter {
-  animation: tooltipFadeIn 200ms ease-out;
-}
-
-@keyframes tooltipFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-50%) translateX(-4px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(-50%) translateX(0);
-  }
+.staticTooltipExitActive {
+  opacity: 0;
+  transform: translateY(-50%) translateX(-4px);
 }
 
 .dropdown {

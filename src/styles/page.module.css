@@ -1,3 +1,9 @@
+.main {
+     position: relative;
+     min-height: 100dvh;
+     overflow: clip;
+}
+
 .container {
      position: fixed;
      margin-left: calc(72px + 1rem);
@@ -84,6 +90,11 @@
      box-sizing: border-box;
 }
 
+.supportLink svg {
+     flex-grow: 0;
+     flex-shrink: 0;
+}
+
 .links_container a:hover {
      background-color: var(--color-level-2);
 }
@@ -118,15 +129,23 @@
 }
 
 @media (max-width: 768px) {
+     .main {
+          min-height: 100svh;
+     }
+
      .container {
           margin-left: 2rem;
           padding-bottom: calc(56px + 12px + env(safe-area-inset-bottom));
      }
 
      .created_by {
-          font-size: 0.7rem;
+          position: fixed;
+          font-size: 0.8rem;
           bottom: calc(56px + 12px + env(safe-area-inset-bottom) + 0.5rem);
-          right: 0.5rem;
+          left: 50%;
+          right: auto;
+          transform: translateX(-50%);
+          width: max-content;
      }
 
      .texts_container h1 {
