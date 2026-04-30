@@ -49,7 +49,7 @@ export const ModelSettings = (props: ModelSettingsProps) => {
           viewerRef.current?.applyMeta(props.model?.gltf?.meta ?? null);
         });
     }
-    viewerRef.current?.render();
+    viewerRef.current?.startRender();
 
     viewerRef.current.controls.addEventListener('change', () => {
       setMeta({

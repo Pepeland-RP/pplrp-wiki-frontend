@@ -10,7 +10,6 @@ import {
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import {
   Box3,
-  Clock,
   DepthTexture,
   DoubleSide,
   EquirectangularReflectionMapping,
@@ -24,6 +23,7 @@ import {
   PerspectiveCamera,
   Scene,
   Texture,
+  Timer,
   Vector3,
   WebGLRenderer,
   WebGLRenderTarget,
@@ -62,7 +62,7 @@ export class ModelViewer {
 
   private frameId: number | undefined;
   progress: number = 0;
-  private clock: Clock;
+  private timer: Timer;
   private renderTarget?: WebGLRenderTarget;
 
   private skyScene: Scene | null = null;
@@ -73,7 +73,8 @@ export class ModelViewer {
   animation?: ModelAnimation;
 
   constructor(props: ModelViewerProps) {
-    this.clock = new Clock();
+    this.timer = new Timer();
+    this.timer.connect(document);
 
     this.canvas = props.canvas;
     this.canvas.width = props.width;
@@ -251,8 +252,18 @@ export class ModelViewer {
     }
   }
 
-  render() {
-    this.progress += this.clock.getDelta();
+  startRender() {
+    if (this.renderPaused) {
+      this.render(0);
+      return;
+    }
+
+    this.frameId = requestAnimationFrame(this.render);
+  }
+
+  render(timestamp: number) {
+    this.timer.update(timestamp);
+    this.progress += this.timer.getDelta();
     if (this.animation) this.animation.animate(this, this.progress);
 
     this.controls.update();

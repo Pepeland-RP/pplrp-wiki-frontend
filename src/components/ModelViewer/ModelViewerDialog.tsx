@@ -99,7 +99,7 @@ export const ModelViewerProvider = ({ children }: { children: ReactNode }) => {
             );
             setLoaded(true);
 
-            viewerRef.current?.render();
+            viewerRef.current?.startRender();
           });
 
         const viewerElement = document.getElementById('viewer');

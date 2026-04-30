@@ -40,7 +40,7 @@ export default function Home() {
       ...PepeTargetAnimation.defaultCameraPos,
     );
     viewerRef.current.controls.update();
-    viewerRef.current.render();
+    viewerRef.current.startRender();
 
     animationRef.current = new PepeTargetAnimation();
     viewerRef.current.animation = animationRef.current;

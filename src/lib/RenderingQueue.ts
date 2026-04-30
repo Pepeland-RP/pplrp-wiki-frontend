@@ -125,7 +125,7 @@ export class RenderingQueue {
         task.data.meta?.render?.double_sided ?? true,
       );
 
-      this.renderer?.render();
+      this.renderer?.startRender();
       const dataURL = this.canvas.toDataURL('image/webp');
       this.renderer!.scene.remove(this.renderer!.gltf!);
 
