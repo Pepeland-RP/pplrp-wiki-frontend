@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
@@ -15,38 +15,37 @@ interface Step {
 
 const steps: Step[] = [
   {
-    title: "Расположение файлов",
+    title: 'Расположение файлов',
     description: [
-      "Сперва файлы вашего предмета необходимо правильно расположить. Сначала в директории `assets/minecraft/models/item` нужно создать свою папку, в нашем случае будет папка `custom_totem`."
+      'Сперва файлы вашего предмета необходимо правильно расположить. Создайте новую папку внутри директории `assets/minecraft/models/item` с названием вашего предмета. В нашем случае это папка `custom_totem`.',
     ],
-    images: ["1.png"],
+    images: ['1.png'],
   },
   {
-    title: "Создание структуры папок",
+    title: 'Создание структуры папок',
     description: [
-      "Для удобства организации нескольких предметов рекомендуется создать дополнительные подпапки внутри (например `totem_of_undying`)"
+      'Для удобства организации нескольких предметов рекомендуется создать дополнительные подпапки внутри (например `totem_of_undying`)',
     ],
   },
   {
-    title: "Перенос модели и текстуры",
+    title: 'Перенос модели и текстуры',
     description: [
-      "В папку `assets/minecraft/models/item/custom_totem/totem_of_undying` мы переносим модельку.",
-      "И в папку `assets/minecraft/textures/item/custom_totem/totem_of_undying` переносим текстуру."
+      'В папку `assets/minecraft/models/item/custom_totem/totem_of_undying` перенесите модельку, а в папку `assets/minecraft/textures/item/custom_totem/totem_of_undying` текстуру.',
     ],
-    images: ["2.png", "3.png"],
+    images: ['2.png', '3.png'],
   },
   {
-    title: "Корректировка пути текстуры",
+    title: 'Корректировка пути до текстуры',
     description: [
-      "Теперь мы открываем файл модели в Notepad++ или стандартном блокноте и корректируем путь текстуры.",
-      "Обязательно убедитесь в верном пути текстуры:"
+      'Теперь откройте файл модели в Notepad++ или стандартном блокноте и измените путь до текстуры.',
+      'Обязательно убедитесь в верном пути до текстуры:',
     ],
     code: `{
     "format_version": "1.21.6",
   "credit": "Made with Blockbench",
   "textures": {
-   "1": "item/custom_totem/totem_of_undying/pooshka",
-   "particle": "item/custom_totem/totem_of_undying/pooshka"
+   "1": "item/custom_totem/totem_of_undying/pooshka",  // Здесь
+   "particle": "item/custom_totem/totem_of_undying/pooshka"  // И здесь
   },
   "elements": [
    {
@@ -56,13 +55,13 @@ const steps: Step[] = [
       }
     ]
 }`,
-    images: ["5.png"],
+    images: ['5.png'],
   },
   {
-    title: "Поиск файла предмета",
+    title: 'Поиск файла предмета',
     description: [
-      "Теперь заходим в `assets/minecraft/items` и ищем нужный файл, в данном случае тотем бессмертия.",
-      "Открываем файл и задаём своей модельке параметр custom_model_data, в нашем примере «пушка»"
+      'Теперь заходим в `assets/minecraft/items` и ищем нужный файл, в данном случае тотем бессмертия.',
+      'Открываем файл и задаём своей модельке параметр `custom_model_data`, в нашем примере «пушка»',
     ],
     code: `{
   "when": "пушка",
@@ -72,10 +71,10 @@ const steps: Step[] = [
 }`,
   },
   {
-    title: "Создание нового файла",
+    title: 'Создание нового файла',
     description: [
-      "Если нужного файла нету, можно создать файл, который должен совпадать с id предмета.",
-      "Простой пример заменяемого предмета."
+      'Если нужного файла нет, можно создать файл, который должен совпадать с id предмета.',
+      'Простой пример заменяемого предмета.',
     ],
     code: `{
   "model": {
@@ -96,15 +95,15 @@ const steps: Step[] = [
     ]
   }
 }`,
-    images: ["7.png"],
+    images: ['7.png'],
   },
   {
-    title: "Итог",
+    title: 'Итог',
     description: [
-      "Проверяем предмет через команду `/custommodel [custom_model_data_предмета]`"
+      'Проверяем предмет через команду `/custommodel [custom_model_data_предмета]`',
     ],
-    images: ["9.png", "10.png"],
-  }
+    images: ['9.png', '10.png'],
+  },
 ];
 
 const allImages: string[] = [];
@@ -176,7 +175,7 @@ export default function PackMod() {
 
       window.scrollTo({
         top: offsetPosition,
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
     }
   };
@@ -222,17 +221,14 @@ export default function PackMod() {
               Гайд на добавление своих предметов в пак Пепеленда
             </h1>
             <p className={styles.mainDescription}>
-              Итак, у вас есть моделька и текстура предмета, который вы хотите добавить в пак:
+              Итак, у вас есть моделька и текстура предмета, который вы хотите
+              добавить в пак:
             </p>
           </header>
 
           <div className={styles.steps}>
             {steps.map((step, index) => (
-              <section
-                key={index}
-                data-section={index}
-                className={styles.step}
-              >
+              <section key={index} data-section={index} className={styles.step}>
                 <div className={styles.stepContent}>
                   <h2 className={styles.stepTitle}>
                     <span className={styles.stepNumber}>{index + 1}</span>
@@ -245,9 +241,7 @@ export default function PackMod() {
                     ))}
                   </div>
 
-                  {step.code && (
-                    <CodeBlock code={step.code} />
-                  )}
+                  {step.code && <CodeBlock code={step.code} />}
 
                   {step.images && step.images.length > 0 && (
                     <div className={styles.images}>
@@ -268,12 +262,28 @@ export default function PackMod() {
                               height={800}
                               className={`${styles.image} ${imageLoaded[imageKey] ? styles.imageLoaded : ''}`}
                               quality={90}
-                              onLoad={() => setImageLoaded(prev => ({ ...prev, [imageKey]: true }))}
+                              onLoad={() =>
+                                setImageLoaded(prev => ({
+                                  ...prev,
+                                  [imageKey]: true,
+                                }))
+                              }
                               loading="lazy"
                             />
                             <div className={styles.imageOverlay}>
-                              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                              <svg
+                                width="18"
+                                height="18"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
+                                />
                               </svg>
                             </div>
                           </div>
