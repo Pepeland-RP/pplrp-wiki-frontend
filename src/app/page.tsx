@@ -117,7 +117,7 @@ export default function Home() {
         </div>
       </div>
       <p className={styles.created_by}>
-        site created by <Link href="https://manukq.systems">Manukq</Link>{' '}
+        site created by <Link href="https://mnq.lol">Manukq</Link>{' '}
         <IconX size={12} />{' '}
         <Link href="https://andcool.ru">AndcoolSystems</Link>
       </p>
